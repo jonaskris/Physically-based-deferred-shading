@@ -14,14 +14,14 @@ Window::Window(int width, int height, const char* title)
     if(!glfwInit())
         std::cerr << "Failed to initialize GLFW!" << std::endl;
     else
-        std::cout << "GLFW initialized! GLFW version: " << GLFW_VERSION_MAJOR << "." << GLFW_VERSION_MINOR << std::endl;
+        std::cout << "GLFW initialized!\n\tVersion: " << GLFW_VERSION_MAJOR << "." << GLFW_VERSION_MINOR << std::endl;
     
     // Initialize window
     this->window = glfwCreateWindow(width, height, title, NULL, NULL);
     if(!this->window)
-        std::cerr << "Failed to initialize GLFW window!" << std::endl;
+        std::cerr << "\tFailed to initialize GLFW window!" << std::endl;
     else
-        std::cout << "Initialized GLFW window!" << std::endl;
+        std::cout << "\tInitialized GLFW window!" << std::endl;
 
     // Configure window
     glfwMakeContextCurrent(window);
@@ -31,7 +31,7 @@ Window::Window(int width, int height, const char* title)
     if(!gladLoadGL())
         std::cerr << "Failed to initialize GLAD!" << std::endl;
     else
-        std::cout << "GLAD initialized! OpenGL version: " << GLVersion.major << "." << GLVersion.minor << std::endl;
+        std::cout << "GLAD initialized!\n\tVersion: " << GLVersion.major << "." << GLVersion.minor << std::endl;
 }
 
 Window::~Window()

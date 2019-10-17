@@ -1,17 +1,15 @@
 #include <iostream>
-#include <glad/glad.h>
-#include <Window.h>
+#include <Renderer.h>
 
 int main()
 {
     // Initialize 
-    Window window = Window(500, 500, "Tittel");
+    graphics::Renderer renderer = graphics::Renderer(500, 500);
 
     // Main loop
-    while(!window.closed())
+    while(!renderer.windowClosed())
     {
         // Process input
-        // Render
-        window.update();
+        renderer.render();
     }
 }
