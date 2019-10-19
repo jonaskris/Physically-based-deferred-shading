@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.0)
 project(Geometry)
 
 add_library(geometry
-    include/Mesh.h src/Mesh.cpp
-    include/Icosphere.h src/Icosphere.cpp
-    include/Cube.h src/Cube.cpp
-    include/Plane.h src/Plane.cpp)
+    include/Mesh.h
+    include/Icosphere.h
+    include/Cube.h
+    include/Plane.h)
 
 target_include_directories(geometry
     PUBLIC include)

@@ -4,4 +4,6 @@ add_executable(demo
     src/demo.cpp)
 
 target_link_libraries(demo
-    renderer)
+    renderer
+    geometry
+    programs)
