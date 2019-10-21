@@ -12,6 +12,7 @@ target_include_directories(programs
 
 target_link_libraries(programs
     PUBLIC shaders
+    PUBLIC math
     PUBLIC glad
     PUBLIC glfw
     PUBLIC ${GLFW_LIBRARIES})

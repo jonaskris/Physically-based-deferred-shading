@@ -4,6 +4,6 @@ namespace geometry
 {
     class Plane
     {
-
+        
     };
 }

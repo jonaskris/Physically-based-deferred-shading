@@ -1,20 +1,23 @@
 #pragma once
 #include <GLFW/glfw3.h>
 
-class Window
+namespace graphics
 {
-private:
-    GLFWwindow* window = nullptr;
-public:
-    Window(int width, int height, const char* title);
-    ~Window();
+    class Window
+    {
+    private:
+        GLFWwindow* window = nullptr;
+    public:
+        Window(int width, int height, const char* title);
+        ~Window();
 
-    // Clear OpenGL viewport
-    void clear() const;
+        // Clear OpenGL viewport
+        void clear() const;
 
-    // Check for OpenGL errors and swap buffers
-    void update() const;
+        // Check for OpenGL errors and swap buffers
+        void update() const;
 
-    // Returns true if user closed window.
-    bool closed() const;
-};
+        // Returns true if user closed window.
+        bool closed() const;
+    };
+}

@@ -6,6 +6,10 @@
 
 #include <Program.h>
 #include <Shader.h>
+#include <Vec2.h>
+#include <Vec3.h>
+#include <Vec4.h>
+#include <Mat4.h>
 
 namespace graphics
 {
@@ -84,6 +88,41 @@ namespace graphics
     bool Program::getValidatedSuccessfully() const
     {
         return validatedSuccessfully;
+    }
+
+    GLint Program::getUniformLocation(const GLchar* name)
+    {
+        return glGetUniformLocation(programId, name);
+    }
+
+    void Program::setUniform1f(const GLchar* name, float scalar)
+    {
+        glUniform1f(getUniformLocation(name), scalar);
+    }
+
+    void Program::setUniform1i(const GLchar* name, int scalar)
+    {
+        glUniform1i(getUniformLocation(name), scalar);
+    }
+
+    void Program::setUniform2f(const GLchar* name, const math::vec2& vector)
+    {
+        glUniform2f(getUniformLocation(name), vector.x, vector.y);
+    }
+
+    void Program::setUniform3f(const GLchar* name, const math::vec3& vector)
+    {
+        glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
+    }
+
+    void Program::setUniform4f(const GLchar* name, const math::vec4& vector)
+    {
+        glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
+    }
+
+    void Program::setUniformMat4(const GLchar* name, const math::mat4& matrix)
+    {
+        glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
     }
 
     std::ostream& operator<<(std::ostream& out, const Program& program)
