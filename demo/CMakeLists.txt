@@ -8,4 +8,6 @@ add_executable(demo
 target_link_libraries(demo
     programs
     rendering
-    geometry)
+    geometry
+    model
+    scene)

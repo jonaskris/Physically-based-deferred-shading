@@ -12,7 +12,7 @@ namespace geometry
         virtual void initialize() = 0;
 
     public:
-        virtual void draw() = 0;
+        virtual void draw() const = 0;
     };
 
     template <typename VertexType>
@@ -55,7 +55,7 @@ namespace geometry
         Mesh() {};
 
     public:
-        void draw() override
+        void draw() const override
         {
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (GLvoid*)(0));

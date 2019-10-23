@@ -32,12 +32,6 @@ namespace graphics
         // Configure window
         glfwMakeContextCurrent(window);
         glfwSetWindowSizeCallback(window, windowresize);
-    
-        // Initialize OpenGL
-        if(!gladLoadGL())
-            std::cerr << "Failed to initialize GLAD!" << std::endl;
-        else
-            std::cout << "GLAD initialized!\n\tVersion: " << GLVersion.major << "." << GLVersion.minor << std::endl;
     }
     
     Window::~Window()
@@ -45,18 +39,8 @@ namespace graphics
         glfwTerminate();
     }
     
-    void Window::clear() const
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-    
     void Window::update() const
     {
-        // Check for OpenGL errors
-        GLenum error = glGetError();
-        if(error != GL_NO_ERROR)
-            std::cout << "OpenGL error: " << error << std::endl;
-    
         // Poll for input
         glfwPollEvents();
     

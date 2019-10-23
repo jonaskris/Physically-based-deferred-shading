@@ -29,6 +29,6 @@ namespace math
         static mat4 rotate(float angle, const vec3& axis);
         static mat4 scale(const vec3& vector);
 		static mat4 perspective(float fov, float aspectRatio, float near, float far);
-        static mat4 viewMatrix(const vec3& cameraPos, const vec3& lookAtPos, const vec3& up);
+        static mat4 view(const vec3& lookFrom, const vec3& lookAt, const vec3& up);
     };
 }

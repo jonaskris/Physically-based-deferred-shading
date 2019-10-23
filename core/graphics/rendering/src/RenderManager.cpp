@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 #include <glad/glad.h>
 #include <RenderManager.h>
 #include <Renderer.h>
@@ -9,6 +10,12 @@ namespace graphics
     RenderManager::RenderManager(size_t width, size_t height, const std::vector<Renderer*>& renderers) : renderers(renderers) 
     {
         window = new Window(width, height, "");
+        
+        // Initialize OpenGL
+        if(!gladLoadGL())
+            std::cerr << "Failed to initialize GLAD!" << std::endl;
+        else
+            std::cout << "GLAD initialized!\n\tVersion: " << GLVersion.major << "." << GLVersion.minor << std::endl;
 
         glEnable(GL_DEPTH_TEST);
         glFrontFace(GL_CW);
@@ -29,13 +36,19 @@ namespace graphics
     void RenderManager::render()
     {
         // Clear window
-        window->clear();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Render every renderer
-        for(Renderer* renderer : renderers)
-            renderer->render();
+        // Execute every renderer
+            for(Renderer* renderer : renderers)
+                renderer->render();
 
         // Update window
-        window->update();
+            // Check for OpenGL errors
+            GLenum error = glGetError();
+            if(error != GL_NO_ERROR)
+                std::cout << "OpenGL error: " << error << std::endl;
+
+            // Poll events, swap buffers
+            window->update();
     }
 }

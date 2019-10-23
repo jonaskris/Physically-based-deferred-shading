@@ -100,27 +100,22 @@ namespace graphics
         glUniform1f(getUniformLocation(name), scalar);
     }
 
-    void Program::setUniform1i(const GLchar* name, int scalar)
-    {
-        glUniform1i(getUniformLocation(name), scalar);
-    }
-
-    void Program::setUniform2f(const GLchar* name, const math::vec2& vector)
+    void Program::setUniformVec2f(const GLchar* name, const math::vec2& vector)
     {
         glUniform2f(getUniformLocation(name), vector.x, vector.y);
     }
 
-    void Program::setUniform3f(const GLchar* name, const math::vec3& vector)
+    void Program::setUniformVec3f(const GLchar* name, const math::vec3& vector)
     {
         glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
     }
 
-    void Program::setUniform4f(const GLchar* name, const math::vec4& vector)
+    void Program::setUniformVec4f(const GLchar* name, const math::vec4& vector)
     {
         glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
     }
 
-    void Program::setUniformMat4(const GLchar* name, const math::mat4& matrix)
+    void Program::setUniformMat4f(const GLchar* name, const math::mat4& matrix)
     {
         glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix.elements);
     }

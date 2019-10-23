@@ -32,11 +32,10 @@ namespace graphics
 
         GLint getUniformLocation(const GLchar* name);
         void setUniform1f(const GLchar* name, float scalar);
-        void setUniform1i(const GLchar* name, int scalar);
-        void setUniform2f(const GLchar* name, const math::vec2& vector);
-        void setUniform3f(const GLchar* name, const math::vec3& vector);
-        void setUniform4f(const GLchar* name, const math::vec4& vector);
-        void setUniformMat4(const GLchar* name, const math::mat4& matrix);
+        void setUniformVec2f(const GLchar* name, const math::vec2& vector);
+        void setUniformVec3f(const GLchar* name, const math::vec3& vector);
+        void setUniformVec4f(const GLchar* name, const math::vec4& vector);
+        void setUniformMat4f(const GLchar* name, const math::mat4& matrix);
 
         friend std::ostream& operator<<(std::ostream& out, const Program& program);
     };

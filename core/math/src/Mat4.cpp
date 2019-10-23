@@ -144,9 +144,9 @@ namespace math
 		return returnMatrix;
 	}
 
-    mat4 mat4::viewMatrix(const vec3& cameraPos, const vec3& lookAtPos, const vec3& up)
+    mat4 mat4::view(const vec3& lookFrom, const vec3& lookAt, const vec3& up)
 	{
-		vec3 zaxis = (cameraPos - lookAtPos).normalize();
+		vec3 zaxis = (lookFrom - lookAt).normalize();
 		vec3 xaxis = (up.cross(zaxis)).normalize();
 		vec3 yaxis = zaxis.cross(xaxis);
 
@@ -160,7 +160,7 @@ namespace math
 		translation.columns[0] = vec4(1.0f, 0.0, 0.0f, 0.0f);
 		translation.columns[1] = vec4(0.0f, 1.0f, 0.0f, 0.0f);
 		translation.columns[2] = vec4(0.0f, 0.0f, 1.0f, 0.0f);
-		translation.columns[3] = vec4(-cameraPos.x, -cameraPos.y, -cameraPos.z, 1.0f);
+		translation.columns[3] = vec4(-lookFrom.x, -lookFrom.y, -lookFrom.z, 1.0f);
 		
 		return orientation * translation;
 	}

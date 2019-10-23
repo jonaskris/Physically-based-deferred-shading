@@ -4,4 +4,5 @@ project(Core)
 
 add_subdirectory(math)
 add_subdirectory(geometry)
+add_subdirectory(input)
 add_subdirectory(graphics)
