@@ -21,7 +21,7 @@ namespace graphics
         bool validatedSuccessfully = false;
 
     public:
-        Program(const std::vector<std::pair<std::string, Shader::Type>>& shaderPaths);
+        Program(std::vector<std::pair<std::string, Shader::Type>> shaderPaths);
 
         GLuint getProgramId() const;
         bool getLinkedSuccessfully() const;

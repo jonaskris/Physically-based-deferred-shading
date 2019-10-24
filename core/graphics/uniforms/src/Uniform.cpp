@@ -1,6 +1,20 @@
 #include <Uniform.h>
 #include <glad/glad.h>
+#include <TextureUnitManager.h>
 
+void UniformSampler2D::set(GLuint programId) const
+{
+    size_t textureLocation;
+    glUniform1i(glGetUniformLocation(programId, &name[0]), textureLocation = graphics::TextureUnitManager::requestTextureUnit());
+    glBindTexture(GL_TEXTURE_2D, textureLocation);
+}
+
+void UniformSampler3D::set(GLuint programId) const
+{
+    size_t textureLocation;
+    glUniform1i(glGetUniformLocation(programId, &name[0]), textureLocation = graphics::TextureUnitManager::requestTextureUnit());
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureLocation);    
+}
 
 void Uniform1f::set(GLuint programId) const
 {

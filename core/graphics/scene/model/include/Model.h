@@ -7,10 +7,11 @@ namespace geometry
     class MeshBase;
 }
 
+
 class Model
 {
 private:
-    std::vector<Uniform*> uniforms;
+    std::vector<Uniform*> uniforms; // Lights and materials
     std::vector<geometry::MeshBase*> meshes;
 
 public:

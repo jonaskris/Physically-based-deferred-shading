@@ -13,7 +13,7 @@
 
 namespace graphics
 {
-    Program::Program(const std::vector<std::pair<std::string, Shader::Type>>& shaderPaths)
+    Program::Program(std::vector<std::pair<std::string, Shader::Type>> shaderPaths)
     {
         std::vector<Shader> shaders;
 

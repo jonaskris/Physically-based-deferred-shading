@@ -28,5 +28,4 @@ Run script below from the main directory:
 
  - [GLAD](https://github.com/Dav1dde/glad)
  - [GLFW](https://github.com/glfw/glfw)
- 
-
+ - [STB_IMAGE](https://github.com/nothings/stb)

@@ -7,16 +7,8 @@
 
 namespace graphics
 {
-    RenderManager::RenderManager(size_t width, size_t height, const std::vector<Renderer*>& renderers) : renderers(renderers) 
+    RenderManager::RenderManager(Window* window, std::vector<Renderer*> renderers) : window(window), renderers(renderers) 
     {
-        window = new Window(width, height, "");
-        
-        // Initialize OpenGL
-        if(!gladLoadGL())
-            std::cerr << "Failed to initialize GLAD!" << std::endl;
-        else
-            std::cout << "GLAD initialized!\n\tVersion: " << GLVersion.major << "." << GLVersion.minor << std::endl;
-
         glEnable(GL_DEPTH_TEST);
         glFrontFace(GL_CW);
         glDisable(GL_CULL_FACE);

@@ -6,8 +6,11 @@ add_executable(demo
     src/demo.cpp)
 
 target_link_libraries(demo
-    programs
-    rendering
-    geometry
-    model
-    scene)
+    PUBLIC programs
+    PUBLIC rendering
+    PUBLIC geometry
+    PUBLIC model
+    PUBLIC scene
+    PUBLIC math
+    PUBLIC uniforms
+    PUBLIC window)

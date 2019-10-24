@@ -15,11 +15,11 @@ namespace graphics
     class RenderManager
     {
     private:
+        Window* window;
         std::vector<Renderer*> renderers;
-        Window* window = nullptr;
 
     public:
-        RenderManager(size_t width, size_t height, const std::vector<Renderer*>& renderers);
+        RenderManager(Window* window, std::vector<Renderer*> renderers);
         ~RenderManager();
 
         bool windowClosed() const;

@@ -12,11 +12,11 @@ protected:
     template<typename SceneComponent>
     void unpackSceneComponents(SceneComponent* sceneComponent)
     {
-        static_assert(std::is_base_of<Model, SceneComponent>::value || std::is_base_of<Camera, SceneComponent>::value, "SceneComponent must be of type Model or Camera!")
+        static_assert(std::is_base_of<Model, SceneComponent>::value || std::is_base_of<Camera, SceneComponent>::value, "SceneComponent must be of type Model or Camera!");
     
         if constexpr (std::is_base_of<Model, SceneComponent>::value) {
             models.push_back(sceneComponent);
-        } else constexpr (std::is_base_of<Camera, SceneComponent>::value) {
+        } else if (std::is_base_of<Camera, SceneComponent>::value) {
             cameras.push_back(sceneComponent);
         }
     }
@@ -24,11 +24,11 @@ protected:
     template<typename SceneComponent, typename... SceneComponents> 
     void unpackSceneComponents(SceneComponent* sceneComponent, SceneComponents*... sceneComponents)
     {
-        static_assert(std::is_base_of<Model, SceneComponent>::value || std::is_base_of<Camera, SceneComponent>::value, "SceneComponent must be of type Model or Camera!")
+        static_assert(std::is_base_of<Model, SceneComponent>::value || std::is_base_of<Camera, SceneComponent>::value, "SceneComponent must be of type Model or Camera!");
     
         if constexpr (std::is_base_of<Model, SceneComponent>::value) {
             models.push_back(sceneComponent);
-        } else constexpr (std::is_base_of<Camera, SceneComponent>::value) {
+        } else if (std::is_base_of<Camera, SceneComponent>::value) {
             cameras.push_back(sceneComponent);
         }
 

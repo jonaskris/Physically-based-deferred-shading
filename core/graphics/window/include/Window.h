@@ -1,4 +1,6 @@
 #pragma once
+
+#include <string>
 #include <GLFW/glfw3.h>
 
 namespace graphics
@@ -8,7 +10,7 @@ namespace graphics
     private:
         GLFWwindow* window = nullptr;
     public:
-        Window(int width, int height, const char* title);
+        Window(const std::string& title, int width, int height);
         ~Window();
 
         // Clear OpenGL viewport

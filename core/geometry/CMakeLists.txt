@@ -13,8 +13,4 @@ target_include_directories(geometry
 
 target_link_libraries(geometry 
     PUBLIC math
-    PUBLIC glad
-    PUBLIC glfw
-    PUBLIC ${GLFW_LIBRARIES})
-
-target_compile_definitions(geometry PRIVATE "GLFW_INCLUDE_NONE")
+    PUBLIC glad)
