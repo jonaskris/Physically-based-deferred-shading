@@ -1,13 +1,9 @@
 #include <math.h>
+#include <iostream>
 #include <Vec3.h>
 
 namespace math
 {
-    vec3::vec3() : x(0.0f), y(0.0f), z(0.0f) {};
-    vec3::vec3(float scalar) : x(scalar), y(scalar), z(scalar) {};
-    vec3::vec3(const vec3& other) : x(other.x), y(other.y), z(other.z) {};
-    vec3::vec3(float x, float y, float z) : x(x), y(y), z(z) {};
-
     vec3& vec3::add(const vec3& other)
     {
         x += other.x; y += other.y; z += other.z;
@@ -78,6 +74,17 @@ namespace math
     
     float vec3::magnitude() const { return sqrt(x*x + y*y + z*z); }
     float vec3::dot(const vec3& other) const { return x * other.x + y * other.y + z * other.z;}
-    vec3 vec3::cross(const vec3& other) const { return vec3( y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x); }
+    vec3 vec3::cross(const vec3& other) const { return vec3{y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x}; }
     vec3 vec3::normalize() const { return *this / magnitude(); }
+
+    std::ostream& operator<<(std::ostream& out, const vec3& vector)
+    {
+        out << '[';
+        
+        for(size_t i = 0; i < 3; i++)
+            out << vector.elements[i] << (i != 2 ? ", " : "");
+        
+        out << ']';
+        return out;
+    }
 }

@@ -1,13 +1,9 @@
 #include <math.h>
+#include <iostream>
 #include <Vec2.h>
 
 namespace math
 {
-    vec2::vec2() : x(0.0f), y(0.0f) {};
-    vec2::vec2(float scalar) : x(scalar), y(scalar) {};
-    vec2::vec2(const vec2& other) : x(other.x), y(other.y) {};
-    vec2::vec2(float x, float y) : x(x), y(y) {};
-
     vec2& vec2::add(const vec2& other)
     {
         x += other.x; y += other.y;
@@ -80,4 +76,15 @@ namespace math
     float vec2::dot(const vec2& other) const { return x * other.x + y * other.y;}
     float vec2::cross(const vec2& other) const { return x * other.y - y * other.x; }
     vec2 vec2::normalize() const { return *this / magnitude(); }
+
+    std::ostream& operator<<(std::ostream& out, const vec2& vector)
+    {
+        out << '[';
+        
+        for(size_t i = 0; i < 2; i++)
+            out << vector.elements[i] << (i != 1 ? ", " : "");
+        
+        out << ']';
+        return out;
+    }    
 }

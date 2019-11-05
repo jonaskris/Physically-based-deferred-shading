@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(Renderering)
+project(Rendering)
 
 add_library(rendering
-    include/RenderManager.h src/RenderManager.cpp
-    include/Renderer.h
-    include/ForwardRenderer.h src/ForwardRenderer.cpp)
+    include/Framebuffer.h src/Framebuffer.cpp
+    include/Renderer.h src/Renderer.cpp)
 
 target_include_directories(rendering
     PUBLIC include)
@@ -13,4 +12,6 @@ target_include_directories(rendering
 target_link_libraries(rendering 
     PUBLIC window
     PUBLIC programs
-    PUBLIC glad)
+    PUBLIC scene
+    PUBLIC glad
+    PUBLIC uniforms)

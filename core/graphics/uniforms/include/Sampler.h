@@ -1,7 +1,9 @@
 #pragma once
 
-#include <string>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+class Image;
 
 class Sampler 
 {
@@ -11,23 +13,18 @@ protected:
 public:
     ~Sampler();
 
-    virtual void set() const = 0;
     GLuint getSamplerId();
 };
 
 class Sampler2D : public Sampler
 {
 public:
-    Sampler2D(const std::string& file);
-
-    void set() const override;
+    Sampler2D(const Image& image);
 };
 
 class Sampler3D : public Sampler
 {
 public:
-    Sampler3D(const std::string& all);
-    Sampler3D(const std::string& left, const std::string& right, const std::string& back, const std::string& front, const std::string& top, const std::string& bottom);
-    
-    void set() const override;
+    Sampler3D(const Image& image);
+    Sampler3D(const Image& left, const Image& right, const Image& back, const Image& front, const Image& top, const Image& bottom);
 };

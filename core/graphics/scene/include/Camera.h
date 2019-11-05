@@ -1,18 +1,33 @@
 #pragma once
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <Vec3.h>
 #include <Mat4.h>
 #include <Uniform.h>
+#include <Node.h>
 
-class Camera : public UniformMat4f
+class Camera : public Node
 {
-protected:
+private:
+    UniformMat4f view;
+    UniformMat4f projection;
+
+public:
     math::vec3 lookFrom;
     math::vec3 lookAt;
     math::vec3 up;
 
+    float fov;
+    float aspectratio;
+    float near;
+    float far;
+
+
 public:
-    Camera(const math::vec3& lookFrom, const math::vec3& lookAt, const math::vec3& up = math::vec3(0.0f, 0.0f, 1.0f));
+    Camera(const math::vec3& lookFrom, const math::vec3& lookAt, const math::vec3& up, float fov, float aspectratio, float near, float far);
     
-    virtual void update();
+    void setUniforms(GLuint programId) override;
+    void draw() const override {};
 };

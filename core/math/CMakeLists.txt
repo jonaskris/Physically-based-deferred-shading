@@ -12,3 +12,5 @@ add_library(math
 
 target_include_directories(math
     PUBLIC include)
+
+add_subdirectory(geometry)

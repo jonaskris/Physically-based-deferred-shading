@@ -12,5 +12,5 @@ target_include_directories(uniforms
 
 target_link_libraries(uniforms
     PUBLIC math
-    PUBLIC stb_image
-    PUBLIC glad)
+    PUBLIC glad
+    PUBLIC image)

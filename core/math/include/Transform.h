@@ -16,7 +16,7 @@ namespace math
             mat4 returnMatrix = mat4::identity();
 
             for(const mat4& transform : transforms)
-                returnMatrix = transforms[i] * returnMatrix;
+                returnMatrix *= transforms[i];
 
             return returnMatrix;
         }

@@ -1,13 +1,9 @@
 #include <math.h>
+#include <iostream>
 #include <Vec4.h>
 
 namespace math
 {
-    vec4::vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {};
-    vec4::vec4(float scalar) : x(scalar), y(scalar), z(scalar), w(scalar) {};
-    vec4::vec4(const vec4& other) : x(other.x), y(other.y), z(other.z), w(other.w) {};
-    vec4::vec4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {};
-
     vec4& vec4::add(const vec4& other)
     {
         x += other.x; y += other.y; z += other.z; w += other.w;
@@ -79,4 +75,15 @@ namespace math
     float vec4::magnitude() const { return sqrt(x*x + y*y + z*z + w*w); }
     float vec4::dot(const vec4& other) const { return x * other.x + y * other.y + z * other.z + w * other.w;}
     vec4 vec4::normalize() const { return *this / magnitude(); }
+
+    std::ostream& operator<<(std::ostream& out, const vec4& vector)
+    {
+        out << '[';
+        
+        for(size_t i = 0; i < 4; i++)
+            out << vector.elements[i] << (i != 3 ? ", " : "");
+        
+        out << ']';
+        return out;
+    }
 }

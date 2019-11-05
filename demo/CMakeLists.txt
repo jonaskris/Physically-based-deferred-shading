@@ -9,7 +9,6 @@ target_link_libraries(demo
     PUBLIC programs
     PUBLIC rendering
     PUBLIC geometry
-    PUBLIC model
     PUBLIC scene
     PUBLIC math
     PUBLIC uniforms

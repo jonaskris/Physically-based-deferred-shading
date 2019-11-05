@@ -6,8 +6,9 @@
 #include <Vec4.h>
 #include <Mat4.h>
 #include <Sampler.h>
-#include <glad/glad.h>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 class Uniform
 {

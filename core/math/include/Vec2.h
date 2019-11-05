@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 namespace math
 {
@@ -12,11 +13,6 @@ namespace math
                 float x, y;
             };
         };
-
-        vec2();
-        vec2(float scalar);
-        vec2(const vec2& other);
-        vec2(float x, float y);
 
         vec2& add(const vec2& other);
         vec2& substract(const vec2& other);
@@ -52,5 +48,7 @@ namespace math
         float dot(const vec2& other) const;
         float cross(const vec2& other) const;
         vec2 normalize() const;
+
+        friend std::ostream& operator<<(std::ostream& out, const vec2& vector);
     };
 }
