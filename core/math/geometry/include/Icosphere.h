@@ -32,9 +32,9 @@ private:
 	    CubemappedVertex midpoint = CubemappedVertex(
             math::vec3
 			{
-		        (vp1.position.x + vp2.position.x) / 2.0f, 
-		        (vp1.position.y + vp2.position.y) / 2.0f, 
-		        (vp1.position.z + vp2.position.z) / 2.0f
+		        (vp1.position.elements[0] + vp2.position.elements[0]) / 2.0f, 
+		        (vp1.position.elements[1] + vp2.position.elements[1]) / 2.0f, 
+		        (vp1.position.elements[2] + vp2.position.elements[2]) / 2.0f
 			}.normalize()
         );
 

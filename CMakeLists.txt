@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
-
 enable_testing()
-project(Project)
+
+project(PhysicallyBasedDeferredShading)
 
 set (CMAKE_CXX_STANDARD 17)
 
@@ -11,5 +11,4 @@ add_subdirectory(external/STB_IMAGE)
 add_subdirectory(core)
 add_subdirectory(demo)
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/googletest)
 add_subdirectory(tests)

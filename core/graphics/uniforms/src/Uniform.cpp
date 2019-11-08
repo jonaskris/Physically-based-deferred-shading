@@ -28,17 +28,17 @@ void Uniform1f::set(GLuint programId) const
 
 void UniformVec2f::set(GLuint programId) const
 {
-    glUniform2f(glGetUniformLocation(programId, &name[0]), vector.x, vector.y);
+    glUniform2f(glGetUniformLocation(programId, &name[0]), vector.elements[0], vector.elements[1]);
 }
 
 void UniformVec3f::set(GLuint programId) const
 {
-    glUniform3f(glGetUniformLocation(programId, &name[0]), vector.x, vector.y, vector.z);
+    glUniform3f(glGetUniformLocation(programId, &name[0]), vector.elements[0], vector.elements[1], vector.elements[2]);
 }
 
 void UniformVec4f::set(GLuint programId) const
 {
-    glUniform4f(glGetUniformLocation(programId, &name[0]), vector.x, vector.y, vector.z, vector.w);
+    glUniform4f(glGetUniformLocation(programId, &name[0]), vector.elements[0], vector.elements[1], vector.elements[2], vector.elements[3]);
 }
 
 void UniformMat4f::set(GLuint programId) const

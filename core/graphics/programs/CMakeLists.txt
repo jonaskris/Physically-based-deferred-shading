@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(Programs)
-
 add_subdirectory(shaders)
 
 add_library(programs

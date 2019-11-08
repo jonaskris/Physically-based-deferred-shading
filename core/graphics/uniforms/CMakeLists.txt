@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(Uniforms)
-
 add_library(uniforms
     include/Sampler.h src/Sampler.cpp
     include/Uniform.h src/Uniform.cpp

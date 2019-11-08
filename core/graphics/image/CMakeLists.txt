@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(Image)
-
 add_library(image
     include/Image.h src/Image.cpp)
 

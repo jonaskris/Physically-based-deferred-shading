@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(Scene)
-
 add_library(scene
     include/Scene.h
     include/Node.h 

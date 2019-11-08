@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(Shaders)
-
 add_library(shaders
     include/Shader.h src/Shader.cpp)
 

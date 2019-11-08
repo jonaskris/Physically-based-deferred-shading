@@ -5,15 +5,18 @@ namespace math
 {
     struct vec3
     {
-        union
-        {
-            float elements[3];
-            struct 
-            {
-                float x, y, z;
-            };
-        };
+        float elements[3];
 
+        // Initialization
+        vec3();
+        vec3(float x, float y, float z);
+
+        // Accessors
+        float& x();
+        float& y();
+        float& z();
+
+        // Operations
         vec3& add(const vec3& other);
         vec3& substract(const vec3& other);
         vec3& multiply(const vec3& other);
@@ -24,30 +27,31 @@ namespace math
         vec3& multiply(float scalar);
         vec3& divide(float scalar);
 
-        vec3& operator +=(const vec3& other); 
-        vec3& operator -=(const vec3& other); 
-        vec3& operator *=(const vec3& other); 
-        vec3& operator /=(const vec3& other); 
-
-        vec3& operator +=(float scalar); 
-        vec3& operator -=(float scalar); 
-        vec3& operator *=(float scalar);
-        vec3& operator /=(float scalar); 
-
-        vec3& operator +(const vec3& other) const; 
-        vec3& operator -(const vec3& other) const;
-        vec3& operator *(const vec3& other) const;
-        vec3& operator /(const vec3& other) const;
-
-        vec3& operator +(float scalar) const;
-        vec3& operator -(float scalar) const;
-        vec3& operator *(float scalar) const;
-        vec3& operator /(float scalar) const;
-
         float magnitude() const;
         float dot(const vec3& other) const;
         vec3 cross(const vec3& other) const;
         vec3 normalize() const;
+
+        // Operators
+        vec3& operator+=(const vec3& other); 
+        vec3& operator-=(const vec3& other); 
+        vec3& operator*=(const vec3& other); 
+        vec3& operator/=(const vec3& other); 
+
+        vec3& operator+=(float scalar); 
+        vec3& operator-=(float scalar); 
+        vec3& operator*=(float scalar);
+        vec3& operator/=(float scalar); 
+
+        vec3 operator+(const vec3& other) const; 
+        vec3 operator-(const vec3& other) const;
+        vec3 operator*(const vec3& other) const;
+        vec3 operator/(const vec3& other) const;
+
+        vec3 operator+(float scalar) const;
+        vec3 operator-(float scalar) const;
+        vec3 operator*(float scalar) const;
+        vec3 operator/(float scalar) const;
 
         friend std::ostream& operator<<(std::ostream& out, const vec3& vector);
     };

@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(Rendering)
-
 add_library(rendering
     include/Framebuffer.h src/Framebuffer.cpp
     include/Renderer.h src/Renderer.cpp)

@@ -101,17 +101,17 @@ void Program::setUniform1f(const GLchar* name, float scalar)
 
 void Program::setUniformVec2f(const GLchar* name, const math::vec2& vector)
 {
-    glUniform2f(getUniformLocation(name), vector.x, vector.y);
+    glUniform2f(getUniformLocation(name), vector.elements[0], vector.elements[1]);
 }
 
 void Program::setUniformVec3f(const GLchar* name, const math::vec3& vector)
 {
-    glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
+    glUniform3f(getUniformLocation(name), vector.elements[0], vector.elements[1], vector.elements[2]);
 }
 
 void Program::setUniformVec4f(const GLchar* name, const math::vec4& vector)
 {
-    glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
+    glUniform4f(getUniformLocation(name), vector.elements[0], vector.elements[1], vector.elements[2], vector.elements[3]);
 }
 
 void Program::setUniformMat4f(const GLchar* name, const math::mat4& matrix)
