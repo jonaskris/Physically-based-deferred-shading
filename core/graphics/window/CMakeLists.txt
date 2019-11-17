@@ -9,6 +9,7 @@ target_include_directories(window
 target_link_libraries(window 
     PUBLIC glad
     PUBLIC glfw
-    PUBLIC ${GLFW_LIBRARIES})
+    PUBLIC ${GLFW_LIBRARIES}
+    PUBLIC input)
 
 target_compile_definitions(window PRIVATE "GLFW_INCLUDE_NONE")

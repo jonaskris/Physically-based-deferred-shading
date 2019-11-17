@@ -5,15 +5,7 @@ namespace math
 {
     struct vec2
     {
-        float elements[2];
-
-        // Initialization
-        vec2();
-        vec2(float x, float y);
-
-        // Accessors
-        float& x();
-        float& y();
+        float elements[2] = {};
 
         // Operations
         vec2& add(const vec2& other);

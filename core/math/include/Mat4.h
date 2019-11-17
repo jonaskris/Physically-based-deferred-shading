@@ -9,22 +9,7 @@ namespace math
 
     struct mat4
     {
-        float elements[4*4];
-
-        // Initialization
-        mat4();
-        mat4(
-            float x0, float y0, float z0, float w0,
-            float x1, float y1, float z1, float w1,
-            float x2, float y2, float z2, float w2,
-            float x3, float y3, float z3, float w3
-        );
-        mat4(
-            const vec4& row0,
-            const vec4& row1,
-            const vec4& row2,
-            const vec4& row3
-        );
+        float elements[4*4] = {};
 
         // Accessors
         vec4 getRow(size_t row) const;
@@ -48,7 +33,10 @@ namespace math
         static mat4 translate(const vec3& vector);
         static mat4 rotate(float angle, const vec3& axis);
         static mat4 scale(const vec3& vector);
-		static mat4 perspective(float fov, float aspectratio, float near, float far);
+
+        static mat4 perspective(float left, float right, float bottom, float top, float near, float far);   // Non-symmetric
+		static mat4 perspective(float fov, float aspectratio, float near, float far);                       // Symmetric with fov and aspectratio
+
         static mat4 view(const vec3& lookFrom, const vec3& lookAt, const vec3& up);
     };
 }

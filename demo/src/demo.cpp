@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <Icosphere.h>
-#include <Program.h>
 #include <Shader.h>
 #include <Scene.h>
 #include <Camera.h>
@@ -20,20 +19,15 @@ int main()
         // Create window
         Window* window = new Window("Title", 500, 500);
 
-        // Create shaders
-        Shader* forwardVert = new Shader("resources/ForwardShader.vert", Shader::Type::VERTEX);
-        Shader* forwardFrag = new Shader("resources/ForwardShader.frag", Shader::Type::FRAGMENT);
-
-        // Create program
-        Program* forwardProg  = new Program({ forwardVert, forwardFrag });
-
         // Create Renderer
         Renderer renderer = Renderer(
             // Window
             window,
-            // Programs
-            forwardProg,
-            nullptr
+            // Shaders
+            {
+                {"resources/ForwardShader.vert", Shader::Type::VERTEX}, 
+                {"resources/ForwardShader.frag", Shader::Type::FRAGMENT}
+            }
         );
 
     // Resources
@@ -45,7 +39,9 @@ int main()
     // Materials
     //Material* moonMaterial = new Material(new UniformSampler3D("albedo", moonSampler));
 
-    Mesh<CubemappedVertex>* ico = new Icosphere(2);
+    Mesh<CubemappedVertex>* ico = Icosphere::generate<CubemappedVertex>(2);
+
+    std::cout << *ico << std::endl;
 
     Camera* camera = nullptr;
 
@@ -53,7 +49,8 @@ int main()
     Scene* scene = new Scene
     ({
         // Nodes
-        camera = new Camera(math::vec3{0.0f, -1.0f, 0.0f}, math::vec3{0.0f, 0.0f, 0.0f}, math::vec3{0.0f, 0.0f, 1.0f}, 90.0f, 500.0f/500.0f, 0.1f, 10.0f),
+        camera = new FirstPersonCamera(math::vec3{-2.0f, 0.0f, 0.0f}, math::vec3{0.0f, 1.0f, 0.0f}, 0.0f, 0.0f),
+        //camera = new Camera(math::vec3(0.0f, 0.0f, 3.0f), math::vec3(0.0f, 0.0f, 0.0f), math::vec3(0.0f, 1.0f, 0.0f)),
         new Model 
         (
             // Material
@@ -74,10 +71,12 @@ int main()
             std::cout << "On frame: " << framecounter << std::endl;
         }
 
-        camera->lookFrom += math::vec3{0.01f, 0.0f, 0.0f};
+        //camera->lookFrom += math::vec3{0.01f, 0.0f, 0.0f};
 
         // Process input
         // Render scene
         renderer.render(scene);
+
+        //std::cin.get();
     }
 }

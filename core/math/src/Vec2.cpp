@@ -4,14 +4,6 @@
 
 namespace math
 {
-    // Initialization
-    vec2::vec2() : elements{} {}
-    vec2::vec2(float x, float y) : elements{ x, y } {}
-
-    // Accessors
-    float& vec2::x() { return elements[0]; }
-    float& vec2::y() { return elements[1]; }
-
     // Operations
     vec2& vec2::add(const vec2& other)
     {

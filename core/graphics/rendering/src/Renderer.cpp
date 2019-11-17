@@ -12,12 +12,16 @@
 #include <TextureUnitManager.h>
 
 
-Renderer::Renderer(Window* window, Program* geometryProgram, Program* lightingProgram) : window(window), geometryProgram(geometryProgram), lightingProgram(lightingProgram) 
+Renderer::Renderer(Window* window, const std::vector<std::pair<std::string, Shader::Type>> geometryShaders/*, const std::vector<std::pair<std::string, Shader::Type>>& lightingShaders*/)
+    : window(window), geometryProgram(new Program(geometryShaders)), lightingProgram(nullptr), 
+    projection({"projection", math::mat4::perspective(80.0f, 500.0f/500.0f, 0.01f, 20.0f)}),
+    model({"model", math::mat4::identity()})
 {
-    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
     glFrontFace(GL_CW);
     glDisable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+    glPointSize(3.0f);
     glClearColor(1.0f, 0.7f, 0.3f, 1.0f);
 };
 
@@ -36,6 +40,9 @@ void Renderer::render(Scene* scene)
     // Draw nodes
     geometryProgram->enable();
 
+    projection.set(geometryProgram->getProgramId());
+    model.set(geometryProgram->getProgramId());
+
     std::vector<Node*>& nodes = scene->getNodes();
     std::for_each(nodes.begin(), nodes.end(), [&](Node* node)
     {
@@ -49,7 +56,7 @@ void Renderer::render(Scene* scene)
     // Update window
     window->update();
 
-    // Check for OpenGL errors
+    //Check for OpenGL errors
     //GLenum error = glGetError();
     //if(error != GL_NO_ERROR)
     //    std::cout << "OpenGL error: " << error << std::endl;
@@ -69,4 +76,9 @@ void Renderer::render(Scene* scene)
     // Render quad
     // Disable lighting pass program
     // Update window
+}
+
+void Renderer::setProjection(float fov, float aspectratio, float near, float far)
+{
+    projection = UniformMat4f("projection", math::mat4::perspective(fov, aspectratio, near, far));
 }

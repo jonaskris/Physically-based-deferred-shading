@@ -58,34 +58,13 @@ TEST(Initialization, Floats)
         14.13f, 24.14f, 34.15f, 44.16f
     };
 
-    mat4 mat1 (
-        11.01f, 21.02f, 31.03f, 41.04f,
-        12.05f, 22.06f, 32.07f, 42.08f,
-        13.09f, 23.10f, 33.11f, 43.12f,
-        14.13f, 24.14f, 34.15f, 44.16f
-    );
-
-    EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);
-}
-
-TEST(Initialization, Vec4s)
-{
-    using namespace math;
-
-    float const EXPECTED[16]
+    mat4 mat1 
     {
-        11.01f, 21.02f, 31.03f, 41.04f,
-        12.05f, 22.06f, 32.07f, 42.08f,
-        13.09f, 23.10f, 33.11f, 43.12f,
-        14.13f, 24.14f, 34.15f, 44.16f
+        11.01f, 12.05f, 13.09f, 14.13f,
+        21.02f, 22.06f, 23.10f, 24.14f,
+        31.03f, 32.07f, 33.11f, 34.15f,
+        41.04f, 42.08f, 43.12f, 44.16f
     };
-
-    mat4 mat1 (
-        vec4(11.01f, 21.02f, 31.03f, 41.04f),
-        vec4(12.05f, 22.06f, 32.07f, 42.08f),
-        vec4(13.09f, 23.10f, 33.11f, 43.12f),
-        vec4(14.13f, 24.14f, 34.15f, 44.16f)
-    );
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);
 }
@@ -102,12 +81,13 @@ TEST(Accessors, GetRow)
         14.13f, 24.14f, 34.15f, 44.16f
     };
 
-    mat4 mat1 (
-        11.01f, 21.02f, 31.03f, 41.04f,
-        12.05f, 22.06f, 32.07f, 42.08f,
-        13.09f, 23.10f, 33.11f, 43.12f,
-        14.13f, 24.14f, 34.15f, 44.16f
-    );
+    mat4 mat1
+    {
+        11.01f, 12.05f, 13.09f, 14.13f,
+        21.02f, 22.06f, 23.10f, 24.14f,
+        31.03f, 32.07f, 33.11f, 34.15f,
+        41.04f, 42.08f, 43.12f, 44.16f
+    };
 
     vec4 row0 = mat1.getRow(0);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_ROW(row0.elements, EXPECTED, 0);
@@ -136,10 +116,10 @@ TEST(Accessors, SetRow)
 
     mat4 mat1;
 
-    mat1.setRow(0, vec4(11.01f, 21.02f, 31.03f, 41.04f));
-    mat1.setRow(1, vec4(12.05f, 22.06f, 32.07f, 42.08f));
-    mat1.setRow(2, vec4(13.09f, 23.10f, 33.11f, 43.12f));
-    mat1.setRow(3, vec4(14.13f, 24.14f, 34.15f, 44.16f));
+    mat1.setRow(0, vec4{11.01f, 21.02f, 31.03f, 41.04f});
+    mat1.setRow(1, vec4{12.05f, 22.06f, 32.07f, 42.08f});
+    mat1.setRow(2, vec4{13.09f, 23.10f, 33.11f, 43.12f});
+    mat1.setRow(3, vec4{14.13f, 24.14f, 34.15f, 44.16f});
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);
 }
@@ -156,12 +136,13 @@ TEST(Accessors, GetColumn)
         14.13f, 24.14f, 34.15f, 44.16f
     };
 
-    mat4 mat1 (
-        11.01f, 21.02f, 31.03f, 41.04f,
-        12.05f, 22.06f, 32.07f, 42.08f,
-        13.09f, 23.10f, 33.11f, 43.12f,
-        14.13f, 24.14f, 34.15f, 44.16f
-    );
+    mat4 mat1
+    {
+        11.01f, 12.05f, 13.09f, 14.13f,
+        21.02f, 22.06f, 23.10f, 24.14f,
+        31.03f, 32.07f, 33.11f, 34.15f,
+        41.04f, 42.08f, 43.12f, 44.16f
+    };
 
     vec4 column0 = mat1.getColumn(0);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_COLUMN(column0.elements, EXPECTED, 0);
@@ -191,10 +172,10 @@ TEST(Accessors, SetColumn)
 
     mat4 mat1;
 
-    mat1.setColumn(0, vec4(11.01f, 21.02f, 31.03f, 41.04f));
-    mat1.setColumn(1, vec4(12.05f, 22.06f, 32.07f, 42.08f));
-    mat1.setColumn(2, vec4(13.09f, 23.10f, 33.11f, 43.12f));
-    mat1.setColumn(3, vec4(14.13f, 24.14f, 34.15f, 44.16f));
+    mat1.setColumn(0, vec4{11.01f, 21.02f, 31.03f, 41.04f});
+    mat1.setColumn(1, vec4{12.05f, 22.06f, 32.07f, 42.08f});
+    mat1.setColumn(2, vec4{13.09f, 23.10f, 33.11f, 43.12f});
+    mat1.setColumn(3, vec4{14.13f, 24.14f, 34.15f, 44.16f});
 
     // Check correct columns were set
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);
@@ -215,12 +196,13 @@ TEST(Operations, MatMultMat)
     // Scale by [2, 3, 4] then translate by [5, 6, 7]
     const mat4 mat1 = mat4::translate({5, 6, 7}) * mat4::scale({2, 3, 4});
 
-    const mat4 mat2 (
-        11.01f, 21.02f, 31.03f, 41.04f,
-        12.05f, 22.06f, 32.07f, 42.08f,
-        13.09f, 23.10f, 33.11f, 43.12f,
-        14.13f, 24.14f, 34.15f, 44.16f
-    );
+    const mat4 mat2 
+    {
+        11.01f, 12.05f, 13.09f, 14.13f,
+        21.02f, 22.06f, 23.10f, 24.14f,
+        31.03f, 32.07f, 33.11f, 34.15f,
+        41.04f, 42.08f, 43.12f, 44.16f
+    };
 
     mat4 mat3 = mat1 * mat2;
 
@@ -231,17 +213,12 @@ TEST(Operations, MatMultVec)
 {
     using namespace math;
 
-    float const EXPECTED[16]
-    {
-        24.2f, 33.0f, 44.0f, 4.4f
-    };
+    float const EXPECTED[16] {24.2f, 33.0f, 44.0f, 4.4f};
 
     // Scale by [2, 3, 4] then translate by [5, 6, 7]
     const mat4 mat1 = mat4::translate({5, 6, 7}) * mat4::scale({2, 3, 4});
 
-    const vec4 v1 (
-        1.1f, 2.2f, 3.3f, 4.4f
-    );
+    const vec4 v1 {1.1f, 2.2f, 3.3f, 4.4f};
 
     vec4 v2 = mat1 * v1;
 

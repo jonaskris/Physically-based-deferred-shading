@@ -4,16 +4,6 @@
 
 namespace math
 {
-
-    // Initialization
-    vec3::vec3() : elements{} {}
-    vec3::vec3(float x, float y, float z) : elements{ x, y, z } {}
-
-    // Accessors
-    float& vec3::x() { return elements[0]; }
-    float& vec3::y() { return elements[1]; }
-    float& vec3::z() { return elements[2]; }    
-
     // Operations
     vec3& vec3::add(const vec3& other)
     {
@@ -64,8 +54,8 @@ namespace math
     }
 
     float vec3::magnitude() const { return sqrt(elements[0] * elements[0] + elements[1] * elements[1] + elements[2] * elements[2]); }
-    float vec3::dot(const vec3& other) const { return elements[0] * other.elements[0] + elements[1] * other.elements[1] + elements[2] * other.elements[2];}
-    vec3 vec3::cross(const vec3& other) const { return vec3{ elements[1] * other.elements[2] - elements[0] * other.elements[1], elements[2] * other.elements[0] - elements[0] * other.elements[2], elements[0] * other.elements[1] - elements[1] * other.elements[0]}; }
+    float vec3::dot(const vec3& other) const { return elements[0] * other.elements[0] + elements[1] * other.elements[1] + elements[2] * other.elements[2]; }
+    vec3 vec3::cross(const vec3& other) const { return vec3{elements[1] * other.elements[2] - elements[2] * other.elements[1], elements[2] * other.elements[0] - elements[0] * other.elements[2], elements[0] * other.elements[1] - elements[1] * other.elements[0]}; }
     vec3 vec3::normalize() const { return *this / magnitude(); }
 
     // Operators

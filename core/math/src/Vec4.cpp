@@ -7,16 +7,6 @@
 
 namespace math
 {
-    // Initialization
-    vec4::vec4() : elements{} {}
-    vec4::vec4(float x, float y, float z, float w) : elements{ x, y, z, w } {}
-
-    // Accessors
-    float& vec4::x() { return elements[0]; }
-    float& vec4::y() { return elements[1]; }
-    float& vec4::z() { return elements[2]; }
-    float& vec4::w() { return elements[3]; }
-
     // Operations
     vec4& vec4::multiply(const mat4& matrix)
     {

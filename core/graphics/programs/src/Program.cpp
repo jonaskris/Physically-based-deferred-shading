@@ -13,7 +13,17 @@
 #include <Vec4.h>
 #include <Mat4.h>
 
-Program::Program(std::vector<Shader*>&& shaders)
+Program::Program(std::vector<std::pair<std::string, Shader::Type>> shaderPaths) : 
+Program([&]() -> std::vector<Shader*>
+{
+    std::vector<Shader*> shaders;
+    for(auto& shaderPath : shaderPaths)
+        shaders.push_back(new Shader(shaderPath.first, shaderPath.second));
+    return shaders;
+}())
+{}
+
+Program::Program(std::vector<Shader*> shaders)
 {
     programId = glCreateProgram();
 

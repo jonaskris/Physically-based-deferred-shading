@@ -25,7 +25,7 @@ struct CubemappedVertex
         glEnableVertexAttribArray(VERTEX_ATTRIBUTE_POSITION);
         glVertexAttribPointer(VERTEX_ATTRIBUTE_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(CubemappedVertex), (const GLvoid*)(offsetof(CubemappedVertex, CubemappedVertex::position)));
         glEnableVertexAttribArray(VERTEX_ATTRIBUTE_NORMAL);
-        glVertexAttribPointer(VERTEX_ATTRIBUTE_NORMAL, 3, GL_FLOAT, GL_TRUE, sizeof(CubemappedVertex), (const GLvoid*)(offsetof(CubemappedVertex, CubemappedVertex::normal)));
+        glVertexAttribPointer(VERTEX_ATTRIBUTE_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(CubemappedVertex), (const GLvoid*)(offsetof(CubemappedVertex, CubemappedVertex::normal)));    
     }
 };
 

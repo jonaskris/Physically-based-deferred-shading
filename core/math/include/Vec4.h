@@ -7,11 +7,7 @@ namespace math
 
     struct vec4
     {
-        float elements[4];
-
-        // Initialization
-        vec4();
-        vec4(float x, float y, float z, float w);
+        float elements[4] = {};
 
         // Accessors
         float& x();

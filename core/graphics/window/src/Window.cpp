@@ -3,9 +3,10 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <Input.h>
 
 void GLAPIENTRY
-MessageCallback( GLenum source,
+DebugMessageCallback( GLenum source,
                  GLenum type,
                  GLuint id,
                  GLenum severity,
@@ -18,9 +19,19 @@ MessageCallback( GLenum source,
             type, severity, message );
 }
 
-void windowresize(GLFWwindow* window, int width, int height)
+void windowResizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+// Converts position to be vertically normalized and horizontally depending on aspect ratio.
+// Also converts so that origin is in lower-left corner.
+void positionCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+
+    MouseCallback::positionCallback(window, (float)((xpos / width) * (width/height)), (float)(-ypos / height));
 }
 
 Window::Window(const std::string& title, int width, int height)
@@ -44,7 +55,8 @@ Window::Window(const std::string& title, int width, int height)
 
     // Configure window
     glfwMakeContextCurrent(window);
-    glfwSetWindowSizeCallback(window, windowresize);
+    glfwSetFramebufferSizeCallback(window, windowResizeCallback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Initialize GLAD
     if(!gladLoadGL())
@@ -52,9 +64,16 @@ Window::Window(const std::string& title, int width, int height)
     else
         std::cout << "GLAD initialized!\n\tVersion: " << GLVersion.major << "." << GLVersion.minor << std::endl;
 
-    // During init, enable debug output
-    glEnable              ( GL_DEBUG_OUTPUT );
-    glDebugMessageCallback( MessageCallback, 0 );
+    // Enable OpenGL debug output
+    glEnable              (GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(DebugMessageCallback, 0);
+
+    // Set input callbacks
+    glfwSetKeyCallback(window, KeyboardCallback::keyCallback);
+    glfwSetCursorPosCallback(window, positionCallback);
+    glfwSetCursorEnterCallback(window, MouseCallback::enterCallback);
+    glfwSetMouseButtonCallback(window, MouseCallback::buttonCallback);
+    glfwSetScrollCallback(window, MouseCallback::scrollCallback);
 }
 
 Window::~Window()
@@ -64,11 +83,11 @@ Window::~Window()
 
 void Window::update() const
 {
-    // Poll for input
-    glfwPollEvents();
-
     // Swap front buffer(displayed) and back buffer
     glfwSwapBuffers(window);
+
+    // Poll for input
+    glfwPollEvents();
 }
 
 bool Window::closed() const

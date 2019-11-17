@@ -5,11 +5,7 @@ namespace math
 {
     struct vec3
     {
-        float elements[3];
-
-        // Initialization
-        vec3();
-        vec3(float x, float y, float z);
+        float elements[3] = {};
 
         // Accessors
         float& x();

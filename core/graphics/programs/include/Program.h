@@ -22,7 +22,8 @@ private:
     bool validatedSuccessfully = false;
 
 public:
-    Program(std::vector<Shader*>&& shaders);
+    Program(std::vector<std::pair<std::string, Shader::Type>> shaderPaths);
+    Program(std::vector<Shader*> shaders);
     ~Program();
 
     // Prevent copying and moving (Because destructor invalidates program handle).

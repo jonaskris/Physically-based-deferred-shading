@@ -23,7 +23,7 @@ class Mesh : public MeshBase
 {
 protected:
     std::vector<VertexType> vertices;
-    std::vector<size_t> indices;
+    std::vector<uint32_t> indices;
     GLuint VAO;
     GLuint VBO;
     GLuint IBO;
@@ -39,7 +39,7 @@ protected:
         // IBO
         glGenBuffers(1, &IBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(size_t) * indices.size(), &indices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * indices.size(), &indices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         // VAO
@@ -52,23 +52,30 @@ protected:
 
         glBindVertexArray(0);
     }
-    Mesh() {};
 
 public:
+    Mesh(const std::vector<VertexType>& verticesIn, const std::vector<uint32_t>& indicesIn) 
+    {
+        vertices = verticesIn;
+        indices = indicesIn;
+        
+        initialize();
+    };
+
     void draw() const override
     {
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (GLvoid*)(0));
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 
-    template <typename U>
-    friend std::ostream& operator<<(std::ostream& out, const Mesh<U>& mesh);
+    friend std::ostream& operator<<(std::ostream& out, const Mesh<VertexType>& mesh)
+    {
+        out << "Mesh: Vertices size: " << mesh.vertices.size() << ", Indices size: " << mesh.indices.size();
+        return out;
+    }
 };
-
-template <typename VertexType>
-std::ostream& operator<<(std::ostream& out, const Mesh<VertexType>& mesh)
-{
-    out << "Mesh: Vertices size: " << mesh.vertices.size() << ", Indices size: " << mesh.indices.size();
-    return out;
-}

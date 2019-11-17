@@ -12,4 +12,5 @@ target_include_directories(scene
 target_link_libraries(scene
     PUBLIC uniforms
     PUBLIC material
-    PUBLIC glad)
+    PUBLIC glad
+    PUBLIC input)
