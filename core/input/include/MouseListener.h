@@ -5,42 +5,58 @@
 #include <MouseCallback.h>
 #include <Vec2.h>
 
-class MousePositionListener
+namespace Input
 {
-protected:
-    MousePositionListener() { MouseCallback::registerListener(this); }
-    ~MousePositionListener() { MouseCallback::unregisterListener(this); }
+    namespace Mouse
+    {
+        class PositionListener
+        {
+        protected:
+            PositionListener() { registerListener(this); }
+            ~PositionListener() { unregisterListener(this); }
 
-public:
-    virtual void positionCallback(math::vec2 position) = 0;
-};
+        public:
+            virtual void positionCallback(double deltatime, const std::vector<PositionEvent>& positionEvents) = 0;
+        };
 
-class MouseEnterListener
-{
-protected:
-    MouseEnterListener() { MouseCallback::registerListener(this); }
-    ~MouseEnterListener() { MouseCallback::unregisterListener(this); }
+        class DeltaPositionListener
+        {
+        protected:
+            DeltaPositionListener() { registerListener(this); }
+            ~DeltaPositionListener() { unregisterListener(this); }
 
-public:
-    virtual void enterCallback(int entered) = 0;
-};
+        public:
+            virtual void deltaPositionCallback(double deltatime, const std::vector<PositionEvent>& deltaPositionEvents) = 0;
+        };
 
-class MouseButtonListener
-{
-protected:
-    MouseButtonListener() { MouseCallback::registerListener(this); }
-    ~MouseButtonListener() { MouseCallback::unregisterListener(this); }
+        class EnterListener
+        {
+        protected:
+            EnterListener() { registerListener(this); }
+            ~EnterListener() { unregisterListener(this); }
 
-public:
-    virtual void buttonCallback(ButtonEvent buttonEvent) = 0;
-};
+        public:
+            virtual void enterCallback(double deltatime, const std::vector<EnterEvent>& enterEvents) = 0;
+        };
 
-class MouseScrollListener
-{
-protected:
-    MouseScrollListener() { MouseCallback::registerListener(this); }
-    ~MouseScrollListener() { MouseCallback::unregisterListener(this); }
+        class ButtonListener
+        {
+        protected:
+            ButtonListener() { registerListener(this); }
+            ~ButtonListener() { unregisterListener(this); }
 
-public:
-    virtual void scrollCallback(math::vec2 offset) = 0;
-};
+        public:
+            virtual void buttonCallback(double deltatime, const std::vector<ButtonEvent>& buttonEvents) = 0;
+        };
+
+        class ScrollListener
+        {
+        protected:
+            ScrollListener() { registerListener(this); }
+            ~ScrollListener() { unregisterListener(this); }
+
+        public:
+            virtual void scrollCallback(double deltatime, const std::vector<ScrollEvent>& scrollEvents) = 0;
+        };
+    }
+}

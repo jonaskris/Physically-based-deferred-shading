@@ -7,71 +7,103 @@
 #include <InputEnums.h>
 #include <Vec2.h>
 
-namespace MouseCallback
+namespace Input
 {
-    void registerListener(MousePositionListener* listener) { positionListeners.push_back(listener); }
-    void registerListener(MouseEnterListener* listener) { enterListeners.push_back(listener); }
-    void registerListener(MouseButtonListener* listener) { buttonListeners.push_back(listener); }
-    void registerListener(MouseScrollListener* listener) { scrollListeners.push_back(listener); }
-
-    void unregisterListener(MousePositionListener* listener) { positionListeners.erase(std::remove(positionListeners.begin(), positionListeners.end(), listener), positionListeners.end()); }
-    void unregisterListener(MouseEnterListener* listener) { enterListeners.erase(std::remove(enterListeners.begin(), enterListeners.end(), listener), enterListeners.end()); }
-    void unregisterListener(MouseButtonListener* listener) { buttonListeners.erase(std::remove(buttonListeners.begin(), buttonListeners.end(), listener), buttonListeners.end()); }
-    void unregisterListener(MouseScrollListener* listener) { scrollListeners.erase(std::remove(scrollListeners.begin(), scrollListeners.end(), listener), scrollListeners.end()); }
-
-    void windowResizeCallback(int width, int height)
+    namespace Mouse
     {
-        windowSize = math::vec2{width, height};
-    }
+        // MouseListener registration and callback logic
+        void registerListener(PositionListener* listener) { positionListeners.push_back(listener); }
+        void registerListener(DeltaPositionListener* listener) { deltaPositionListeners.push_back(listener); }
+        void registerListener(EnterListener* listener) { enterListeners.push_back(listener); }
+        void registerListener(ButtonListener* listener) { buttonListeners.push_back(listener); }
+        void registerListener(ScrollListener* listener) { scrollListeners.push_back(listener); }
 
-    void positionCallback(GLFWwindow* window, float xpos, float ypos)
-    {
-        for(MousePositionListener* listener : positionListeners)
-            listener->positionCallback(math::vec2{xpos, ypos});
-    }
+        void unregisterListener(PositionListener* listener) { positionListeners.erase(std::remove(positionListeners.begin(), positionListeners.end(), listener), positionListeners.end()); }
+        void unregisterListener(DeltaPositionListener* listener) { deltaPositionListeners.erase(std::remove(deltaPositionListeners.begin(), deltaPositionListeners.end(), listener), deltaPositionListeners.end()); }
+        void unregisterListener(EnterListener* listener) { enterListeners.erase(std::remove(enterListeners.begin(), enterListeners.end(), listener), enterListeners.end()); }
+        void unregisterListener(ButtonListener* listener) { buttonListeners.erase(std::remove(buttonListeners.begin(), buttonListeners.end(), listener), buttonListeners.end()); }
+        void unregisterListener(ScrollListener* listener) { scrollListeners.erase(std::remove(scrollListeners.begin(), scrollListeners.end(), listener), scrollListeners.end()); }
 
-    void enterCallback(GLFWwindow* window, int entered)
-    {
-        for(MouseEnterListener* listener : enterListeners)
-            listener->enterCallback(entered);        
-    }
-
-    void buttonCallback(GLFWwindow* window, int button, int action, int mods)
-    {
-        input::mouse::button buttonEnum = static_cast<input::mouse::button>(button);
-
-        ButtonEvent buttonEvent;
-
-        if(action == GLFW_PRESS)
+        void positionCallback(GLFWwindow* window, float xpos, float ypos)
         {
-            buttonEvent =
-            {
-                buttonEnum,
-                (buttonStates[buttonEnum] ? input::mouse::action::HOLD : input::mouse::action::PRESS)
-            };
+            positionEvents.emplace_back(math::vec2{xpos, ypos});
 
-            buttonStates[buttonEnum] = true;
-        } else if (action == GLFW_RELEASE)
-        {
-            buttonEvent =
-            {
-                buttonEnum,
-                input::mouse::action::RELEASE
-            };        
-            
-            buttonStates[buttonEnum] = false;
-        } else 
-        { 
-            return; 
+            if(!justEntered)
+                deltaPositionEvents.emplace_back(math::vec2{xpos, ypos} - lastPosition);
+
+            lastPosition = math::vec2{xpos, ypos};
+            justEntered = false;
         }
 
-        for(MouseButtonListener* listener : buttonListeners)
-            listener->buttonCallback(buttonEvent);
-    }
+        void enterCallback(GLFWwindow* window, int entered)
+        {
+            enterEvents.emplace_back((bool)entered);
 
-    void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
-    {
-        for(MouseScrollListener* listener : scrollListeners)
-            listener->scrollCallback(math::vec2{(float)xoffset, (float)yoffset});        
+            if(entered)
+                justEntered = true;
+        }
+
+        void buttonCallback(GLFWwindow* window, int button, int action, int mods)
+        {
+            Button buttonEnum = static_cast<Button>(button);
+
+            if(action == GLFW_PRESS)
+            {
+                buttonEvents.emplace_back
+                (
+                    buttonEnum,
+                    Action::PRESS
+                );      
+
+                buttonStates[buttonEnum] = true;
+            } else if (action == GLFW_RELEASE)
+            {
+                buttonEvents.emplace_back
+                (
+                    buttonEnum,
+                    Action::RELEASE
+                );        
+
+                buttonStates[buttonEnum] = false;
+            }
+        }
+
+        void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+        {
+            scrollEvents.emplace_back(math::vec2{(float)xoffset, (float)yoffset});        
+        }
+
+        // Calls listeners with accumulated events
+        void update(double deltatime)
+        {
+            for(auto& buttonstate : buttonStates)
+                if(buttonstate.second)
+                    buttonEvents.emplace_back
+                    (
+                        buttonstate.first,
+                        Action::HOLD
+                    );    
+
+            for(PositionListener* listener : positionListeners)
+                listener->positionCallback(deltatime, positionEvents);        
+
+            for(DeltaPositionListener* listener : deltaPositionListeners)
+                listener->deltaPositionCallback(deltatime, deltaPositionEvents);   
+
+            for(EnterListener* listener : enterListeners)
+                listener->enterCallback(deltatime, enterEvents);          
+
+            for(ButtonListener* listener : buttonListeners)
+                listener->buttonCallback(deltatime, buttonEvents);
+
+            for(ScrollListener* listener : scrollListeners)
+                listener->scrollCallback(deltatime, scrollEvents);
+
+            positionEvents.clear();
+            deltaPositionEvents.clear();
+            enterEvents.clear();
+            buttonEvents.clear();
+            scrollEvents.clear();
+        }
     }
 }

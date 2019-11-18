@@ -27,7 +27,7 @@ public:
     void draw() const override {};
 };
 
-class FirstPersonCamera : public Camera, public MousePositionListener, public KeyboardListener
+class FirstPersonCamera : public Camera, public Input::Mouse::DeltaPositionListener, public Input::Keyboard::KeyListener
 {
 private:
     float yaw, pitch;
@@ -36,6 +36,6 @@ private:
 public:
     FirstPersonCamera(const math::vec3& lookFrom, const math::vec3& up, float yaw, float pitch);
 
-    void positionCallback(math::vec2 position) override;
-    void keyCallback(const KeyEvent keyEvent) override;
+    void deltaPositionCallback(double deltatime, const std::vector<Input::Mouse::PositionEvent>& positionEvents) override;
+    void keyCallback(double deltatime, const std::vector<Input::Keyboard::KeyEvent>& keyEvents) override;
 };

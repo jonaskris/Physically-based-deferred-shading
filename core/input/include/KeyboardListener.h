@@ -4,12 +4,18 @@
 #include <InputEnums.h>
 #include <KeyboardCallback.h>
 
-class KeyboardListener
+namespace Input
 {
-protected:
-    KeyboardListener() { KeyboardCallback::registerListener(this); }
-    ~KeyboardListener() { KeyboardCallback::unregisterListener(this); }
+    namespace Keyboard
+    {
+        class KeyListener
+        {
+        protected:
+            KeyListener() { registerListener(this); }
+            ~KeyListener() { unregisterListener(this); }
 
-public:
-    virtual void keyCallback(const KeyEvent keyEvent) = 0;
-};
+        public:
+            virtual void keyCallback(double deltatime, const std::vector<KeyEvent>& keyEvents) = 0;
+        };
+    }
+}

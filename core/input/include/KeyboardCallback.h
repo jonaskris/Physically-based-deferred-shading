@@ -4,27 +4,40 @@
 #include <vector>
 #include <unordered_map>
 
-class KeyboardListener;
 class GLFWwindow;
 
-struct KeyEvent
+namespace Input
 {
-    input::keyboard::key key;
-    input::keyboard::action action;
-};
-
-namespace KeyboardCallback
-{
-    namespace
+    namespace Keyboard
     {
-        // Contains pointers to every registered listener.
-        std::vector<KeyboardListener*> listeners;
+        class KeyListener;
 
-        std::unordered_map<input::keyboard::key, bool> keyStates; // Bool ? pressed : released
+        // Events
+        struct KeyEvent
+        {
+            Key key;
+            Action action;
+
+            KeyEvent(Key key, Action action) : key(key), action(action) {}
+        };
+
+        // Keyboard namespace private members
+        namespace
+        {
+            // Contains pointers to every registered listener.
+            std::vector<KeyListener*> listeners;
+
+            std::unordered_map<Key, bool> keyStates; // Bool ? pressed : released
+            std::vector<KeyEvent> keyEvents;
+        }
+
+        // KeyListener registration and callback logic
+        void registerListener(KeyListener* listener);
+        void unregisterListener(KeyListener* listener);
+
+        void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+        // Calls listeners with accumulated events
+        void update(double deltatime);
     }
-
-    void registerListener(KeyboardListener* listener);
-    void unregisterListener(KeyboardListener* listener);
-
-    void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 }

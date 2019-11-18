@@ -12,17 +12,15 @@
 #include <Image.h>
 #include <Model.h>
 #include <Renderer.h>
+#include <Input.h>
 
 int main()
 {
     // Initialization
-        // Create window
-        Window* window = new Window("Title", 500, 500);
-
         // Create Renderer
-        Renderer renderer = Renderer(
+        Renderer::initialize(
             // Window
-            window,
+            "Title", 500, 500,
             // Shaders
             {
                 {"resources/ForwardShader.vert", Shader::Type::VERTEX}, 
@@ -62,21 +60,17 @@ int main()
     });
 
     unsigned int framecounter = 0;
+
     // Main loop
-    while(!window->closed())
+    while(!Renderer::windowClosed())
     {
         framecounter++;
         if(framecounter % 100 == 0)
-        {
-            std::cout << "On frame: " << framecounter << std::endl;
-        }
+            std::cout << "FPS: " << Renderer::getFPS() << std::endl;
 
         //camera->lookFrom += math::vec3{0.01f, 0.0f, 0.0f};
 
-        // Process input
-        // Render scene
-        renderer.render(scene);
-
-        //std::cin.get();
+        Input::update(Renderer::getDeltatime()); // Process input
+        Renderer::render(scene);                 // Render scene
     }
 }

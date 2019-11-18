@@ -6,48 +6,61 @@
 #include <KeyboardListener.h>
 #include <InputEnums.h>
 
-namespace KeyboardCallback
+namespace Input
 {
-    void registerListener(KeyboardListener* listener) { listeners.push_back(listener); }
-    void unregisterListener(KeyboardListener* listener) { listeners.erase(std::remove(listeners.begin(), listeners.end(), listener), listeners.end()); }
-
-    void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    namespace Keyboard
     {
-        input::keyboard::key keyEnum = static_cast<input::keyboard::key>(key);
+        // KeyListener registration and callback logic
+        void registerListener(KeyListener* listener) { listeners.push_back(listener); }
+        void unregisterListener(KeyListener* listener) { listeners.erase(std::remove(listeners.begin(), listeners.end(), listener), listeners.end()); }
 
-        KeyEvent keyEvent;
+        void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            Key keyEnum = static_cast<Key>(key);
 
-        if(action == GLFW_PRESS)
-        {
-            keyEvent =
+            if(action == GLFW_PRESS)
             {
-                keyEnum,
-                (keyStates[keyEnum] ? input::keyboard::action::HOLD : input::keyboard::action::PRESS)
-            };
+                keyEvents.emplace_back
+                (
+                    keyEnum,
+                    Action::PRESS
+                );
 
-            keyStates[keyEnum] = true;
-        } else if (action == GLFW_RELEASE)
-        {
-            keyEvent =
+                keyStates[keyEnum] = true;
+            } else if (action == GLFW_RELEASE)
             {
-                keyEnum,
-                input::keyboard::action::RELEASE
-            };        
-            
-            keyStates[keyEnum] = false;
-        } else if (action == GLFW_REPEAT)
-        {
-            keyEvent =
+                keyEvents.emplace_back
+                (
+                    keyEnum,
+                    Action::RELEASE
+                );
+
+                keyStates[keyEnum] = false;
+            } else if (action == GLFW_REPEAT)
             {
-                keyEnum,
-                input::keyboard::action::REPEAT
-            };     
-        } else 
-        { 
-            return; 
+                keyEvents.emplace_back
+                (
+                    keyEnum,
+                    Action::REPEAT
+                );
+            }
         }
 
-        for(KeyboardListener* listener : listeners)
-            listener->keyCallback(keyEvent);
+        // Calls listeners with accumulated events
+        void update(double deltatime)
+        {
+            for(auto& keystate : keyStates)
+                if(keystate.second)
+                    keyEvents.emplace_back
+                    (
+                        keystate.first,
+                        Action::HOLD
+                    );
+
+            for(KeyListener* listener : listeners)
+                listener->keyCallback(deltatime, keyEvents);        
+
+            keyEvents.clear();
+        }
     }
 }

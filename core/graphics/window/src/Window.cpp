@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Input.h>
+#include <Renderer.h>
 
 void GLAPIENTRY
 DebugMessageCallback( GLenum source,
@@ -19,9 +20,10 @@ DebugMessageCallback( GLenum source,
             type, severity, message );
 }
 
-void windowResizeCallback(GLFWwindow* window, int width, int height)
+void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+    Renderer::setProjection(0.0f, (float)width / (float)height, 0.0f, 0.0f);
 }
 
 // Converts position to be vertically normalized and horizontally depending on aspect ratio.
@@ -31,7 +33,7 @@ void positionCallback(GLFWwindow* window, double xpos, double ypos)
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
 
-    MouseCallback::positionCallback(window, (float)((xpos / width) * (width/height)), (float)(-ypos / height));
+    Input::Mouse::positionCallback(window, (float)((xpos / width) * (width/height)), (float)(-ypos / height));
 }
 
 Window::Window(const std::string& title, int width, int height)
@@ -55,8 +57,9 @@ Window::Window(const std::string& title, int width, int height)
 
     // Configure window
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, windowResizeCallback);
+    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSwapInterval(1);
 
     // Initialize GLAD
     if(!gladLoadGL())
@@ -69,11 +72,11 @@ Window::Window(const std::string& title, int width, int height)
     glDebugMessageCallback(DebugMessageCallback, 0);
 
     // Set input callbacks
-    glfwSetKeyCallback(window, KeyboardCallback::keyCallback);
+    glfwSetKeyCallback(window, Input::Keyboard::keyCallback);
     glfwSetCursorPosCallback(window, positionCallback);
-    glfwSetCursorEnterCallback(window, MouseCallback::enterCallback);
-    glfwSetMouseButtonCallback(window, MouseCallback::buttonCallback);
-    glfwSetScrollCallback(window, MouseCallback::scrollCallback);
+    glfwSetCursorEnterCallback(window, Input::Mouse::enterCallback);
+    glfwSetMouseButtonCallback(window, Input::Mouse::buttonCallback);
+    glfwSetScrollCallback(window, Input::Mouse::scrollCallback);
 }
 
 Window::~Window()

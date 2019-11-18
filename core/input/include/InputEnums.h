@@ -2,18 +2,18 @@
 
 #include <GLFW/glfw3.h>
 
-namespace input
+namespace Input
 {
-    namespace mouse
+    namespace Mouse
     {
-        enum class button
+        enum class Button
         {
             LEFT_CLICK = GLFW_MOUSE_BUTTON_LEFT, 
             RIGHT_CLICK = GLFW_MOUSE_BUTTON_RIGHT,
             MIDDLE_CLICK = GLFW_MOUSE_BUTTON_MIDDLE,
         };
 
-        enum class action
+        enum class Action
         {
             RELEASE = GLFW_RELEASE,
             PRESS = GLFW_PRESS,
@@ -21,9 +21,9 @@ namespace input
         };
     }
 
-    namespace keyboard
+    namespace Keyboard
     {
-        enum class key
+        enum class Key
         {
             // 0 - 9
             NUM0 = GLFW_KEY_0, NUM1 = GLFW_KEY_1, NUM2 = GLFW_KEY_2, NUM3 = GLFW_KEY_3, NUM4 = GLFW_KEY_4, NUM5 = GLFW_KEY_5, NUM6 = GLFW_KEY_6, NUM7 = GLFW_KEY_7, NUM8 = GLFW_KEY_8, NUM9 = GLFW_KEY_9,
@@ -43,7 +43,7 @@ namespace input
 			ESCAPE = GLFW_KEY_ESCAPE, ENTER = GLFW_KEY_ENTER, TAB = GLFW_KEY_TAB, BACKSPACE = GLFW_KEY_BACKSPACE, RIGHT = GLFW_KEY_RIGHT, LEFT = GLFW_KEY_LEFT, DOWN = GLFW_KEY_DOWN, UP = GLFW_KEY_UP
         };
 
-        enum class action
+        enum class Action
         {
             RELEASE = GLFW_RELEASE,
             PRESS = GLFW_PRESS,

@@ -7,7 +7,7 @@ add_library(input
     include/MouseCallback.h src/MouseCallback.cpp
     include/KeyboardListener.h
     include/MouseListener.h
-    include/Input.h
+    include/Input.h src/Input.cpp
     include/InputEnums.h)
 
 target_include_directories(input

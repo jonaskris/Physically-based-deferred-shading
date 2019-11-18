@@ -37,17 +37,21 @@ Camera(
     //std::cin.get();
 }
 
-void FirstPersonCamera::positionCallback(math::vec2 position)
+void FirstPersonCamera::deltaPositionCallback(double deltatime, const std::vector<Input::Mouse::PositionEvent>& deltaPositionEvents)
 {
-    static math::vec2 lastPosition{0.5f, 0.5f};
-    math::vec2 deltaPos = position - lastPosition;
+    using namespace Input::Mouse;
 
-    // Update yaw and pitch based on input
-    yaw -= deltaPos.elements[0] * 10.0f;
-    pitch += deltaPos.elements[1] * 10.0f;
+    static const float moveSpeed = 50.0f;
 
-    // Limit yaw to -180 to 180 to limit floating point errors with big values.
-    yaw = std::fmod(yaw, 180.0f);
+    for(auto& deltaPositionEvent : deltaPositionEvents)
+    {
+        // Update yaw and pitch based on input
+        yaw -= deltaPositionEvent.position.elements[0] * moveSpeed;
+        pitch += deltaPositionEvent.position.elements[1] * moveSpeed;
+    }
+
+    // Limit yaw to 360 degrees to limit floating point errors with big values.
+    yaw = std::fmod(yaw, 360.0f);
 
     // Limit pitch to a 180 degreee arch.
     if(pitch > 89.99f)
@@ -65,44 +69,50 @@ void FirstPersonCamera::positionCallback(math::vec2 position)
 
     // Update lookAt vector
     lookAt = lookFrom + forward;
-
-    // Update lastPosition
-    lastPosition = position;
 }
 
-void FirstPersonCamera::keyCallback(const KeyEvent keyEvent)
+void FirstPersonCamera::keyCallback(double deltatime, const std::vector<Input::Keyboard::KeyEvent>& keyEvents)
 {
-    static const float moveSpeed = 0.1f;
+    using namespace Input::Keyboard;
 
-    std::cout << "key: " << (size_t)keyEvent.key << ", action: " << (size_t)keyEvent.action << std::endl;
+    static const float moveSpeed = 10.0f; // Per second
 
-    if(keyEvent.action == input::keyboard::action::PRESS)
+    // Make a frameMoveSpeed based on frame render time, to make input independent of FPS
+    const float frameMoveSpeed = moveSpeed * (float)deltatime;
+
+    // Limit WASD movement to horizontal plane by using a horizontal forward vector
+    math::vec3 horizontalForward = forward;
+    horizontalForward.elements[1] = 0.0f;
+    horizontalForward = horizontalForward.normalize();
+
+    for(auto& keyEvent : keyEvents)
     {
-        switch(keyEvent.key)
+        if(keyEvent.action == Action::HOLD)
         {
-        case input::keyboard::key::S:
-            lookFrom.elements[2] -= moveSpeed;
-            break;
-        case input::keyboard::key::W:
-            lookFrom.elements[2] += moveSpeed;                
-            break;
-        case input::keyboard::key::A:
-            lookFrom.elements[0] -= moveSpeed;                
-            break;        
-        case input::keyboard::key::D:
-            lookFrom.elements[0] += moveSpeed;                
-            break;
-        case input::keyboard::key::R:
-            lookFrom.elements[1] += moveSpeed;                
-            break;
-        case input::keyboard::key::F:
-            lookFrom.elements[1] -= moveSpeed;                
-            break;
-        
+            switch(keyEvent.key)
+            {
+            case Key::S:
+                lookFrom -= horizontalForward * frameMoveSpeed;
+                break;
+            case Key::W:
+                lookFrom += horizontalForward * frameMoveSpeed;
+                break;
+            case Key::A:
+                lookFrom -= horizontalForward.cross(up) * frameMoveSpeed;
+                break;        
+            case Key::D:
+                lookFrom += horizontalForward.cross(up) * frameMoveSpeed;
+                break;
+            case Key::SPACE:
+                lookFrom.elements[1] += frameMoveSpeed;                
+                break;
+            case Key::LEFT_SHIFT:
+                lookFrom.elements[1] -= frameMoveSpeed;                
+                break;
+            }
         }
     }
 
+    // Update lookAt so its always relative to lookFrom
     lookAt = lookFrom + forward;
-
-    //std::cout << "lookFrom: " << lookFrom << std::endl;
 }

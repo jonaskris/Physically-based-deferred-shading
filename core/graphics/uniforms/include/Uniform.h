@@ -26,8 +26,9 @@ protected:
     Sampler2D* sampler;
 
 public:
-    void set(GLuint programId) const override;
+    UniformSampler2D() : Uniform("NULL"), sampler(nullptr) {};
     UniformSampler2D(const std::string& name, Sampler2D* sampler) : Uniform(name), sampler(sampler) {};
+    void set(GLuint programId) const override;
 };
 
 class UniformSampler3D : public Uniform
@@ -36,8 +37,9 @@ protected:
     Sampler3D* sampler;
 
 public:
-    void set(GLuint programId) const override;
+    UniformSampler3D() : Uniform("NULL"), sampler(nullptr) {};
     UniformSampler3D(const std::string& name, Sampler3D* sampler) : Uniform(name), sampler(sampler) {};
+    void set(GLuint programId) const override;
 };
 
 class Uniform1f : public Uniform
@@ -46,6 +48,7 @@ protected:
     float scalar;
 
 public:
+    Uniform1f() : Uniform("NULL"), scalar(0.0f) {}
     Uniform1f(const std::string& name, float scalar) : Uniform(name), scalar(scalar) {};
     void set(GLuint programId) const override;
     void setScalar(float scalar) { this->scalar = scalar; }
@@ -57,6 +60,7 @@ protected:
     math::vec2 vector;
 
 public:
+    UniformVec2f() : Uniform("NULL"), vector({}) {}
     UniformVec2f(const std::string& name, const math::vec2& vector) : Uniform(name), vector(vector) {};
     void set(GLuint programId) const override;
     void setVector(const math::vec2& vector) { this->vector = vector; }
@@ -68,6 +72,7 @@ protected:
     math::vec3 vector;
 
 public:
+    UniformVec3f() : Uniform("NULL"), vector({}) {}
     UniformVec3f(const std::string& name, const math::vec3& vector) : Uniform(name), vector(vector) {};
     void set(GLuint programId) const override;
     void setVector(const math::vec3& vector) { this->vector = vector; }
@@ -79,6 +84,7 @@ protected:
     math::vec4 vector;
 
 public:
+    UniformVec4f() : Uniform("NULL"), vector({}) {}
     UniformVec4f(const std::string& name, const math::vec4& vector) : Uniform(name), vector(vector) {};
     void set(GLuint programId) const override;
     void setVector(const math::vec4& vector) { this->vector = vector; }
@@ -90,6 +96,7 @@ protected:
     math::mat4 matrix;
     
 public:
+    UniformMat4f() : Uniform("NULL"), matrix({}) {}
     UniformMat4f(const std::string& name, const math::mat4& matrix) : Uniform(name), matrix(matrix) {};
     void set(GLuint programId) const override;
     void setMatrix(const math::mat4& matrix) { this->matrix = matrix; }
