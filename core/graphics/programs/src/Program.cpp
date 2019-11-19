@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include <Program.h>
+
 #include <Shader.h>
 #include <Vec2.h>
 #include <Vec3.h>

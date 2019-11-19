@@ -1,11 +1,16 @@
 #pragma once
+
 #include <iostream>
 
 namespace math
 {
     struct vec2
     {
-        float elements[2] = {};
+        float elements[2];
+
+        // Initialization
+        vec2();
+        vec2(float x, float y);
 
         // Operations
         vec2& add(const vec2& other);

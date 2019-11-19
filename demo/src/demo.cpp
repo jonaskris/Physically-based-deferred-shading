@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+
 #include <Icosphere.h>
 #include <Shader.h>
 #include <Scene.h>

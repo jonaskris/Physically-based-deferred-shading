@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 
 namespace math
@@ -7,7 +8,11 @@ namespace math
 
     struct vec4
     {
-        float elements[4] = {};
+        float elements[4];
+
+        // Initialization
+        vec4();
+        vec4(float x, float y, float z, float w);
 
         // Accessors
         float& x();

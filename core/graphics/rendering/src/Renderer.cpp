@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <Renderer.h>
+
 #include <Window.h>
 #include <Scene.h>
 #include <Program.h>

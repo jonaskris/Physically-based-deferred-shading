@@ -1,7 +1,9 @@
 #pragma once
-#include <Uniform.h>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include <Uniform.h>
 
 class Program;
 

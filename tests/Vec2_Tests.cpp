@@ -29,7 +29,7 @@ TEST(Initialization, Floats)
 
     float const EXPECTED[2] {1.0f, 2.0f};
 
-    vec2 vec1{1.0f, 2.0f};
+    vec2 vec1(1.0f, 2.0f);
 
     EXPECT_VEC2_EQ_FLOAT_ARRAY(vec1.elements, EXPECTED);
 }
@@ -40,7 +40,7 @@ TEST(Operations, Magnitude)
 
     const float EXPECTED = 2.4596748f;
 
-    const vec2 v1 {1.1f, 2.2f};
+    const vec2 v1(1.1f, 2.2f);
 
     float f = v1.magnitude();
 
@@ -53,9 +53,9 @@ TEST(Operations, Dot)
 
     const float EXPECTED = 21.34f;
 
-    const vec2 v1 {1.1f, 2.2f};
+    const vec2 v1(1.1f, 2.2f);
 
-    const vec2 v2 {7.2f, 6.1f};
+    const vec2 v2(7.2f, 6.1f);
 
     float f1 = v1.dot(v2);
     float f2 = v2.dot(v1);
@@ -72,9 +72,9 @@ TEST(Operations, Normalize)
 
     const float EXPECTED2[2] {-0.76298422f, 0.6464172f};
 
-    const vec2 v1 {1.1f, -2.2f};
+    const vec2 v1(1.1f, -2.2f);
 
-    const vec2 v2 {-7.2f, 6.1f};
+    const vec2 v2(-7.2f, 6.1f);
 
     vec2 n1 = v1.normalize();
     vec2 n2 = v2.normalize();

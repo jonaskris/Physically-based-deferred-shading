@@ -1,8 +1,11 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+
 #include <GLFW/glfw3.h>
+
 #include <KeyboardCallback.h>
+
 #include <KeyboardListener.h>
 #include <InputEnums.h>
 

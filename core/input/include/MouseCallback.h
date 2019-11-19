@@ -1,8 +1,9 @@
 #pragma once
 
-#include <InputEnums.h>
 #include <vector>
 #include <unordered_map>
+
+#include <InputEnums.h>
 #include <Vec2.h>
 
 class GLFWwindow;

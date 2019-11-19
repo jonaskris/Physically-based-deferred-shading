@@ -1,5 +1,7 @@
 #pragma once
+
 #include <iostream>
+
 #include <Utils.h>
 
 namespace math
@@ -9,7 +11,17 @@ namespace math
 
     struct mat4
     {
-        float elements[4*4] = {};
+        float elements[4*4];
+
+        // Initialization
+        mat4(float diagonal);
+        mat4();
+        mat4(
+            float x0, float y0, float z0, float w0,
+            float x1, float y1, float z1, float w1,
+            float x2, float y2, float z2, float w2,
+            float x3, float y3, float z3, float w3
+        );
 
         // Accessors
         vec4 getRow(size_t row) const;

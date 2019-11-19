@@ -1,9 +1,15 @@
 #include <math.h>
 #include <iostream>
+
 #include <Vec3.h>
 
 namespace math
 {
+
+    // Initialization
+    vec3::vec3() : elements{} {}
+    vec3::vec3(float x, float y, float z) : elements{x, y , z} {}
+
     // Operations
     vec3& vec3::add(const vec3& other)
     {

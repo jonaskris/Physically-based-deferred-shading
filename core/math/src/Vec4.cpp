@@ -3,10 +3,15 @@
 #include <iostream>
 
 #include <Vec4.h>
+
 #include <Mat4.h>
 
 namespace math
 {
+    // Initialization
+    vec4::vec4() : elements{} {}
+    vec4::vec4(float x, float y, float z, float w) : elements{x, y, z, w} {}
+
     // Operations
     vec4& vec4::multiply(const mat4& matrix)
     {

@@ -2,14 +2,39 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-#include <Utils.h>
 
 #include <Mat4.h>
+
 #include <Vec3.h>
 #include <Vec4.h>
 
 namespace math
 {
+
+    // Initialization
+    mat4::mat4(float diagonal) : elements
+    {
+        diagonal, 0.0f, 0.0f, 0.0f,
+        0.0f, diagonal, 0.0f, 0.0f,
+        0.0f, 0.0f, diagonal, 0.0f,
+        0.0f, 0.0f, 0.0f, diagonal
+    } {}
+
+    mat4::mat4() : mat4(1.0f) {}
+
+    mat4::mat4(
+        float x0, float y0, float z0, float w0,
+        float x1, float y1, float z1, float w1,
+        float x2, float y2, float z2, float w2,
+        float x3, float y3, float z3, float w3
+    ) : elements
+    {
+        x0, y0, z0, w0,
+        x1, y1, z1, w1,
+        x2, y2, z2, w2,
+        x3, y3, z3, w3
+    } {}
+
     // Accessors
 	vec4 mat4::getRow(size_t row) const
 	{
@@ -27,7 +52,7 @@ namespace math
 
     vec4 mat4::getColumn(size_t column) const
 	{
-		return vec4{elements[column * 4 + 0], elements[column * 4 + 1], elements[column * 4 + 2], elements[column * 4 + 3]};
+		return vec4(elements[column * 4 + 0], elements[column * 4 + 1], elements[column * 4 + 2], elements[column * 4 + 3]);
 	}
 
     void mat4::setColumn(size_t column, const vec4& vector)
@@ -41,7 +66,7 @@ namespace math
     // Operations
     mat4& mat4::multiply(const mat4& other)
     {
-        mat4 temp;
+        mat4 temp(0.0f);
 
         for(size_t column = 0; column < 4; column++)
             for(size_t row = 0; row < 4; row++)
@@ -57,12 +82,12 @@ namespace math
     vec4 mat4::multiply(const vec4& vector) const
     {
         return vec4
-		{
+		(
 			elements[0] * vector.elements[0] + elements[4] * vector.elements[1] + elements[8]  * vector.elements[2] + elements[12] * vector.elements[3],
 			elements[1] * vector.elements[0] + elements[5] * vector.elements[1] + elements[9]  * vector.elements[2] + elements[13] * vector.elements[3],
 			elements[2] * vector.elements[0] + elements[6] * vector.elements[1] + elements[10] * vector.elements[2] + elements[14] * vector.elements[3],
 			elements[3] * vector.elements[0] + elements[7] * vector.elements[1] + elements[11] * vector.elements[2] + elements[15] * vector.elements[3]
-        };
+        );
     }
 
     // Operators
@@ -88,24 +113,18 @@ namespace math
     // Generators
     mat4 mat4::identity()
     {
-        return mat4
-		{
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
-        };
+        return mat4();
     }
 
     mat4 mat4::translate(const vec3& vector)
     {
 		return mat4 
-		{
+		(
 			1.0f,		        0.0f,		        0.0f,		        0.0f,
 			0.0f,		        1.0f,		        0.0f,		        0.0f,
 			0.0f,		        0.0f,		        1.0f,		        0.0f,
 			vector.elements[0], vector.elements[1], vector.elements[2], 1.0f
-        };
+        );
     }
 
     mat4 mat4::rotate(float angle, const vec3& axis)
@@ -118,34 +137,34 @@ namespace math
 		float x = axis.elements[0], y = axis.elements[1], z = axis.elements[2];
 
 		return mat4 
-		{
+		(
 			c+omc*x*x, 		omc*x*y-s*z, 	omc*x*z+s*y, 	0.0f,
 			omc*x*y+s*z,	c+omc*y*y,		omc*y*z-s*x, 	0.0f,
 			omc*x*z-s*y,	omc*y*z+s*x,	c+omc*z*z, 		0.0f,
 			0.0f, 			0.0f, 			0.0f, 			1.0f
-        };
+        );
     }
 
     mat4 mat4::scale(const vec3& vector)
 	{
 		return mat4 
-		{
+		(
 			vector.elements[0], 	0.0f, 				0.0f, 				0.0f,
 			0.0f, 					vector.elements[1], 0.0f, 				0.0f,
 			0.0f, 					0.0f, 				vector.elements[2], 0.0f,
 			0.0f, 					0.0f, 				0.0f, 				1.0f
-        };
+        );
 	}
 
     mat4 mat4::perspective(float left, float right, float bottom, float top, float near, float far)
     {
         return mat4
-        {
+        (
             (2.0f*near)/(right-left),   0.0f,                           0.0f,                           0.0f,
             0.0f,                       (2.0f*near)/(top-bottom),       0.0f,                           0.0f,
             (right+left)/(right-left),  (top+bottom)/(top-bottom),      -(far+near)/(far-near),        -1.0f,
             0.0f,                       0.0f,                           -(2.0f*far*near)/(far-near),    0.0f
-        };
+        );
     }
 
 	mat4 mat4::perspective(float fov, float aspectratio, float near, float far)
@@ -166,11 +185,11 @@ namespace math
         vec3 ups = forward.cross(left);
 
         return mat4
-        {
+        (
             left.elements[0],    ups.elements[0],    forward.elements[0],    0.0f,
             left.elements[1],    ups.elements[1],    forward.elements[1],    0.0f,
             left.elements[2],    ups.elements[2],    forward.elements[2],    0.0f,
             -left.elements[0] * lookFrom.elements[0] - left.elements[1] * lookFrom.elements[1] - left.elements[2] * lookFrom.elements[2],   -ups.elements[0] * lookFrom.elements[0] - ups.elements[1] * lookFrom.elements[1] - ups.elements[2] * lookFrom.elements[2],  -forward.elements[0] * lookFrom.elements[0] - forward.elements[1] * lookFrom.elements[1] - forward.elements[2] * lookFrom.elements[2],                   1.0f
-        };
+        );
     }
 }

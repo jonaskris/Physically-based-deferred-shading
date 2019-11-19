@@ -1,8 +1,9 @@
+#include <Camera.h>
+
 #include <Vec2.h>
 #include <Vec3.h>
 #include <Mat4.h>
 #include <Uniform.h>
-#include <Camera.h>
 
 // Camera
 Camera::Camera(const math::vec3& lookFrom, const math::vec3& lookAt, const math::vec3& up)

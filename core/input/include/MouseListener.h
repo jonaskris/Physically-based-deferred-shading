@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 #include <InputEnums.h>
 #include <MouseCallback.h>
 #include <Vec2.h>

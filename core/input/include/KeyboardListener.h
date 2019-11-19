@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 #include <InputEnums.h>
 #include <KeyboardCallback.h>
 

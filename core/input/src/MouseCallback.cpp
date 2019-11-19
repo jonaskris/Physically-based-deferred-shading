@@ -1,9 +1,12 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+
 #include <GLFW/glfw3.h>
-#include <MouseListener.h>
+
 #include <MouseCallback.h>
+
+#include <MouseListener.h>
 #include <InputEnums.h>
 #include <Vec2.h>
 

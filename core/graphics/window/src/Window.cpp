@@ -1,10 +1,12 @@
 #include <iostream>
-#include "Window.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <Input.h>
+
+#include <Window.h>
+
 #include <Renderer.h>
+#include <Input.h>
 
 void GLAPIENTRY
 DebugMessageCallback( GLenum source,

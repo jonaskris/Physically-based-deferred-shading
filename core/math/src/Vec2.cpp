@@ -1,9 +1,15 @@
 #include <math.h>
 #include <iostream>
+
 #include <Vec2.h>
 
 namespace math
 {
+
+    // Initialization
+    vec2::vec2() : elements{} {}
+    vec2::vec2(float x, float y) : elements{x, y} {}
+
     // Operations
     vec2& vec2::add(const vec2& other)
     {
