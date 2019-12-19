@@ -5,6 +5,7 @@
 
 #include <Window.h>
 
+#include <Utils.h>
 #include <Renderer.h>
 #include <Input.h>
 
@@ -25,7 +26,7 @@ DebugMessageCallback( GLenum source,
 void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
-    Renderer::setProjection(0.0f, (float)width / (float)height, 0.0f, 0.0f);
+    Renderer::setProjection(math::Radians(0.0f), (float)width / (float)height, 0.0f, 0.0f);
 }
 
 // Converts position to be vertically normalized and horizontally depending on aspect ratio.
@@ -61,7 +62,7 @@ Window::Window(const std::string& title, int width, int height)
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
 
     // Initialize GLAD
     if(!gladLoadGL())

@@ -7,6 +7,7 @@
 
 #include <Renderer.h>
 
+#include <Utils.h>
 #include <Window.h>
 #include <Scene.h>
 #include <Program.h>
@@ -22,12 +23,12 @@ namespace Renderer
         geometryProgram = new Program(geometryShaders);
         lightingProgram = nullptr;
 
-        setProjection(90.0f, (float)windowWidth / (float)windowHeight, 0.01f, 20.0f);
+        setProjection(math::Degrees(90.0f), (float)windowWidth / (float)windowHeight, 0.01f, 20.0f);
 
-        model = {"model", math::mat4::identity()};
+        model = {"model", math::Mat4::identity()};
 
-        glDisable(GL_DEPTH_TEST);
-        glFrontFace(GL_CW);
+        glEnable(GL_DEPTH_TEST);
+        glFrontFace(GL_CCW);
         glDisable(GL_CULL_FACE);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
         glPointSize(3.0f);
@@ -101,7 +102,7 @@ namespace Renderer
         return deltatime;
     }
 
-    void setProjection(float newFov, float newAspectratio, float newNear, float newFar)
+    void setProjection(math::Radians newFov, float newAspectratio, float newNear, float newFar)
     {
         if(newFov)
             fov = newFov;
@@ -115,10 +116,10 @@ namespace Renderer
         if(newFar)
             far = newFar;
 
-        projection = UniformMat4f("projection", math::mat4::perspective(fov, aspectratio, near, far));
+        projection = UniformMat4f("projection", math::Mat4::perspective(fov, aspectratio, near, far));
     }
 
-    void setModel(const math::mat4& modelMatrix)
+    void setModel(const math::Mat4& modelMatrix)
     {
         model.setMatrix(modelMatrix);
     }

@@ -1,42 +1,39 @@
 #include <Camera.h>
 
+#include <Utils.h>
 #include <Vec2.h>
 #include <Vec3.h>
 #include <Mat4.h>
 #include <Uniform.h>
 
 // Camera
-Camera::Camera(const math::vec3& lookFrom, const math::vec3& lookAt, const math::vec3& up)
-: lookFrom(lookFrom), lookAt(lookAt), up(up), view({"view", math::mat4::view(lookFrom, lookAt, up)}) {};
+Camera::Camera(const math::Vec3& lookFrom, const math::Vec3& lookAt, const math::Vec3& up)
+: lookFrom(lookFrom), lookAt(lookAt), up(up), view({"view", math::Mat4::view(lookFrom, lookAt, up)}) {};
 
 void Camera::setUniforms(GLuint programId)
 {
-    view.setMatrix(math::mat4::view(lookFrom, lookAt, up));
+    view.setMatrix(math::Mat4::view(lookFrom, lookAt, up));
     view.set(programId);
 }
 
 // FirstPersonCamera
-FirstPersonCamera::FirstPersonCamera(const math::vec3& lookFrom, const math::vec3& up, float yaw, float pitch) : yaw(yaw), pitch(pitch),
+FirstPersonCamera::FirstPersonCamera(const math::Vec3& lookFrom, const math::Vec3& up, math::Degrees yaw, math::Degrees pitch) : yaw(yaw), pitch(pitch),
 forward
 ({
     cosf(math::toRadians(pitch)) * cosf(math::toRadians(yaw)),
     sinf(math::toRadians(pitch)),
-    cosf(math::toRadians(pitch)) * sinf(-math::toRadians(yaw))
+    cosf(math::toRadians(pitch)) * sinf(math::toRadians(-yaw))
 }),
 Camera(
     lookFrom, 
-    lookFrom + math::vec3
+    lookFrom + math::Vec3
     {
         cosf(math::toRadians(pitch)) * cosf(math::toRadians(yaw)),
         sinf(math::toRadians(pitch)),
-        cosf(math::toRadians(pitch)) * sinf(-math::toRadians(yaw))
+        cosf(math::toRadians(pitch)) * sinf(math::toRadians(-yaw))
     },
     up
-) {
-
-    //std::cout << "lookFrom: " << lookFrom << ", lookAt: " << lookAt << ", up: " << up << std::endl;
-    //std::cin.get();
-}
+) {}
 
 void FirstPersonCamera::deltaPositionCallback(double deltatime, const std::vector<Input::Mouse::PositionEvent>& deltaPositionEvents)
 {
@@ -47,25 +44,25 @@ void FirstPersonCamera::deltaPositionCallback(double deltatime, const std::vecto
     for(auto& deltaPositionEvent : deltaPositionEvents)
     {
         // Update yaw and pitch based on input
-        yaw -= deltaPositionEvent.position.elements[0] * moveSpeed;
-        pitch += deltaPositionEvent.position.elements[1] * moveSpeed;
+        yaw.degrees -= deltaPositionEvent.position.elements[0] * moveSpeed;
+        pitch.degrees += deltaPositionEvent.position.elements[1] * moveSpeed;
     }
 
     // Limit yaw to 360 degrees to limit floating point errors with big values.
-    yaw = std::fmod(yaw, 360.0f);
+    yaw.degrees = std::fmod(yaw, 360.0f);
 
     // Limit pitch to a 180 degreee arch.
     if(pitch > 89.99f)
-        pitch = 89.99f;
+        pitch.degrees = 89.99f;
     if(pitch < -89.99f)
-        pitch = -89.99f;
+        pitch.degrees = -89.99f;
 
     // Update forward vector
     forward =
     {
         cosf(math::toRadians(pitch)) * cosf(math::toRadians(yaw)),
         sinf(math::toRadians(pitch)),
-        cosf(math::toRadians(pitch)) * sinf(-math::toRadians(yaw))
+        cosf(math::toRadians(pitch)) * sinf(math::toRadians(-yaw))
     };
 
     // Update lookAt vector
@@ -82,7 +79,7 @@ void FirstPersonCamera::keyCallback(double deltatime, const std::vector<Input::K
     const float frameMoveSpeed = moveSpeed * (float)deltatime;
 
     // Limit WASD movement to horizontal plane by using a horizontal forward vector
-    math::vec3 horizontalForward = forward;
+    math::Vec3 horizontalForward = forward;
     horizontalForward.elements[1] = 0.0f;
     horizontalForward = horizontalForward.normalize();
 

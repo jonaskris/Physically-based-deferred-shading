@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <Utils.h>
 #include <Vec2.h>
 #include <Vec3.h>
 #include <Mat4.h>
@@ -16,12 +17,12 @@ private:
     UniformMat4f view;
 
 protected:
-    math::vec3 lookFrom;
-    math::vec3 lookAt;
-    math::vec3 up;
+    math::Vec3 lookFrom;
+    math::Vec3 lookAt;
+    math::Vec3 up;
 
 public:
-    Camera(const math::vec3& lookFrom, const math::vec3& lookAt, const math::vec3& up);
+    Camera(const math::Vec3& lookFrom, const math::Vec3& lookAt, const math::Vec3& up);
     
     void setUniforms(GLuint programId) override;
     void draw() const override {};
@@ -30,11 +31,11 @@ public:
 class FirstPersonCamera : public Camera, public Input::Mouse::DeltaPositionListener, public Input::Keyboard::KeyListener
 {
 private:
-    float yaw, pitch;
-    math::vec3 forward;
+    math::Degrees yaw, pitch;
+    math::Vec3 forward;
 
 public:
-    FirstPersonCamera(const math::vec3& lookFrom, const math::vec3& up, float yaw, float pitch);
+    FirstPersonCamera(const math::Vec3& lookFrom, const math::Vec3& up, math::Degrees yaw, math::Degrees pitch);
 
     void deltaPositionCallback(double deltatime, const std::vector<Input::Mouse::PositionEvent>& positionEvents) override;
     void keyCallback(double deltatime, const std::vector<Input::Keyboard::KeyEvent>& keyEvents) override;

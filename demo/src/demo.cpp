@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 
+#include <Utils.h>
 #include <Icosphere.h>
 #include <Shader.h>
 #include <Scene.h>
@@ -30,17 +31,16 @@ int main()
         );
 
     // Resources
-        //Image* moonImage = new Image("moon.png");
-    
+        Image* moonImage = new Image("resources/moon.png");
+        std::cout << *moonImage << std::endl;
     // Samplers
-        //Sampler3D* moonSampler = new Sampler3D(*moonImage);
+        Sampler3D* moonSampler = new Sampler3D(*moonImage);
 
     // Materials
-    //Material* moonMaterial = new Material(new UniformSampler3D("albedo", moonSampler));
+    Material* moonMaterial = new Material(new UniformSampler3D("albedo", moonSampler));
 
     Mesh<CubemappedVertex>* ico = Icosphere::generate<CubemappedVertex>(2);
-
-    std::cout << *ico << std::endl;
+    //std::cout << *ico << std::endl;
 
     Camera* camera = nullptr;
 
@@ -48,12 +48,12 @@ int main()
     Scene* scene = new Scene
     ({
         // Nodes
-        camera = new FirstPersonCamera(math::vec3{-2.0f, 0.0f, 0.0f}, math::vec3{0.0f, 1.0f, 0.0f}, 0.0f, 0.0f),
+        camera = new FirstPersonCamera(math::Vec3{-2.0f, 0.0f, 0.0f}, math::Vec3{0.0f, 1.0f, 0.0f}, math::Degrees(0.0f), math::Degrees(0.0f)),
         //camera = new Camera(math::vec3(0.0f, 0.0f, 3.0f), math::vec3(0.0f, 0.0f, 0.0f), math::vec3(0.0f, 1.0f, 0.0f)),
         new Model 
         (
             // Material
-            nullptr,//moonMaterial,
+            moonMaterial,
 
             // Mesh
             ico

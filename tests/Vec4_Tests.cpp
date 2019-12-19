@@ -20,7 +20,7 @@ TEST(Initialization, Default)
 {
     using namespace math;
 
-    vec4 vec1;
+    Vec4 vec1;
 
     EXPECT_VEC4_EQ_FLOAT(vec1.elements, 0.0f);
 }
@@ -31,7 +31,7 @@ TEST(Initialization, Floats)
 
     float const EXPECTED[4] {1.0f, 2.0f, 3.0f, 4.0f};
 
-    vec4 vec1(1.0f, 2.0f, 3.0f, 4.0f);
+    Vec4 vec1(1.0f, 2.0f, 3.0f, 4.0f);
 
     EXPECT_VEC4_EQ_FLOAT_ARRAY(vec1.elements, EXPECTED);
 }
@@ -43,11 +43,23 @@ TEST(Operations, VecMultMat)
     float const EXPECTED[4] {2.2f, 6.6f, 13.2f, 46.2f};
 
     // Scale by [2, 3, 4] then translate by [5, 6, 7]
-    const mat4 mat1 = mat4::translate({5, 6, 7}) * mat4::scale({2, 3, 4});
+    const Mat4 mat1 = Mat4::translate({5, 6, 7}) * Mat4::scale({2, 3, 4});
 
-    const vec4 v1(1.1f, 2.2f, 3.3f, 4.4f);
+    const Vec4 v1(1.1f, 2.2f, 3.3f, 4.4f);
 
-    vec4 v2 = v1 * mat1;
+    Vec4 v2 = v1 * mat1;
+
+    EXPECT_VEC4_EQ_FLOAT_ARRAY(v2.elements, EXPECTED); 
+}
+
+TEST(Operations, Negation)
+{
+    using namespace math;
+
+    float const EXPECTED[4] {-1.0f, 2.0f, -3.0f, 4.0f};
+
+    const Vec4 v1(1.0f, -2.0f, 3.0f, -4.0f);
+    const Vec4 v2 = -v1;
 
     EXPECT_VEC4_EQ_FLOAT_ARRAY(v2.elements, EXPECTED); 
 }
@@ -58,7 +70,7 @@ TEST(Operations, Magnitude)
 
     const float EXPECTED = 6.0249481f;
 
-    const vec4 v1(1.1f, 2.2f, 3.3f, 4.4f);
+    const Vec4 v1(1.1f, 2.2f, 3.3f, 4.4f);
 
     float f = v1.magnitude();
 
@@ -71,9 +83,9 @@ TEST(Operations, Dot)
 
     const float EXPECTED = 58.630005f;
 
-    const vec4 v1(1.1f, 2.2f, 3.3f, 4.4f);
+    const Vec4 v1(1.1f, 2.2f, 3.3f, 4.4f);
 
-    const vec4 v2(7.2f, 6.1f, 4.9f, 4.8f);
+    const Vec4 v2(7.2f, 6.1f, 4.9f, 4.8f);
 
     float f1 = v1.dot(v2);
     float f2 = v2.dot(v1);
@@ -90,12 +102,12 @@ TEST(Operations, Normalize)
 
     const float EXPECTED2[4] {-0.61716801f, 0.52287847f, 0.42001712f, -0.41144535f};
 
-    const vec4 v1(1.1f, -2.2f, 3.3f, 4.4f);
+    const Vec4 v1(1.1f, -2.2f, 3.3f, 4.4f);
 
-    const vec4 v2(-7.2f, 6.1f, 4.9f, -4.8f);
+    const Vec4 v2(-7.2f, 6.1f, 4.9f, -4.8f);
 
-    vec4 n1 = v1.normalize();
-    vec4 n2 = v2.normalize();
+    Vec4 n1 = v1.normalize();
+    Vec4 n2 = v2.normalize();
 
     EXPECT_VEC4_EQ_FLOAT_ARRAY(n1.elements, EXPECTED1); 
     EXPECT_VEC4_EQ_FLOAT_ARRAY(n2.elements, EXPECTED2); 

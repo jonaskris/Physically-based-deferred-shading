@@ -59,47 +59,47 @@ public:
 class UniformVec2f : public Uniform
 {
 protected:
-    math::vec2 vector;
+    math::Vec2 vector;
 
 public:
     UniformVec2f() : Uniform("NULL"), vector({}) {}
-    UniformVec2f(const std::string& name, const math::vec2& vector) : Uniform(name), vector(vector) {};
+    UniformVec2f(const std::string& name, const math::Vec2& vector) : Uniform(name), vector(vector) {};
     void set(GLuint programId) const override;
-    void setVector(const math::vec2& vector) { this->vector = vector; }
+    void setVector(const math::Vec2& vector) { this->vector = vector; }
 };
 
 class UniformVec3f : public Uniform
 {
 protected:
-    math::vec3 vector;
+    math::Vec3 vector;
 
 public:
     UniformVec3f() : Uniform("NULL"), vector({}) {}
-    UniformVec3f(const std::string& name, const math::vec3& vector) : Uniform(name), vector(vector) {};
+    UniformVec3f(const std::string& name, const math::Vec3& vector) : Uniform(name), vector(vector) {};
     void set(GLuint programId) const override;
-    void setVector(const math::vec3& vector) { this->vector = vector; }
+    void setVector(const math::Vec3& vector) { this->vector = vector; }
 }; 
 
 class UniformVec4f : public Uniform
 {
 protected:
-    math::vec4 vector;
+    math::Vec4 vector;
 
 public:
     UniformVec4f() : Uniform("NULL"), vector({}) {}
-    UniformVec4f(const std::string& name, const math::vec4& vector) : Uniform(name), vector(vector) {};
+    UniformVec4f(const std::string& name, const math::Vec4& vector) : Uniform(name), vector(vector) {};
     void set(GLuint programId) const override;
-    void setVector(const math::vec4& vector) { this->vector = vector; }
+    void setVector(const math::Vec4& vector) { this->vector = vector; }
 };
 
 class UniformMat4f : public Uniform
 {
 protected:
-    math::mat4 matrix;
+    math::Mat4 matrix;
     
 public:
     UniformMat4f() : Uniform("NULL"), matrix({}) {}
-    UniformMat4f(const std::string& name, const math::mat4& matrix) : Uniform(name), matrix(matrix) {};
+    UniformMat4f(const std::string& name, const math::Mat4& matrix) : Uniform(name), matrix(matrix) {};
     void set(GLuint programId) const override;
-    void setMatrix(const math::mat4& matrix) { this->matrix = matrix; }
+    void setMatrix(const math::Mat4& matrix) { this->matrix = matrix; }
 }; 

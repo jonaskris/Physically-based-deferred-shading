@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 class Image
@@ -14,4 +15,6 @@ public:
     int getWidth() const;
     int getHeight() const;
     const unsigned char* const getPixels() const;
+
+    friend std::ostream& operator<<(std::ostream& out, const Image& shader);
 };

@@ -4,51 +4,60 @@
 
 namespace math
 {
-    struct vec2
+    struct Vec2
     {
         float elements[2];
 
         // Initialization
-        vec2();
-        vec2(float x, float y);
+        Vec2();
+        Vec2(float x, float y);
 
+        // Accessors
+        float& x();
+        float& y();
+        float& z();
+        
         // Operations
-        vec2& add(const vec2& other);
-        vec2& substract(const vec2& other);
-        vec2& multiply(const vec2& other);
-        vec2& divide(const vec2& other);
+        Vec2& add(const Vec2& other);
+        Vec2& substract(const Vec2& other);
+        Vec2& multiply(const Vec2& other);
+        Vec2& divide(const Vec2& other);
 
-        vec2& add(float scalar);
-        vec2& substract(float scalar);
-        vec2& multiply(float scalar);
-        vec2& divide(float scalar);
+        Vec2& add(float scalar);
+        Vec2& substract(float scalar);
+        Vec2& multiply(float scalar);
+        Vec2& divide(float scalar);
+
+        Vec2 negate() const;
 
         float magnitude() const;
-        float dot(const vec2& other) const;
-        float cross(const vec2& other) const;
-        vec2 normalize() const;
+        float dot(const Vec2& other) const;
+        float cross(const Vec2& other) const;
+        Vec2 normalize() const;
 
         // Operators
-        vec2& operator+=(const vec2& other); 
-        vec2& operator-=(const vec2& other); 
-        vec2& operator*=(const vec2& other); 
-        vec2& operator/=(const vec2& other); 
+        Vec2& operator+=(const Vec2& other); 
+        Vec2& operator-=(const Vec2& other); 
+        Vec2& operator*=(const Vec2& other); 
+        Vec2& operator/=(const Vec2& other); 
 
-        vec2& operator+=(float scalar); 
-        vec2& operator-=(float scalar); 
-        vec2& operator*=(float scalar);
-        vec2& operator/=(float scalar); 
+        Vec2& operator+=(float scalar); 
+        Vec2& operator-=(float scalar); 
+        Vec2& operator*=(float scalar);
+        Vec2& operator/=(float scalar); 
 
-        vec2 operator+(const vec2& other) const; 
-        vec2 operator-(const vec2& other) const;
-        vec2 operator*(const vec2& other) const;
-        vec2 operator/(const vec2& other) const;
+        Vec2 operator-() const;
 
-        vec2 operator+(float scalar) const;
-        vec2 operator-(float scalar) const;
-        vec2 operator*(float scalar) const;
-        vec2 operator/(float scalar) const;
+        Vec2 operator+(const Vec2& other) const; 
+        Vec2 operator-(const Vec2& other) const;
+        Vec2 operator*(const Vec2& other) const;
+        Vec2 operator/(const Vec2& other) const;
 
-        friend std::ostream& operator<<(std::ostream& out, const vec2& vector);
+        Vec2 operator+(float scalar) const;
+        Vec2 operator-(float scalar) const;
+        Vec2 operator*(float scalar) const;
+        Vec2 operator/(float scalar) const;
+
+        friend std::ostream& operator<<(std::ostream& out, const Vec2& vector);
     };
 }

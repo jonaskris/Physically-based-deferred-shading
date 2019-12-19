@@ -41,10 +41,10 @@ public:
     
     GLint getUniformLocation(const GLchar* name);
     void setUniform1f(const GLchar* name, float scalar);
-    void setUniformVec2f(const GLchar* name, const math::vec2& vector);
-    void setUniformVec3f(const GLchar* name, const math::vec3& vector);
-    void setUniformVec4f(const GLchar* name, const math::vec4& vector);
-    void setUniformMat4f(const GLchar* name, const math::mat4& matrix);
+    void setUniformVec2f(const GLchar* name, const math::Vec2& vector);
+    void setUniformVec3f(const GLchar* name, const math::Vec3& vector);
+    void setUniformVec4f(const GLchar* name, const math::Vec4& vector);
+    void setUniformMat4f(const GLchar* name, const math::Mat4& matrix);
     
     friend std::ostream& operator<<(std::ostream& out, const Program& program);
 };

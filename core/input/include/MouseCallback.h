@@ -21,9 +21,9 @@ namespace Input
         // Events
         struct PositionEvent
         {
-            math::vec2 position;
+            math::Vec2 position;
 
-            PositionEvent(math::vec2 position) : position(position) {}
+            PositionEvent(math::Vec2 position) : position(position) {}
         };
 
         struct EnterEvent
@@ -43,9 +43,9 @@ namespace Input
 
         struct ScrollEvent
         {
-            math::vec2 offset;
+            math::Vec2 offset;
 
-            ScrollEvent(math::vec2 offset) : offset(offset) {}
+            ScrollEvent(math::Vec2 offset) : offset(offset) {}
         };
 
         // Mouse namespace private members
@@ -63,7 +63,7 @@ namespace Input
 
             // DeltaPosition events
             std::vector<PositionEvent> deltaPositionEvents;
-            math::vec2 lastPosition {0.5f, 0.5f}; // [0.5f, 0.5f] is the initial mouse position (Middle of screen).
+            math::Vec2 lastPosition {0.5f, 0.5f}; // [0.5f, 0.5f] is the initial mouse position (Middle of screen).
             bool justEntered = false; // Used to prevent delta position being calculated when entering window, as it can yield large values when mouse leaves the window from one side and enters from another. 
 
             // Enter events

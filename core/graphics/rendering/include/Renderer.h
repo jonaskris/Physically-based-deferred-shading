@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include <Utils.h>
 #include <Uniform.h>
 #include <Shader.h>
 
@@ -27,7 +28,7 @@ namespace Renderer
 
         // Projection
         UniformMat4f projection;
-        float fov;
+        math::Radians fov (90.0f);
         float aspectratio;
         float near;
         float far;
@@ -50,7 +51,7 @@ namespace Renderer
     size_t getFPS();
 
     // Updates projection arguments if argument is not 0 and updates the matrix
-    void setProjection(float newFov, float newAspectratio, float newNear, float newFar);
-    void setModel(const math::mat4& modelMatrix);
+    void setProjection(math::Radians newFov, float newAspectratio, float newNear, float newFar);
+    void setModel(const math::Mat4& modelMatrix);
 
 }

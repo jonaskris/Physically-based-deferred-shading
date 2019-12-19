@@ -3,6 +3,7 @@
 #include <Vec3.h>
 #include <Vec4.h>
 #include <Mat4.h>
+#include <Utils.h>
 
 // Helper methods
 
@@ -49,7 +50,7 @@ TEST(Initialization, Default)
         0.0f, 0.0f, 0.0f, 1.0f
     };
 
-    mat4 mat1;
+    Mat4 mat1;
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);
 }
@@ -66,7 +67,7 @@ TEST(Initialization, Floats)
         14.13f, 24.14f, 34.15f, 44.16f
     };
 
-    mat4 mat1 
+    Mat4 mat1 
     (
         11.01f, 12.05f, 13.09f, 14.13f,
         21.02f, 22.06f, 23.10f, 24.14f,
@@ -89,7 +90,7 @@ TEST(Accessors, GetRow)
         14.13f, 24.14f, 34.15f, 44.16f
     };
 
-    mat4 mat1
+    Mat4 mat1
     (
         11.01f, 12.05f, 13.09f, 14.13f,
         21.02f, 22.06f, 23.10f, 24.14f,
@@ -97,16 +98,16 @@ TEST(Accessors, GetRow)
         41.04f, 42.08f, 43.12f, 44.16f
     );
 
-    vec4 row0 = mat1.getRow(0);
+    Vec4 row0 = mat1.getRow(0);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_ROW(row0.elements, EXPECTED, 0);
 
-    vec4 row1 = mat1.getRow(1);
+    Vec4 row1 = mat1.getRow(1);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_ROW(row1.elements, EXPECTED, 1);
 
-    vec4 row2 = mat1.getRow(2);
+    Vec4 row2 = mat1.getRow(2);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_ROW(row2.elements, EXPECTED, 2);
 
-    vec4 row3 = mat1.getRow(3);
+    Vec4 row3 = mat1.getRow(3);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_ROW(row3.elements, EXPECTED, 3);
 }
 
@@ -122,12 +123,12 @@ TEST(Accessors, SetRow)
         14.13f, 24.14f, 34.15f, 44.16f
     };
 
-    mat4 mat1;
+    Mat4 mat1;
 
-    mat1.setRow(0, vec4(11.01f, 21.02f, 31.03f, 41.04f) );
-    mat1.setRow(1, vec4(12.05f, 22.06f, 32.07f, 42.08f) );
-    mat1.setRow(2, vec4(13.09f, 23.10f, 33.11f, 43.12f) );
-    mat1.setRow(3, vec4(14.13f, 24.14f, 34.15f, 44.16f) );
+    mat1.setRow(0, Vec4(11.01f, 21.02f, 31.03f, 41.04f) );
+    mat1.setRow(1, Vec4(12.05f, 22.06f, 32.07f, 42.08f) );
+    mat1.setRow(2, Vec4(13.09f, 23.10f, 33.11f, 43.12f) );
+    mat1.setRow(3, Vec4(14.13f, 24.14f, 34.15f, 44.16f) );
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);
 }
@@ -144,7 +145,7 @@ TEST(Accessors, GetColumn)
         14.13f, 24.14f, 34.15f, 44.16f
     };
 
-    mat4 mat1
+    Mat4 mat1
     (
         11.01f, 12.05f, 13.09f, 14.13f,
         21.02f, 22.06f, 23.10f, 24.14f,
@@ -152,16 +153,16 @@ TEST(Accessors, GetColumn)
         41.04f, 42.08f, 43.12f, 44.16f
     );
 
-    vec4 column0 = mat1.getColumn(0);
+    Vec4 column0 = mat1.getColumn(0);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_COLUMN(column0.elements, EXPECTED, 0);
 
-    vec4 column1 = mat1.getColumn(1);
+    Vec4 column1 = mat1.getColumn(1);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_COLUMN(column1.elements, EXPECTED, 1);
 
-    vec4 column2 = mat1.getColumn(2);
+    Vec4 column2 = mat1.getColumn(2);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_COLUMN(column2.elements, EXPECTED, 2);
 
-    vec4 column3 = mat1.getColumn(3);
+    Vec4 column3 = mat1.getColumn(3);
     EXPECT_VEC4_EQ_FLOAT_ARRAY_COLUMN(column3.elements, EXPECTED, 3);
 
 }
@@ -178,12 +179,12 @@ TEST(Accessors, SetColumn)
         41.04f, 42.08f, 43.12f, 44.16f
     };
 
-    mat4 mat1;
+    Mat4 mat1;
 
-    mat1.setColumn(0, vec4(11.01f, 21.02f, 31.03f, 41.04f) );
-    mat1.setColumn(1, vec4(12.05f, 22.06f, 32.07f, 42.08f) );
-    mat1.setColumn(2, vec4(13.09f, 23.10f, 33.11f, 43.12f) );
-    mat1.setColumn(3, vec4(14.13f, 24.14f, 34.15f, 44.16f) );
+    mat1.setColumn(0, Vec4(11.01f, 21.02f, 31.03f, 41.04f) );
+    mat1.setColumn(1, Vec4(12.05f, 22.06f, 32.07f, 42.08f) );
+    mat1.setColumn(2, Vec4(13.09f, 23.10f, 33.11f, 43.12f) );
+    mat1.setColumn(3, Vec4(14.13f, 24.14f, 34.15f, 44.16f) );
 
     // Check correct columns were set
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);
@@ -202,9 +203,9 @@ TEST(Operations, MatMultMat)
     };
 
     // Scale by [2, 3, 4] then translate by [5, 6, 7]
-    const mat4 mat1 = mat4::translate({5, 6, 7}) * mat4::scale({2, 3, 4});
+    const Mat4 mat1 = Mat4::translate({5, 6, 7}) * Mat4::scale({2, 3, 4});
 
-    const mat4 mat2 
+    const Mat4 mat2 
     (
         11.01f, 12.05f, 13.09f, 14.13f,
         21.02f, 22.06f, 23.10f, 24.14f,
@@ -212,7 +213,7 @@ TEST(Operations, MatMultMat)
         41.04f, 42.08f, 43.12f, 44.16f
     );
 
-    mat4 mat3 = mat1 * mat2;
+    Mat4 mat3 = mat1 * mat2;
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat3.elements, EXPECTED);   
 }
@@ -224,11 +225,11 @@ TEST(Operations, MatMultVec)
     float const EXPECTED[16] {24.2f, 33.0f, 44.0f, 4.4f};
 
     // Scale by [2, 3, 4] then translate by [5, 6, 7]
-    const mat4 mat1 = mat4::translate({5, 6, 7}) * mat4::scale({2, 3, 4});
+    const Mat4 mat1 = Mat4::translate({5, 6, 7}) * Mat4::scale({2, 3, 4});
 
-    const vec4 v1 {1.1f, 2.2f, 3.3f, 4.4f};
+    const Vec4 v1 {1.1f, 2.2f, 3.3f, 4.4f};
 
-    vec4 v2 = mat1 * v1;
+    Vec4 v2 = mat1 * v1;
 
     EXPECT_VEC4_EQ_FLOAT_ARRAY_ROW(v2.elements, EXPECTED, 0);   
 }
@@ -245,7 +246,7 @@ TEST(Generators, Identity)
         0.0f, 0.0f, 0.0f, 1.0f
     };
 
-    const mat4 mat1 = mat4::identity();
+    const Mat4 mat1 = Mat4::identity();
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);   
 }
@@ -262,12 +263,12 @@ TEST(Generators, Translate)
         0.0f, 0.0f, 0.0f, 1.0f
     };
 
-    const mat4 mat1 = mat4::translate({1, 2, 3});
+    const Mat4 mat1 = Mat4::translate({1, 2, 3});
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);   
 }
 
-TEST(Generators, Rotate)
+TEST(Generators, RotateAxisAngle)
 {
     using namespace math;
 
@@ -295,9 +296,9 @@ TEST(Generators, Rotate)
         0.0f,                   0.0f,               0.0f, 1.0f
     };
 
-    const mat4 matX = mat4::rotate(45.0f, {1.0f, 0.0f, 0.0f});
-    const mat4 matY = mat4::rotate(45.0f, {0.0f, 1.0f, 0.0f});
-    const mat4 matZ = mat4::rotate(45.0f, {0.0f, 0.0f, 1.0f});
+    const Mat4 matX = Mat4::rotate( Degrees(45.0f), {1.0f, 0.0f, 0.0f} );
+    const Mat4 matY = Mat4::rotate( Degrees(45.0f), {0.0f, 1.0f, 0.0f} );
+    const Mat4 matZ = Mat4::rotate( Degrees(45.0f), {0.0f, 0.0f, 1.0f} );
 
     EXPECT_MAT4_EQ_FLOAT_ARRAY(matX.elements, EXPECTEDX);   
     EXPECT_MAT4_EQ_FLOAT_ARRAY(matY.elements, EXPECTEDY);   
@@ -316,7 +317,7 @@ TEST(Generators, Scale)
         0.0f, 0.0f, 0.0f, 1.0f
     };
 
-    mat4 mat1 = mat4::scale({2, 3, 4});
+    Mat4 mat1 = Mat4::scale({2, 3, 4});
     
     EXPECT_MAT4_EQ_FLOAT_ARRAY(mat1.elements, EXPECTED);   
 }

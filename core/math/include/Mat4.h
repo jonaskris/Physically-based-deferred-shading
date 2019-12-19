@@ -6,17 +6,17 @@
 
 namespace math
 {
-    struct vec3;
-    struct vec4;
+    struct Vec3;
+    struct Vec4;
 
-    struct mat4
+    struct Mat4
     {
         float elements[4*4];
 
         // Initialization
-        mat4(float diagonal);
-        mat4();
-        mat4(
+        Mat4(float diagonal);
+        Mat4();
+        Mat4(
             float x0, float y0, float z0, float w0,
             float x1, float y1, float z1, float w1,
             float x2, float y2, float z2, float w2,
@@ -24,31 +24,31 @@ namespace math
         );
 
         // Accessors
-        vec4 getRow(size_t row) const;
-        void setRow(size_t row, const vec4& vector);
+        Vec4 getRow(size_t row) const;
+        void setRow(size_t row, const Vec4& vector);
 
-        vec4 getColumn(size_t column) const;
-        void setColumn(size_t column, const vec4& vector);
+        Vec4 getColumn(size_t column) const;
+        void setColumn(size_t column, const Vec4& vector);
 
         // Operations
-        mat4& multiply(const mat4& other);
-        vec4 multiply(const vec4& vector) const;
+        Mat4& multiply(const Mat4& other);
+        Vec4 multiply(const Vec4& vector) const;
 
         // Operators
-        vec4 operator*(const vec4& vector) const;
-        mat4 operator*(const mat4& other) const;
-        mat4& operator*=(const mat4& other);
-        friend std::ostream& operator<<(std::ostream& out, const math::mat4& matrix);
+        Vec4 operator*(const Vec4& vector) const;
+        Mat4 operator*(const Mat4& other) const;
+        Mat4& operator*=(const Mat4& other);
+        friend std::ostream& operator<<(std::ostream& out, const math::Mat4& matrix);
 
         // Generators
-        static mat4 identity();
-        static mat4 translate(const vec3& vector);
-        static mat4 rotate(float angle, const vec3& axis);
-        static mat4 scale(const vec3& vector);
+        static Mat4 identity();
+        static Mat4 translate(const Vec3& vector);
+        static Mat4 rotate(Radians angle, const Vec3& axis);
+        static Mat4 scale(const Vec3& vector);
 
-        static mat4 perspective(float left, float right, float bottom, float top, float near, float far);   // Non-symmetric
-		static mat4 perspective(float fov, float aspectratio, float near, float far);                       // Symmetric with fov and aspectratio
+        static Mat4 perspective(float left, float right, float bottom, float top, float near, float far);   // Non-symmetric
+		static Mat4 perspective(Radians fov, float aspectratio, float near, float far);                       // Symmetric with fov and aspectratio
 
-        static mat4 view(const vec3& lookFrom, const vec3& lookAt, const vec3& up);
+        static Mat4 view(const Vec3& lookFrom, const Vec3& lookAt, const Vec3& up);
     };
 }

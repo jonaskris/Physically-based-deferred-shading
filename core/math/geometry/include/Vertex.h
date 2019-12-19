@@ -14,11 +14,11 @@
 
 struct CubemappedVertex
 {
-    math::vec3 position;
-    math::vec3 normal;
+    math::Vec3 position;
+    math::Vec3 normal;
 
-    CubemappedVertex(const math::vec3& position) : position(position), normal(position.normalize()) {};
-    CubemappedVertex(const math::vec3& position, const math::vec3& normal) : position(position), normal(normal) {};
+    CubemappedVertex(const math::Vec3& position) : position(position), normal(position.normalize()) {};
+    CubemappedVertex(const math::Vec3& position, const math::Vec3& normal) : position(position), normal(normal) {};
 
     static void describeVAOLayout()
     {
@@ -31,12 +31,12 @@ struct CubemappedVertex
 
 struct TexturemappedVertex
 {
-    math::vec3 position;
-    math::vec3 normal;
-    math::vec2 uv;
+    math::Vec3 position;
+    math::Vec3 normal;
+    math::Vec2 uv;
 
-    TexturemappedVertex(const math::vec3& position, const math::vec2& uv) : position(position), normal(position.normalize()), uv(uv) {};
-    TexturemappedVertex(const math::vec3& position, const math::vec3& normal, const math::vec2& uv) : position(position), normal(normal), uv(uv) {};
+    TexturemappedVertex(const math::Vec3& position, const math::Vec2& uv) : position(position), normal(position.normalize()), uv(uv) {};
+    TexturemappedVertex(const math::Vec3& position, const math::Vec3& normal, const math::Vec2& uv) : position(position), normal(normal), uv(uv) {};
 
     static void describeVAOLayout()
     {
@@ -52,10 +52,10 @@ struct TexturemappedVertex
 
 struct SimpleTexturemappedVertex
 {
-    math::vec3 position;
-    math::vec2 uv;
+    math::Vec3 position;
+    math::Vec2 uv;
 
-    SimpleTexturemappedVertex(const math::vec3& position, const math::vec2& uv) : position(position), uv(uv) {};
+    SimpleTexturemappedVertex(const math::Vec3& position, const math::Vec2& uv) : position(position), uv(uv) {};
 
     static void describeVAOLayout()
     {

@@ -29,12 +29,12 @@ namespace Input
 
         void positionCallback(GLFWwindow* window, float xpos, float ypos)
         {
-            positionEvents.emplace_back(math::vec2{xpos, ypos});
+            positionEvents.emplace_back(math::Vec2{xpos, ypos});
 
             if(!justEntered)
-                deltaPositionEvents.emplace_back(math::vec2{xpos, ypos} - lastPosition);
+                deltaPositionEvents.emplace_back(math::Vec2{xpos, ypos} - lastPosition);
 
-            lastPosition = math::vec2{xpos, ypos};
+            lastPosition = math::Vec2{xpos, ypos};
             justEntered = false;
         }
 
@@ -73,7 +73,7 @@ namespace Input
 
         void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
         {
-            scrollEvents.emplace_back(math::vec2{(float)xoffset, (float)yoffset});        
+            scrollEvents.emplace_back(math::Vec2{(float)xoffset, (float)yoffset});        
         }
 
         // Calls listeners with accumulated events

@@ -7,11 +7,8 @@
 
 class Node
 {
-private:
-    math::mat4 transform;
-
 public:
-    Node() : transform({}) {}
+    Node() {}
 
     virtual void setUniforms(GLuint programid) = 0;
     virtual void draw() const = 0;

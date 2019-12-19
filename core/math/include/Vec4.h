@@ -4,15 +4,15 @@
 
 namespace math
 {
-    struct mat4;
+    struct Mat4;
 
-    struct vec4
+    struct Vec4
     {
         float elements[4];
 
         // Initialization
-        vec4();
-        vec4(float x, float y, float z, float w);
+        Vec4();
+        Vec4(float x, float y, float z, float w);
 
         // Accessors
         float& x();
@@ -21,47 +21,51 @@ namespace math
         float& w();
 
         // Operations
-        vec4& multiply(const mat4& matrix);
+        Vec4& multiply(const Mat4& matrix);
 
-        vec4& add(const vec4& other);
-        vec4& substract(const vec4& other);
-        vec4& multiply(const vec4& other);
-        vec4& divide(const vec4& other);
+        Vec4& add(const Vec4& other);
+        Vec4& substract(const Vec4& other);
+        Vec4& multiply(const Vec4& other);
+        Vec4& divide(const Vec4& other);
 
-        vec4& add(float scalar);
-        vec4& substract(float scalar);
-        vec4& multiply(float scalar);
-        vec4& divide(float scalar);
+        Vec4& add(float scalar);
+        Vec4& substract(float scalar);
+        Vec4& multiply(float scalar);
+        Vec4& divide(float scalar);
+
+        Vec4 negate() const;
 
         float magnitude() const;
-        float dot(const vec4& other) const;
-        vec4 normalize() const;
+        float dot(const Vec4& other) const;
+        Vec4 normalize() const;
 
         // Operators
-        vec4& operator*=(const mat4& matrix);
+        Vec4& operator*=(const Mat4& matrix);
 
-        vec4& operator+=(const vec4& other); 
-        vec4& operator-=(const vec4& other); 
-        vec4& operator*=(const vec4& other); 
-        vec4& operator/=(const vec4& other); 
+        Vec4& operator+=(const Vec4& other); 
+        Vec4& operator-=(const Vec4& other); 
+        Vec4& operator*=(const Vec4& other); 
+        Vec4& operator/=(const Vec4& other); 
 
-        vec4& operator+=(float scalar); 
-        vec4& operator-=(float scalar); 
-        vec4& operator*=(float scalar);
-        vec4& operator/=(float scalar); 
+        Vec4& operator+=(float scalar); 
+        Vec4& operator-=(float scalar); 
+        Vec4& operator*=(float scalar);
+        Vec4& operator/=(float scalar); 
 
-        vec4 operator*(const mat4& matrix) const;
+        Vec4 operator-() const;
 
-        vec4 operator+(const vec4& other) const; 
-        vec4 operator-(const vec4& other) const;
-        vec4 operator*(const vec4& other) const;
-        vec4 operator/(const vec4& other) const;
+        Vec4 operator*(const Mat4& matrix) const;
 
-        vec4 operator+(float scalar) const;
-        vec4 operator-(float scalar) const;
-        vec4 operator*(float scalar) const;
-        vec4 operator/(float scalar) const;
+        Vec4 operator+(const Vec4& other) const; 
+        Vec4 operator-(const Vec4& other) const;
+        Vec4 operator*(const Vec4& other) const;
+        Vec4 operator/(const Vec4& other) const;
 
-        friend std::ostream& operator<<(std::ostream& out, const vec4& vector);
+        Vec4 operator+(float scalar) const;
+        Vec4 operator-(float scalar) const;
+        Vec4 operator*(float scalar) const;
+        Vec4 operator/(float scalar) const;
+
+        friend std::ostream& operator<<(std::ostream& out, const Vec4& vector);
     };
 }

@@ -18,7 +18,7 @@ TEST(Initialization, Default)
 {
     using namespace math;
 
-    vec3 vec1;
+    Vec3 vec1;
 
     EXPECT_VEC3_EQ_FLOAT(vec1.elements, 0.0f);
 }
@@ -32,9 +32,21 @@ TEST(Initialization, Floats)
         1.0f, 2.0f, 3.0f
     };
 
-    vec3 vec1(1.0f, 2.0f, 3.0f);
+    Vec3 vec1(1.0f, 2.0f, 3.0f);
 
     EXPECT_VEC3_EQ_FLOAT_ARRAY(vec1.elements, EXPECTED);
+}
+
+TEST(Operations, Negation)
+{
+    using namespace math;
+
+    float const EXPECTED[3] {-1.0f, 2.0f, -3.0f};
+
+    const Vec3 v1(1.0f, -2.0f, 3.0f);
+    const Vec3 v2 = -v1;
+
+    EXPECT_VEC3_EQ_FLOAT_ARRAY(v2.elements, EXPECTED); 
 }
 
 TEST(Operations, Magnitude)
@@ -43,7 +55,7 @@ TEST(Operations, Magnitude)
 
     const float EXPECTED = 4.1158228f;
 
-    const vec3 v1(1.1f, 2.2f, 3.3f);
+    const Vec3 v1(1.1f, 2.2f, 3.3f);
 
     float f = v1.magnitude();
 
@@ -56,9 +68,9 @@ TEST(Operations, Dot)
 
     const float EXPECTED = 37.510002f;
 
-    const vec3 v1(1.1f, 2.2f, 3.3f);
+    const Vec3 v1(1.1f, 2.2f, 3.3f);
 
-    const vec3 v2(7.2f, 6.1f, 4.9f);
+    const Vec3 v2(7.2f, 6.1f, 4.9f);
 
     float f1 = v1.dot(v2);
     float f2 = v2.dot(v1);
@@ -75,12 +87,12 @@ TEST(Operations, Normalize)
 
     const float EXPECTED2[3] {-0.67713922f, 0.57368743f, 0.4608309f};
 
-    const vec3 v1(1.1f, -2.2f, 3.3f);
+    const Vec3 v1(1.1f, -2.2f, 3.3f);
 
-    const vec3 v2(-7.2f, 6.1f, 4.9f);
+    const Vec3 v2(-7.2f, 6.1f, 4.9f);
 
-    vec3 n1 = v1.normalize();
-    vec3 n2 = v2.normalize();
+    Vec3 n1 = v1.normalize();
+    Vec3 n2 = v2.normalize();
 
     EXPECT_VEC3_EQ_FLOAT_ARRAY(n1.elements, EXPECTED1); 
     EXPECT_VEC3_EQ_FLOAT_ARRAY(n2.elements, EXPECTED2); 

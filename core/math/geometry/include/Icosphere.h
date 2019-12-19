@@ -37,8 +37,8 @@ namespace Icosphere
 	        	    return it->second;
 	            }
 
-	            math::vec3 vp1 = newVertices[p1].position;
-	            math::vec3 vp2 = newVertices[p2].position;
+	            math::Vec3 vp1 = newVertices[p1].position;
+	            math::Vec3 vp2 = newVertices[p2].position;
 
                 if constexpr(std::is_same<CubemappedVertex, VertexType>::value)
                 {
@@ -60,20 +60,20 @@ namespace Icosphere
 
                 // Vertices/Normals
                 vertices.reserve(12);
-	            vertices.push_back( VertexType({ math::vec3{-1.0f, t, 0.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{ 1.0f, t, 0.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{-1.0f,-t, 0.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{ 1.0f,-t, 0.0f}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{-1.0f, t, 0.0f}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{ 1.0f, t, 0.0f}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{-1.0f,-t, 0.0f}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{ 1.0f,-t, 0.0f}.normalize() }) );
 
-	            vertices.push_back( VertexType({ math::vec3{0.0f,-1.0f, t}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{0.0f, 1.0f, t}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{0.0f,-1.0f,-t}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{0.0f, 1.0f,-t}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f, t}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f, t}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f,-t}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f,-t}.normalize() }) );
 
-                vertices.push_back( VertexType({ math::vec3{ t, 0.0f,-1.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{ t, 0.0f, 1.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{-t, 0.0f,-1.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::vec3{-t, 0.0f, 1.0f}.normalize() }) );
+                vertices.push_back( VertexType({ math::Vec3{ t, 0.0f,-1.0f}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{ t, 0.0f, 1.0f}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{-t, 0.0f,-1.0f}.normalize() }) );
+	            vertices.push_back( VertexType({ math::Vec3{-t, 0.0f, 1.0f}.normalize() }) );
 
                 // Indices
                 indices.reserve(60);

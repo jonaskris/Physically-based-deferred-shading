@@ -5,13 +5,14 @@ project(Tests)
 add_subdirectory(${PROJECT_SOURCE_DIR}/googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-# Mat4
-add_executable(Mat4_Tests Mat4_Tests.cpp)
-target_link_libraries(Mat4_Tests 
+
+# Utils
+add_executable(Utils_Tests Utils_Tests.cpp)
+target_link_libraries(Utils_Tests 
     PRIVATE gtest 
     PRIVATE gtest_main
     PRIVATE math)
-add_test(Mat4 Mat4_Tests)
+add_test(Utils Utils_Tests)
 
 # Vec4
 add_executable(Vec4_Tests Vec4_Tests.cpp)
@@ -36,3 +37,11 @@ target_link_libraries(Vec2_Tests
     PRIVATE gtest_main
     PRIVATE math)
 add_test(Vec2 Vec2_Tests)
+
+# Mat4
+add_executable(Mat4_Tests Mat4_Tests.cpp)
+target_link_libraries(Mat4_Tests 
+    PRIVATE gtest 
+    PRIVATE gtest_main
+    PRIVATE math)
+add_test(Mat4 Mat4_Tests)

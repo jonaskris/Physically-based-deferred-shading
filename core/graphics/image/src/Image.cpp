@@ -1,5 +1,10 @@
+#include <iostream>
 #include <string>
+#include <vector>
+#include <fstream>
+#include <istream>
 
+#define STBI_FAILURE_USERMSG
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -8,7 +13,21 @@
 
 Image::Image(const std::string& file) : file(file)
 {
-    pixels = stbi_load((char* const)file.c_str(), &width, &height, 0, STBI_rgb_alpha);
+
+    // Read file
+    std::ifstream fileStream(file, std::ios::binary);
+    std::vector<char> fileContents((std::istreambuf_iterator<char>(fileStream)),
+                              (std::istreambuf_iterator<char>()));
+
+    // Load image from file contents
+    pixels = stbi_load_from_memory((stbi_uc* const)(&fileContents[0]), fileContents.size(), &width, &height, 0, STBI_rgb_alpha);
+
+
+    
+    //std::cout << "width: " << width << ", height: " << height << ", channels: " << channels << std::endl;
+    //if(stbi_failure_reason())
+    //    std::cout << stbi_failure_reason();
+    //std::cin.get();
 }
 
 Image::~Image()
@@ -29,4 +48,10 @@ int Image::getHeight() const
 const unsigned char* const Image::getPixels() const
 {
     return pixels;
+}
+
+std::ostream& operator<<(std::ostream& out, const Image& image)
+{
+    out << "Filename:  " << image.file << ", width: " << image.width << ", height: " << image.height;
+    return out;
 }
