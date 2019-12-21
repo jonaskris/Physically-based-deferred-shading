@@ -1,27 +1,41 @@
 #pragma once
 
-#include <vector>
-
-#include <mat4.h>
+#include <Quaternion.h>
+#include <Vec3.h>
 
 namespace math
 {
     class Transform
     {
     private:
-        std::vector<mat4> transforms;
+        Vec3 position;
+        Quaternion orientation;
+        Vec3 scale;
+        
+        Mat4 transform;
+        bool dirtyFlag = true; // Dirty if transform matrix not updated according to position/orientation/scale
 
     public:
-        Transform(const std::vector<mat4>& transforms) : transforms(transforms) {};
+        Transform() {}
+        Transform(const Vec3& position, const Quaternion& orientation, const Vec3& scale) : position(position), orientation(orientation), scale(scale) {}
 
-        mat4 toMatrix()
+        Mat4 toMatrix()
         {
-            mat4 returnMatrix = mat4::identity();
-
-            for(const mat4& transform : transforms)
-                returnMatrix *= transforms[i];
-
-            return returnMatrix;
+            if(dirtyFlag)
+            {
+                transform = Mat4::translate(position) * orientation.toMatrix() * Mat4::scale(scale);
+                dirtyFlag = false;
+            }
+            
+            return transform;
         }
+
+        Vec3 getPosition() const { return position; }
+        Quaternion getOrientation() const { return orientation; }
+        Vec3 getScale() const { return scale; }
+
+        void setPosition(const Vec3& position) { this->position = position; dirtyFlag = true; }
+        void setOrientation(const Quaternion& orientation) { this->orientation = orientation; dirtyFlag = true; }
+        void setScale(const Vec3& scale) { this->scale = scale; dirtyFlag = true; }
     };
 }

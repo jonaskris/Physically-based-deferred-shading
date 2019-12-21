@@ -15,6 +15,7 @@
 #include <Model.h>
 #include <Renderer.h>
 #include <Input.h>
+#include <Quaternion.h>
 
 int main()
 {
@@ -39,7 +40,7 @@ int main()
     // Materials
     Material* moonMaterial = new Material(new UniformSampler3D("albedo", moonSampler));
 
-    Mesh<CubemappedVertex>* ico = Icosphere::generate<CubemappedVertex>(2);
+    Mesh<CubemappedVertex, GL_TRIANGLES>* ico = Icosphere::generate<CubemappedVertex>(2);
     //std::cout << *ico << std::endl;
 
     Camera* camera = nullptr;
@@ -50,7 +51,7 @@ int main()
         // Nodes
         camera = new FirstPersonCamera(math::Vec3{-2.0f, 0.0f, 0.0f}, math::Vec3{0.0f, 1.0f, 0.0f}, math::Degrees(0.0f), math::Degrees(0.0f)),
         //camera = new Camera(math::vec3(0.0f, 0.0f, 3.0f), math::vec3(0.0f, 0.0f, 0.0f), math::vec3(0.0f, 1.0f, 0.0f)),
-        new Model 
+        new Model
         (
             // Material
             moonMaterial,

@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.0)
 
 project(Tests)
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/googletest)
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
-
 # Utils
 add_executable(Utils_Tests Utils_Tests.cpp)
 target_link_libraries(Utils_Tests 
@@ -45,3 +41,11 @@ target_link_libraries(Mat4_Tests
     PRIVATE gtest_main
     PRIVATE math)
 add_test(Mat4 Mat4_Tests)
+
+# Quaternion
+add_executable(Quaternion_Tests Quaternion_Tests.cpp)
+target_link_libraries(Quaternion_Tests 
+    PRIVATE gtest 
+    PRIVATE gtest_main
+    PRIVATE math)
+add_test(Quaternion Quaternion_Tests)

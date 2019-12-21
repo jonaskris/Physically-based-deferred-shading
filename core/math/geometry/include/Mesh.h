@@ -18,7 +18,7 @@ public:
     virtual void draw() const = 0;
 };
 
-template <typename VertexType>
+template <typename VertexType, unsigned int DrawMode>
 class Mesh : public MeshBase
 {
 protected:
@@ -69,11 +69,11 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(DrawMode, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 
-    friend std::ostream& operator<<(std::ostream& out, const Mesh<VertexType>& mesh)
+    friend std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
     {
         out << "Mesh: Vertices size: " << mesh.vertices.size() << ", Indices size: " << mesh.indices.size();
         return out;

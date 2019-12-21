@@ -6,6 +6,9 @@
 #include <vector>
 #include <utility>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <Vertex.h>
 #include <Mesh.h>
 
@@ -136,12 +139,12 @@ namespace Icosphere
     }
 
     template <typename VertexType>
-    Mesh<VertexType>* generate(size_t subdivisions)
+    Mesh<VertexType, GL_TRIANGLES>* generate(size_t subdivisions)
     {
         Workspace<VertexType> workspace;
         workspace.generateBase();
         workspace.subdivide(subdivisions);
 
-        return new Mesh<VertexType>(workspace.vertices, workspace.indices);
+        return new Mesh<VertexType, GL_TRIANGLES>(workspace.vertices, workspace.indices);
     }
 }
