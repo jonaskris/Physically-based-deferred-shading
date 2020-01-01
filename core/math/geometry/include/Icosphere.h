@@ -9,25 +9,23 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <Vertex.h>
 #include <Mesh.h>
+#include <RenderData.h>
+#include <VertexAttribute.h>
 
 namespace Icosphere
 {
     namespace
     {
-        template <typename VertexType>
         struct Workspace
         {
-            static_assert(std::is_same<CubemappedVertex, VertexType>::value, "Icosphere generation is only defined for CubemappedVertex VertexType!");
-
             std::map<uint64_t, uint32_t> middlePointCache;
 
-            std::vector<VertexType> vertices;
+            std::vector<float> vertices;
             std::vector<uint32_t> indices;
 
 	        // Creates new vertex and returns index of new point between p1 and p2. (Indices index)
-	        uint32_t getMiddlePoint(std::vector<VertexType>& newVertices, std::vector<uint32_t>& newIndices, const uint32_t p1, const uint32_t p2)
+	        uint32_t getMiddlePoint(std::vector<float>& newVertices, std::vector<uint32_t>& newIndices, const uint32_t p1, const uint32_t p2)
             {
 	            bool firstIsSmaller = p1 < p2;
 	            uint64_t smallerIndex = firstIsSmaller ? p1 : p2;
@@ -36,73 +34,116 @@ namespace Icosphere
 
 	            std::map<uint64_t, uint32_t>::iterator it;
 	            if ((it = middlePointCache.find(key)) != middlePointCache.end())
-	            {
 	        	    return it->second;
-	            }
 
-	            math::Vec3 vp1 = newVertices[p1].position;
-	            math::Vec3 vp2 = newVertices[p2].position;
+	            math::Vec3 vp1 = {newVertices[p1 * 6], newVertices[p1 * 6 + 1], newVertices[p1 * 6 + 2]};//math::Vec3 vp1 = newVertices[p1].position;
+	            math::Vec3 vp2 = {newVertices[p2 * 6], newVertices[p2 * 6 + 1], newVertices[p2 * 6 + 2]};//math::Vec3 vp2 = newVertices[p2].position;
 
-                if constexpr(std::is_same<CubemappedVertex, VertexType>::value)
-                {
-	                CubemappedVertex midpoint = CubemappedVertex(
-                        {((vp1 + vp2) / 2.0f).normalize()}
-                    );
+                math::Vec3 midpoint = ((vp1 + vp2) / 2.0f).normalize(); // Both position and normal
 
-                    newVertices.push_back(midpoint);
-                }
+                //CubemappedVertex midpoint = CubemappedVertex(
+                //    {((vp1 + vp2) / 2.0f).normalize()}
+                //);
 
-	            middlePointCache[key] = newVertices.size() - 1;
+                newVertices.insert(newVertices.end(), midpoint.elements, midpoint.elements + 3); //newVertices.push_back(midpoint);
+                newVertices.insert(newVertices.end(), midpoint.elements, midpoint.elements + 3);
 
-            	return newVertices.size() - 1;
+	            middlePointCache[key] = (newVertices.size() / 6) - 1;
+
+            	return (newVertices.size() / 6) - 1;
             }
 
             void generateBase()
             {
                 float t = (1.0f + sqrt(5.0f)) / 2.0f;
+                float s = 1.0f;
+
+                float l = sqrt(t * t + s * s);
+                t /= l;
+                s /= l;
 
                 // Vertices/Normals
-                vertices.reserve(12);
-	            vertices.push_back( VertexType({ math::Vec3{-1.0f, t, 0.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{ 1.0f, t, 0.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{-1.0f,-t, 0.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{ 1.0f,-t, 0.0f}.normalize() }) );
+                vertices = 
+                {
+                    -s, t, 0.0f,-s, t, 0.0f, 
+                     s, t, 0.0f, s, t, 0.0f, 
+                    -s,-t, 0.0f,-s,-t, 0.0f, 
+                     s,-t, 0.0f, s,-t, 0.0f, 
+                     0.0f,-s, t, 0.0f,-s, t, 
+                     0.0f, s, t, 0.0f, s, t, 
+                     0.0f,-s,-t, 0.0f,-s,-t, 
+                     0.0f, s,-t, 0.0f, s,-t, 
+                     t, 0.0f,-s, t, 0.0f,-s, 
+                     t, 0.0f, s, t, 0.0f, s, 
+                    -t, 0.0f,-s,-t, 0.0f,-s, 
+                    -t, 0.0f, s,-t, 0.0f, s
+                };
 
-	            vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f, t}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f, t}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f,-t}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f,-t}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
 
-                vertices.push_back( VertexType({ math::Vec3{ t, 0.0f,-1.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{ t, 0.0f, 1.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{-t, 0.0f,-1.0f}.normalize() }) );
-	            vertices.push_back( VertexType({ math::Vec3{-t, 0.0f, 1.0f}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f, t}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f, t}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f,-t}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f,-t}.normalize() }) );
+
+                // vertices.push_back( VertexType({ math::Vec3{ t, 0.0f,-1.0f}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{ t, 0.0f, 1.0f}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{-t, 0.0f,-1.0f}.normalize() }) );
+	            // vertices.push_back( VertexType({ math::Vec3{-t, 0.0f, 1.0f}.normalize() }) );
 
                 // Indices
-                indices.reserve(60);
-	            indices.push_back(0); indices.push_back(11); indices.push_back(5);
-	            indices.push_back(0); indices.push_back(5);  indices.push_back(1);
-	            indices.push_back(0); indices.push_back(1);  indices.push_back(7);
-	            indices.push_back(0); indices.push_back(7);  indices.push_back(10);
-	            indices.push_back(0); indices.push_back(10); indices.push_back(11);
+                indices = 
+                {
+                    0, 11, 5,
+                    0, 5, 1,
+                    0, 1, 7,
+                    0, 7, 10,
+                    0, 10, 11,
 
-                indices.push_back(1);  indices.push_back(5);  indices.push_back(9);
-	            indices.push_back(5);  indices.push_back(11); indices.push_back(4);
-	            indices.push_back(11); indices.push_back(10); indices.push_back(2);
-	            indices.push_back(10); indices.push_back(7);  indices.push_back(6);
-                indices.push_back(7);  indices.push_back(1);  indices.push_back(8);
+                    1, 5, 9,
+                    5, 11, 4,
+                    11, 10, 2,
+                    10, 7, 6,
+                    7, 1, 8,
 
-                indices.push_back(3); indices.push_back(9); indices.push_back(4);
-                indices.push_back(3); indices.push_back(4); indices.push_back(2);
-	            indices.push_back(3); indices.push_back(2); indices.push_back(6);
-	            indices.push_back(3); indices.push_back(6); indices.push_back(8);
-	            indices.push_back(3); indices.push_back(8); indices.push_back(9);
+                    3, 9, 4,
+                    3, 4, 2,
+                    3, 2, 6,
+                    3, 6, 8,
+                    3, 8, 9,
 
-                indices.push_back(4); indices.push_back(9); indices.push_back(5);
-	            indices.push_back(2); indices.push_back(4); indices.push_back(11);
-	            indices.push_back(6); indices.push_back(2); indices.push_back(10);
-	            indices.push_back(8); indices.push_back(6); indices.push_back(7);
-	            indices.push_back(9); indices.push_back(8); indices.push_back(1);
+                    4, 9, 5,
+                    2, 4, 11,
+                    6, 2, 10,
+                    8, 6, 7,
+                    9, 8, 1
+                };
+	            //indices.push_back(0); indices.push_back(11); indices.push_back(5);
+	            //indices.push_back(0); indices.push_back(5);  indices.push_back(1);
+	            //indices.push_back(0); indices.push_back(1);  indices.push_back(7);
+	            //indices.push_back(0); indices.push_back(7);  indices.push_back(10);
+	            //indices.push_back(0); indices.push_back(10); indices.push_back(11);
+
+                //indices.push_back(1);  indices.push_back(5);  indices.push_back(9);
+	            //indices.push_back(5);  indices.push_back(11); indices.push_back(4);
+	            //indices.push_back(11); indices.push_back(10); indices.push_back(2);
+	            //indices.push_back(10); indices.push_back(7);  indices.push_back(6);
+                //indices.push_back(7);  indices.push_back(1);  indices.push_back(8);
+
+                //indices.push_back(3); indices.push_back(9); indices.push_back(4);
+                //indices.push_back(3); indices.push_back(4); indices.push_back(2);
+	            //indices.push_back(3); indices.push_back(2); indices.push_back(6);
+	            //indices.push_back(3); indices.push_back(6); indices.push_back(8);
+	            //indices.push_back(3); indices.push_back(8); indices.push_back(9);
+
+                //indices.push_back(4); indices.push_back(9); indices.push_back(5);
+	            //indices.push_back(2); indices.push_back(4); indices.push_back(11);
+	            //indices.push_back(6); indices.push_back(2); indices.push_back(10);
+	            //indices.push_back(8); indices.push_back(6); indices.push_back(7);
+	            //indices.push_back(9); indices.push_back(8); indices.push_back(1);
             }
 
             void subdivide(size_t subdivisions)
@@ -110,7 +151,6 @@ namespace Icosphere
                 if(subdivisions == 0)
                     return;
 
-                
                 for (size_t i = 0; i < subdivisions; i++)
 	            {
                     std::vector<uint32_t> subdividedIndices;
@@ -138,13 +178,28 @@ namespace Icosphere
         };
     }
 
-    template <typename VertexType>
-    Mesh<VertexType, GL_TRIANGLES>* generate(size_t subdivisions)
+    unsigned int generate(size_t subdivisions)
     {
-        Workspace<VertexType> workspace;
+        Workspace workspace;
         workspace.generateBase();
         workspace.subdivide(subdivisions);
 
-        return new Mesh<VertexType, GL_TRIANGLES>(workspace.vertices, workspace.indices);
+        std::vector<graphics::VertexAttribute> vertexAttributes
+        {
+            // Position
+            graphics::VertexAttribute{0, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(0)},
+
+            // Normal
+            graphics::VertexAttribute{1, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(3 * sizeof(float))}
+        };
+
+        return graphics::RenderData::insert<graphics::Mesh>(
+            new graphics::Mesh
+            {
+                workspace.vertices, workspace.indices, 
+                vertexAttributes,
+                (unsigned int)GL_TRIANGLES
+            }
+        );
     }
 }

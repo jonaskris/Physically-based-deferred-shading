@@ -12,8 +12,7 @@
 
 namespace AxisTriplets
 {
-    template <typename VertexType>
-    Mesh<VertexType, GL_LINES>* generate()
+    Mesh* generate()
     {
         return new Mesh<VertexType>
         (

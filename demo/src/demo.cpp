@@ -2,20 +2,25 @@
 #include <vector>
 
 #include <Utils.h>
-#include <Icosphere.h>
-#include <Shader.h>
-#include <Scene.h>
-#include <Camera.h>
 #include <Vec3.h>
-#include <Sampler.h>
+#include <Icosphere.h>
+//#include <Quaternion.h>
+
+#include <Shader.h>
 #include <Window.h>
-#include <Vertex.h>
-#include <Material.h>
-#include <Image.h>
-#include <Model.h>
 #include <Renderer.h>
 #include <Input.h>
-#include <Quaternion.h>
+#include <RenderData.h>
+
+#include <Image.h>
+#include <Texture.h>
+#include <Material.h>
+
+// For constructing scene
+#include <Scene.h>
+#include <Node.h>
+#include <Model.h>
+#include <Camera.h>
 
 int main()
 {
@@ -23,7 +28,7 @@ int main()
         // Create Renderer
         Renderer::initialize(
             // Window
-            "Title", 500, 500,
+            "Title", 1000, 1000,
             // Shaders
             {
                 {"resources/ForwardShader.vert", Shader::Type::VERTEX}, 
@@ -31,48 +36,43 @@ int main()
             }
         );
 
-    // Resources
-        Image* moonImage = new Image("resources/moon.png");
-        std::cout << *moonImage << std::endl;
-    // Samplers
-        Sampler3D* moonSampler = new Sampler3D(*moonImage);
 
-    // Materials
-    Material* moonMaterial = new Material(new UniformSampler3D("albedo", moonSampler));
 
-    Mesh<CubemappedVertex, GL_TRIANGLES>* ico = Icosphere::generate<CubemappedVertex>(2);
-    //std::cout << *ico << std::endl;
+    // Initialize scene
+    {
+        // Images
+        //Image* moonImage = new Image("resources/moon.png");
+        Image* metalAlbedo = new Image("resources/metal-albedo.png");
 
-    Camera* camera = nullptr;
+        // Textures
+        //unsigned int moonTexture = graphics::RenderData::insert<graphics::TextureCubemap, graphics::Texture>( new graphics::TextureCubemap(*moonImage) );
+        unsigned int metalAlbedoTexture = graphics::RenderData::insert<graphics::TextureCubemap, graphics::Texture>( new graphics::TextureCubemap(*metalAlbedo) );
 
-    // Generate scene
-    Scene* scene = new Scene
-    ({
+        //// Materials
+        //unsigned int moonMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(moonTexture) );
+        unsigned int metalMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(metalAlbedoTexture) );
+
+        // Meshes
+        unsigned int icosphere = Icosphere::generate(2);
+
         // Nodes
-        camera = new FirstPersonCamera(math::Vec3{-2.0f, 0.0f, 0.0f}, math::Vec3{0.0f, 1.0f, 0.0f}, math::Degrees(0.0f), math::Degrees(0.0f)),
-        //camera = new Camera(math::vec3(0.0f, 0.0f, 3.0f), math::vec3(0.0f, 0.0f, 0.0f), math::vec3(0.0f, 1.0f, 0.0f)),
-        new Model
-        (
-            // Material
-            moonMaterial,
+        unsigned int cam = graphics::RenderData::insert<graphics::FirstPersonCamera, graphics::Node>( new graphics::FirstPersonCamera(math::Vec3{-2.0f, 0.0f, 0.0f}, math::Vec3{0.0f, 1.0f, 0.0f}, math::Degrees(0.0f), math::Degrees(0.0f)) );
+        unsigned int mod = graphics::RenderData::insert<graphics::Model, graphics::Node>( new graphics::Model(icosphere, metalMaterial) );
 
-            // Mesh
-            ico
-        )
-    });
+        // Scenes
+        unsigned int s = graphics::RenderData::insert<graphics::Scene>( new graphics::Scene({cam, mod}) );
+    }
 
-    unsigned int framecounter = 0;
 
     // Main loop
+    unsigned int framecounter = 0;
     while(!Renderer::windowClosed())
     {
         framecounter++;
         if(framecounter % 100 == 0)
             std::cout << "FPS: " << Renderer::getFPS() << std::endl;
 
-        //camera->lookFrom += math::vec3{0.01f, 0.0f, 0.0f};
-
-        Input::update(Renderer::getDeltatime()); // Process input
-        Renderer::render(scene);                 // Render scene
+        Input::update(Renderer::getDeltatime());    // Process input
+        Renderer::render(1);                        // Render scene 1
     }
 }

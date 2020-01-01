@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Quaternion.h>
+#include <Uniform.h>
 #include <Vec3.h>
 
 namespace math
@@ -19,7 +20,7 @@ namespace math
         Transform() {}
         Transform(const Vec3& position, const Quaternion& orientation, const Vec3& scale) : position(position), orientation(orientation), scale(scale) {}
 
-        Mat4 toMatrix()
+        const Mat4& toMatrix()
         {
             if(dirtyFlag)
             {

@@ -9,9 +9,9 @@ add_executable(demo
 
 target_link_libraries(demo
     PUBLIC programs
-    PUBLIC rendering
+    PUBLIC renderer
+    PUBLIC renderdata
     PUBLIC geometry
-    PUBLIC scene
     PUBLIC math
     PUBLIC uniforms
     PUBLIC window)

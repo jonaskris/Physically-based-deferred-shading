@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.0)
 project(Geometry)
 
 add_library(geometry
-    include/Mesh.h
     include/Icosphere.h
     include/Cube.h
     include/Plane.h
@@ -14,4 +13,5 @@ target_include_directories(geometry
 
 target_link_libraries(geometry 
     PUBLIC math
+    PUBLIC renderdata
     PUBLIC glad)

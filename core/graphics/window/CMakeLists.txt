@@ -8,7 +8,7 @@ target_include_directories(window
 
 target_link_libraries(window 
     PUBLIC input
-    PUBLIC rendering
+    PUBLIC renderer
     PUBLIC glad
     PUBLIC glfw
     PUBLIC ${GLFW_LIBRARIES})
