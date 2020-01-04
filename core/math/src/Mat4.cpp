@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <optional>
 
 #include <Mat4.h>
 
@@ -50,7 +51,6 @@ namespace math
 		elements[row + 4 * 3] = vector.elements[3];
 	}
 
-
     Vec4 Mat4::getColumn(size_t column) const
 	{
 		return Vec4(elements[column * 4 + 0], elements[column * 4 + 1], elements[column * 4 + 2], elements[column * 4 + 3]);
@@ -89,6 +89,135 @@ namespace math
 			elements[2] * vector.elements[0] + elements[6] * vector.elements[1] + elements[10] * vector.elements[2] + elements[14] * vector.elements[3],
 			elements[3] * vector.elements[0] + elements[7] * vector.elements[1] + elements[11] * vector.elements[2] + elements[15] * vector.elements[3]
         );
+    }
+
+    std::optional<Mat4> Mat4::inverse() const
+    {
+        Mat4 inverse;
+
+        inverse.elements[0] = elements[5]  * elements[10] * elements[15] - 
+                 elements[5]  * elements[11] * elements[14] - 
+                 elements[9]  * elements[6]  * elements[15] + 
+                 elements[9]  * elements[7]  * elements[14] +
+                 elements[13] * elements[6]  * elements[11] - 
+                 elements[13] * elements[7]  * elements[10];
+
+        inverse.elements[4] = -elements[4]  * elements[10] * elements[15] + 
+                  elements[4]  * elements[11] * elements[14] + 
+                  elements[8]  * elements[6]  * elements[15] - 
+                  elements[8]  * elements[7]  * elements[14] - 
+                  elements[12] * elements[6]  * elements[11] + 
+                  elements[12] * elements[7]  * elements[10];
+
+        inverse.elements[8] = elements[4]  * elements[9] * elements[15] - 
+                 elements[4]  * elements[11] * elements[13] - 
+                 elements[8]  * elements[5] * elements[15] + 
+                 elements[8]  * elements[7] * elements[13] + 
+                 elements[12] * elements[5] * elements[11] - 
+                 elements[12] * elements[7] * elements[9];
+
+        inverse.elements[12] = -elements[4]  * elements[9] * elements[14] + 
+                   elements[4]  * elements[10] * elements[13] +
+                   elements[8]  * elements[5] * elements[14] - 
+                   elements[8]  * elements[6] * elements[13] - 
+                   elements[12] * elements[5] * elements[10] + 
+                   elements[12] * elements[6] * elements[9];
+
+        inverse.elements[1] = -elements[1]  * elements[10] * elements[15] + 
+                  elements[1]  * elements[11] * elements[14] + 
+                  elements[9]  * elements[2] * elements[15] - 
+                  elements[9]  * elements[3] * elements[14] - 
+                  elements[13] * elements[2] * elements[11] + 
+                  elements[13] * elements[3] * elements[10];
+
+        inverse.elements[5] = elements[0]  * elements[10] * elements[15] - 
+                 elements[0]  * elements[11] * elements[14] - 
+                 elements[8]  * elements[2] * elements[15] + 
+                 elements[8]  * elements[3] * elements[14] + 
+                 elements[12] * elements[2] * elements[11] - 
+                 elements[12] * elements[3] * elements[10];
+
+        inverse.elements[9] = -elements[0]  * elements[9] * elements[15] + 
+                  elements[0]  * elements[11] * elements[13] + 
+                  elements[8]  * elements[1] * elements[15] - 
+                  elements[8]  * elements[3] * elements[13] - 
+                  elements[12] * elements[1] * elements[11] + 
+                  elements[12] * elements[3] * elements[9];
+
+        inverse.elements[13] = elements[0]  * elements[9] * elements[14] - 
+                  elements[0]  * elements[10] * elements[13] - 
+                  elements[8]  * elements[1] * elements[14] + 
+                  elements[8]  * elements[2] * elements[13] + 
+                  elements[12] * elements[1] * elements[10] - 
+                  elements[12] * elements[2] * elements[9];
+
+        inverse.elements[2] = elements[1]  * elements[6] * elements[15] - 
+                 elements[1]  * elements[7] * elements[14] - 
+                 elements[5]  * elements[2] * elements[15] + 
+                 elements[5]  * elements[3] * elements[14] + 
+                 elements[13] * elements[2] * elements[7] - 
+                 elements[13] * elements[3] * elements[6];
+
+        inverse.elements[6] = -elements[0]  * elements[6] * elements[15] + 
+                  elements[0]  * elements[7] * elements[14] + 
+                  elements[4]  * elements[2] * elements[15] - 
+                  elements[4]  * elements[3] * elements[14] - 
+                  elements[12] * elements[2] * elements[7] + 
+                  elements[12] * elements[3] * elements[6];
+
+        inverse.elements[10] = elements[0]  * elements[5] * elements[15] - 
+                  elements[0]  * elements[7] * elements[13] - 
+                  elements[4]  * elements[1] * elements[15] + 
+                  elements[4]  * elements[3] * elements[13] + 
+                  elements[12] * elements[1] * elements[7] - 
+                  elements[12] * elements[3] * elements[5];
+
+        inverse.elements[14] = -elements[0]  * elements[5] * elements[14] + 
+                   elements[0]  * elements[6] * elements[13] + 
+                   elements[4]  * elements[1] * elements[14] - 
+                   elements[4]  * elements[2] * elements[13] - 
+                   elements[12] * elements[1] * elements[6] + 
+                   elements[12] * elements[2] * elements[5];
+
+        inverse.elements[3] = -elements[1] * elements[6] * elements[11] + 
+                  elements[1] * elements[7] * elements[10] + 
+                  elements[5] * elements[2] * elements[11] - 
+                  elements[5] * elements[3] * elements[10] - 
+                  elements[9] * elements[2] * elements[7] + 
+                  elements[9] * elements[3] * elements[6];
+
+        inverse.elements[7] = elements[0] * elements[6] * elements[11] - 
+                 elements[0] * elements[7] * elements[10] - 
+                 elements[4] * elements[2] * elements[11] + 
+                 elements[4] * elements[3] * elements[10] + 
+                 elements[8] * elements[2] * elements[7] - 
+                 elements[8] * elements[3] * elements[6];
+
+        inverse.elements[11] = -elements[0] * elements[5] * elements[11] + 
+                   elements[0] * elements[7] * elements[9] + 
+                   elements[4] * elements[1] * elements[11] - 
+                   elements[4] * elements[3] * elements[9] - 
+                   elements[8] * elements[1] * elements[7] + 
+                   elements[8] * elements[3] * elements[5];
+
+        inverse.elements[15] = elements[0] * elements[5] * elements[10] - 
+                  elements[0] * elements[6] * elements[9] - 
+                  elements[4] * elements[1] * elements[10] + 
+                  elements[4] * elements[2] * elements[9] + 
+                  elements[8] * elements[1] * elements[6] - 
+                  elements[8] * elements[2] * elements[5];
+
+        float det = elements[0] * inverse.elements[0] + elements[1] * inverse.elements[4] + elements[2] * inverse.elements[8] + elements[3] * inverse.elements[12];
+
+        if (det == 0)
+            return std::nullopt;
+
+        det = 1.0 / det;
+
+        for (size_t i = 0; i < 16; i++)
+            inverse.elements[i] = inverse.elements[i] * det;
+
+        return inverse;
     }
 
     // Operators

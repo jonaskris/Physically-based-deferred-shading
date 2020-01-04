@@ -10,13 +10,20 @@ namespace TextureUnitManager
     static bool textureUnits[GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS] = {};
     static std::vector<size_t> contexts;
 
-    // Activates texture unit, marks it as used and returns its id.
-    // Returns -1 if there are no available texture units.
+    /*
+        Activates texture unit, marks it as used and returns its id.
+        Returns -1 if there are no available texture units.
+    */
     int requestTextureUnit();
 
-    // Create a context.
+    /* 
+        Create a context in which requested texture units are assigned.
+    */
     void pushContext();
     
-    // Texture units that were marked as used in the context, are marked as unused.
+    /* 
+        Pop context. Marks texture units that were used in the context as
+        unused.
+    */
     void popContext();
 }

@@ -7,8 +7,10 @@
 
 namespace TextureUnitManager
 {
-    // Activates texture unit, marks it as used and returns its id.
-    // Returns -1 if there are no available texture units.
+    /*
+        Activates texture unit, marks it as used and returns its id.
+        Returns -1 if there are no available texture units.
+    */
     int requestTextureUnit()
     {
         for(size_t i = 0; i < GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS; i++)
@@ -21,7 +23,9 @@ namespace TextureUnitManager
         return -1;
     }
 
-    // Create a context.
+    /* 
+        Create a context in which requested texture units are assigned.
+    */
     void pushContext()
     {
         size_t minIndexUnused;
@@ -34,7 +38,10 @@ namespace TextureUnitManager
         contexts.push_back(minIndexUnused);
     }
     
-    // Texture units that were marked as used in the context, are marked as unused.
+    /* 
+        Pop context. Marks texture units that were used in the context as
+        unused.
+    */
     void popContext()
     {
         for(size_t i = GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS; i--;)

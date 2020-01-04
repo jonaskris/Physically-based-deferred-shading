@@ -28,16 +28,19 @@ namespace math
         Quaternion(); // Multiplicative identity
 
         static Quaternion fromAxisAngle(const Vec3& axis, Radians angle);         // Axis and angle to rotate around that axis
-        static Quaternion fromEulerAngles(Radians yaw, Radians pitch, Radians roll);
+        static Quaternion fromEulerAngles(Radians x, Radians y, Radians z);
 
         // Operations
         Quaternion& multiply(const Quaternion& other);
         Quaternion& multiply(float scalar);
 
+        Vec3 multiply(const Vec3& vector) const;
+
         float dot(const Quaternion& other) const;
         float magnitude() const;
         Quaternion normalize() const;
         Quaternion inverse() const;
+        Quaternion conjugate() const;
 
         Mat4 toMatrix() const;
         
@@ -47,6 +50,8 @@ namespace math
         
         Quaternion operator*(const Quaternion& other) const;
         Quaternion operator*(float scalar) const;
+
+        Vec3 operator*(const Vec3& vector) const;
         
         friend std::ostream& operator<<(std::ostream& out, const Quaternion& quaternion);
     };

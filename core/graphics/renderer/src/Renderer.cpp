@@ -79,7 +79,9 @@ namespace Renderer
             else
                 std::cout << "Couldent find node!" << std::endl;
         }
+
         
+
         //std::cout << "BREAKPOINT 4" << std::endl;
         //std::cin.get();
         //std::queue<unsigned int> renderQueue;

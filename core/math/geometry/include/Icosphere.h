@@ -39,7 +39,7 @@ namespace Icosphere
 	            math::Vec3 vp1 = {newVertices[p1 * 6], newVertices[p1 * 6 + 1], newVertices[p1 * 6 + 2]};//math::Vec3 vp1 = newVertices[p1].position;
 	            math::Vec3 vp2 = {newVertices[p2 * 6], newVertices[p2 * 6 + 1], newVertices[p2 * 6 + 2]};//math::Vec3 vp2 = newVertices[p2].position;
 
-                math::Vec3 midpoint = ((vp1 + vp2) / 2.0f).normalize(); // Both position and normal
+                math::Vec3 midpoint = ((vp1 + vp2) / 2.0f).normalize() / 2.0f; // Both position and normal
 
                 //CubemappedVertex midpoint = CubemappedVertex(
                 //    {((vp1 + vp2) / 2.0f).normalize()}
@@ -61,7 +61,8 @@ namespace Icosphere
                 float l = sqrt(t * t + s * s);
                 t /= l;
                 s /= l;
-
+                t /= 2.0f;
+                s /= 2.0f;
                 // Vertices/Normals
                 vertices = 
                 {

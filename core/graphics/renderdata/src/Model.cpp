@@ -5,13 +5,20 @@
 #include <Mesh.h>
 #include <Material.h>
 #include <RenderData.h>
+#include <Uniform.h>
+#include <RenderData.h>
 
 namespace graphics
 {
-    Model::Model(unsigned int mesh, unsigned int material) : mesh(mesh), material(material) {}
+    
+    Model::Model(unsigned int mesh, unsigned int material, math::Transform transform, std::vector<unsigned int> childrenNodes) : Node(childrenNodes, transform), mesh(mesh), material(material) {}
 
-    void Model::process(GLuint programId)
+    void Model::process(GLuint programId, math::Mat4 parentTransform)
     {
+        // Set transform
+        parentTransform = transform.toMatrix() * parentTransform;
+        Uniform::setMat4(programId, "model", parentTransform);
+
         // Set material
         if(material)
         {
@@ -30,6 +37,14 @@ namespace graphics
 
             if(m)
                 m->draw();
+        }
+
+        // Process childrenNodes
+        for(unsigned int n : childrenNodes)
+        {
+            graphics::Node* node = graphics::RenderData::get<graphics::Model>(n);
+            if(node)
+                node->process(programId, parentTransform);
         }
     }
 }

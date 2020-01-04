@@ -28,7 +28,7 @@ int main()
         // Create Renderer
         Renderer::initialize(
             // Window
-            "Title", 1000, 1000,
+            "Title", 500, 500,
             // Shaders
             {
                 {"resources/ForwardShader.vert", Shader::Type::VERTEX}, 
@@ -41,28 +41,28 @@ int main()
     // Initialize scene
     {
         // Images
-        //Image* moonImage = new Image("resources/moon.png");
+        Image* moonImage = new Image("resources/moon.png");
         Image* metalAlbedo = new Image("resources/metal-albedo.png");
 
         // Textures
-        //unsigned int moonTexture = graphics::RenderData::insert<graphics::TextureCubemap, graphics::Texture>( new graphics::TextureCubemap(*moonImage) );
+        unsigned int moonTexture = graphics::RenderData::insert<graphics::TextureCubemap, graphics::Texture>( new graphics::TextureCubemap(*moonImage) );
         unsigned int metalAlbedoTexture = graphics::RenderData::insert<graphics::TextureCubemap, graphics::Texture>( new graphics::TextureCubemap(*metalAlbedo) );
 
         //// Materials
-        //unsigned int moonMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(moonTexture) );
+        unsigned int moonMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(moonTexture) );
         unsigned int metalMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(metalAlbedoTexture) );
 
         // Meshes
         unsigned int icosphere = Icosphere::generate(2);
 
         // Nodes
-        unsigned int cam = graphics::RenderData::insert<graphics::FirstPersonCamera, graphics::Node>( new graphics::FirstPersonCamera(math::Vec3{-2.0f, 0.0f, 0.0f}, math::Vec3{0.0f, 1.0f, 0.0f}, math::Degrees(0.0f), math::Degrees(0.0f)) );
-        unsigned int mod = graphics::RenderData::insert<graphics::Model, graphics::Node>( new graphics::Model(icosphere, metalMaterial) );
+        unsigned int cam = graphics::RenderData::insert<graphics::FirstPersonCamera, graphics::Node>( new graphics::FirstPersonCamera(math::Vec3{-2.0f, 0.0f, 0.0f}, math::Degrees(0.0f), math::Degrees(0.0f), {}) );
+        unsigned int mod2 = graphics::RenderData::insert<graphics::Model, graphics::Node>( new graphics::Model(icosphere, moonMaterial, math::Transform({0.75f, 0.0f, 0.0f}, {}, {0.5f, 0.5f, 0.5f}), {}) );
+        unsigned int mod1 = graphics::RenderData::insert<graphics::Model, graphics::Node>( new graphics::Model(icosphere, metalMaterial, {}, {mod2}) );
 
         // Scenes
-        unsigned int s = graphics::RenderData::insert<graphics::Scene>( new graphics::Scene({cam, mod}) );
+        unsigned int s = graphics::RenderData::insert<graphics::Scene>( new graphics::Scene({cam, mod1}) );
     }
-
 
     // Main loop
     unsigned int framecounter = 0;

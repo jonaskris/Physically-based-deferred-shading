@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <optional>
 
 #include <Utils.h>
 
@@ -33,6 +34,7 @@ namespace math
         // Operations
         Mat4& multiply(const Mat4& other);
         Vec4 multiply(const Vec4& vector) const;
+        std::optional<Mat4> inverse() const;
 
         // Operators
         Vec4 operator*(const Vec4& vector) const;

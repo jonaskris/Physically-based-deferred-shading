@@ -8,7 +8,6 @@ namespace graphics
     {
     private:
         unsigned int albedo;
-        unsigned int normal;
 
     public:
         Material(unsigned int albedo);

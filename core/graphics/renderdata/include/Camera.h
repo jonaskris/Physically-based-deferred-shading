@@ -1,41 +1,34 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
+#include <vector>
 
 #include <Utils.h>
 #include <Vec3.h>
 #include <Mat4.h>
-#include <Node.h>
+#include <Transform.h>
+
 #include <Input.h>
+#include <Node.h>
 
 namespace graphics
 {
     class Camera : public Node
     {
-    private:
-        math::Mat4 view;
-
-    protected:
-        math::Vec3 lookFrom;
-        math::Vec3 lookAt;
-        math::Vec3 up;
-
     public:
-        Camera(const math::Vec3& lookFrom, const math::Vec3& lookAt, const math::Vec3& up);
-        Camera(const math::Vec3& lookFrom, math::Radians yaw, math::Radians pitch);
+        Camera(math::Transform transform, std::vector<unsigned int> childrenNodes);
 
-        void process(GLuint programId) override;
+        void process(GLuint programId, math::Mat4 parentTransform = {}) override;
     };
 
     class FirstPersonCamera : public Camera, public Input::Mouse::DeltaPositionListener, public Input::Keyboard::KeyListener
     {
     private:
         math::Radians yaw, pitch;
-        math::Vec3 forward;
 
     public:
-        FirstPersonCamera(const math::Vec3& lookFrom, const math::Vec3& up, math::Radians yaw, math::Radians pitch);
+        FirstPersonCamera(const math::Vec3& position, math::Radians yaw, math::Radians pitch, std::vector<unsigned int> childrenNodes);
 
         void deltaPositionCallback(double deltatime, const std::vector<Input::Mouse::PositionEvent>& positionEvents) override;
         void keyCallback(double deltatime, const std::vector<Input::Keyboard::KeyEvent>& keyEvents) override;

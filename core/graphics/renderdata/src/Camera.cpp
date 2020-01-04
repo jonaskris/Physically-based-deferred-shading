@@ -1,42 +1,49 @@
 #include <Camera.h>
 
+#include <glad/glad.h>
+
+#include <vector>
+
 #include <Utils.h>
 #include <Vec3.h>
 #include <Mat4.h>
+#include <Transform.h>
+
+#include <Input.h>
+#include <Node.h>
 #include <Uniform.h>
+#include <RenderData.h>
+#include <Model.h>
 
 namespace graphics
 {
-    // Anonymous "private" namespace for camera helper methods
-    namespace 
-    {
-        math::Vec3 euleranglesToDirectionvector(math::Radians yaw, math::Radians pitch)
-        {
-            return math::Vec3
-            {
-                cosf(pitch) * cosf(yaw),
-                sinf(pitch),
-                cosf(pitch) * sinf(-yaw)
-            };
-        }
-    }
     // Camera
-    Camera::Camera(const math::Vec3& lookFrom, const math::Vec3& lookAt, const math::Vec3& up)
-    : lookFrom(lookFrom), lookAt(lookAt), up(up), view(math::Mat4::view(lookFrom, lookAt, up)) {};
+    Camera::Camera(math::Transform transform, std::vector<unsigned int> childrenNodes)
+    : Node(transform, childrenNodes) {};
 
-    void Camera::process(GLuint programId)
+    void Camera::process(GLuint programId, math::Mat4 parentTransform)
     {
-        view = math::Mat4::view(lookFrom, lookAt, up);
-        Uniform::setMat4(programId, "view", view);
+        // Set transform
+        parentTransform = transform.toMatrix() * parentTransform;
+
+        // Set view
+        Uniform::setMat4(programId, "view", parentTransform.inverse().value());
+
+        // Process childrenNodes
+        for(unsigned int n : childrenNodes)
+        {
+            graphics::Node* node = graphics::RenderData::get<graphics::Model>(n);
+            if(node)
+                node->process(programId, parentTransform);
+        }
     }
     
     // FirstPersonCamera
-    FirstPersonCamera::FirstPersonCamera(const math::Vec3& lookFrom, const math::Vec3& up, math::Radians yaw, math::Radians pitch) : yaw(yaw), pitch(pitch),
-    forward( euleranglesToDirectionvector(yaw, pitch) ),
+    FirstPersonCamera::FirstPersonCamera(const math::Vec3& position, math::Radians yaw, math::Radians pitch, std::vector<unsigned int> childrenNodes)
+    : yaw(yaw), pitch(pitch),
     Camera(
-        lookFrom, 
-        lookFrom + euleranglesToDirectionvector(yaw, pitch),
-        up
+        math::Transform(position, math::Quaternion::fromEulerAngles(yaw, pitch, math::Radians(0.0f))),
+        childrenNodes
     ) {}
     
     void FirstPersonCamera::deltaPositionCallback(double deltatime, const std::vector<Input::Mouse::PositionEvent>& deltaPositionEvents)
@@ -52,20 +59,16 @@ namespace graphics
             pitch.radians += deltaPositionEvent.position.elements[1] * moveSpeed;
         }
     
-        // Limit yaw to 360 degrees to limit floating point errors with big values.
-        yaw.radians = std::fmod(yaw, 360.0f);
-    
-        // Limit pitch to a 180 degreee arch.
+        // Limit yaw to +-360 degrees to limit floating point errors with big values
+        yaw.radians = std::fmod(yaw, math::toRadians(360.0f));
+        
+        // Limit pitch to +-90 degrees
         if(pitch > math::toRadians(89.99f))
             pitch.radians = math::toRadians(89.99f);
         if(pitch < math::toRadians(-89.99f))
             pitch.radians = math::toRadians(-89.99f);
     
-        // Update forward vector
-        forward = euleranglesToDirectionvector(yaw, pitch);
-    
-        // Update lookAt vector
-        lookAt = lookFrom + forward;
+        transform.setOrientation(math::Quaternion::fromEulerAngles(math::Radians(-pitch.radians), math::Radians(-yaw.radians), math::Radians(0.0f)));        
     }
     
     void FirstPersonCamera::keyCallback(double deltatime, const std::vector<Input::Keyboard::KeyEvent>& keyEvents)
@@ -78,10 +81,12 @@ namespace graphics
         const float frameMoveSpeed = moveSpeed * (float)deltatime;
     
         // Limit WASD movement to horizontal plane by using a horizontal forward vector
-        math::Vec3 horizontalForward = forward;
+        math::Vec3 horizontalForward = toVec3(transform.getOrientation().toMatrix() * math::Vec4(0.0f, 0.0f, -1.0f, 0.0f));
         horizontalForward.elements[1] = 0.0f;
         horizontalForward = horizontalForward.normalize();
     
+        math::Vec3 position = transform.getPosition();
+
         for(auto& keyEvent : keyEvents)
         {
             if(keyEvent.action == Action::HOLD)
@@ -89,28 +94,27 @@ namespace graphics
                 switch(keyEvent.key)
                 {
                 case Key::S:
-                    lookFrom -= horizontalForward * frameMoveSpeed;
+                    position -= horizontalForward * frameMoveSpeed;
                     break;
                 case Key::W:
-                    lookFrom += horizontalForward * frameMoveSpeed;
+                    position += horizontalForward * frameMoveSpeed;
                     break;
                 case Key::A:
-                    lookFrom -= horizontalForward.cross(up) * frameMoveSpeed;
+                    position -= horizontalForward.cross({0.0f, 1.0f, 0.0f}) * frameMoveSpeed;
                     break;        
                 case Key::D:
-                    lookFrom += horizontalForward.cross(up) * frameMoveSpeed;
+                    position += horizontalForward.cross({0.0f, 1.0f, 0.0f}) * frameMoveSpeed;
                     break;
                 case Key::SPACE:
-                    lookFrom.elements[1] += frameMoveSpeed;                
+                    position.elements[1] += frameMoveSpeed;                
                     break;
                 case Key::LEFT_SHIFT:
-                    lookFrom.elements[1] -= frameMoveSpeed;                
+                    position.elements[1] -= frameMoveSpeed;                
                     break;
                 }
             }
         }
-    
-        // Update lookAt so its always relative to lookFrom
-        lookAt = lookFrom + forward;
+
+        transform.setPosition(position);
     }
 }
