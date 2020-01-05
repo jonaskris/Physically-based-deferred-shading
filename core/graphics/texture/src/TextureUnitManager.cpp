@@ -11,12 +11,12 @@ namespace TextureUnitManager
         Activates texture unit, marks it as used and returns its id.
         Returns -1 if there are no available texture units.
     */
-    int requestTextureUnit()
+    GLuint requestTextureUnit()
     {
         for(size_t i = 0; i < GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS; i++)
             if(!textureUnits[i])
             {
-                glActiveTexture(GL_TEXTURE0 + i);
+                //glActiveTexture(GL_TEXTURE0 + i);
                 textureUnits[i] = true;
                 return i;
             }

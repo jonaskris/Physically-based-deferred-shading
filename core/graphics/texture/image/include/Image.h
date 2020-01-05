@@ -12,7 +12,7 @@ private:
     int channels;
 
 public:
-    Image(const std::string& file);
+    Image(const std::string& file, unsigned int desiredChannels = 3);
     ~Image();
 
     int getWidth() const;

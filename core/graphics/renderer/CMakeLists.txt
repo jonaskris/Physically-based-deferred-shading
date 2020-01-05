@@ -12,4 +12,6 @@ target_link_libraries(renderer
     PUBLIC programs
     PUBLIC renderdata
     PUBLIC glad
-    PUBLIC uniforms)
+    PUBLIC uniforms
+    PUBLIC math
+    PUBLIC geometry)

@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 
 #include <Renderer.h>
+#include <Framebuffer.h>
 
 #include <Utils.h>
 #include <Window.h>
@@ -21,18 +22,40 @@
 #include <Model.h>
 #include <Camera.h>
 #include <Mat4.h>
+#include <Plane.h>
+#include <Cube.h>
 
 namespace Renderer
 {
-    void initialize(const std::string& windowTitle, size_t windowWidth, size_t windowHeight, const std::vector<std::pair<std::string, Shader::Type>> geometryShaders/*, const std::vector<std::pair<std::string, Shader::Type>>& lightingShaders*/)
+    void initialize(const std::string& windowTitle, size_t windowWidth, size_t windowHeight, 
+        const std::vector<std::pair<std::string, Shader::Type>> geometryShaders, 
+        const std::vector<std::pair<std::string, Shader::Type>> lightingShaders, 
+        const std::vector<std::pair<std::string, Shader::Type>> skyboxShaders)
     {
-        // Renderer members
+        // Essentials
         window = new Window(windowTitle, windowWidth, windowHeight);
-
         geometryProgram = new Program(geometryShaders);
-        lightingProgram = nullptr;
+        lightingProgram = new Program(lightingShaders);
+        skyboxProgram = new Program(skyboxShaders);
+        framebuffer = new graphics::Framebuffer(windowWidth, windowHeight);
+        planeMesh = Plane::generate();
+        cubeMesh = Cube::generate();
 
-        setProjection(math::Degrees(90.0f), (float)windowWidth / (float)windowHeight, 0.01f, 20.0f);
+        // Default perspective
+        fov = math::Degrees(45.0f);
+        aspectratio = (float)windowWidth / (float)windowHeight;
+        nearP = 0.01f;
+        farP = 20.0f;
+        setPerspective();
+
+        // Default orthographic
+        left = -1.0f;
+        right = 1.0f;
+        bottom = -1.0f;
+        top = 1.0f;
+        nearO = -1.0f;
+        farO = 1.0f;
+        setOrthographic();
 
         glEnable(GL_DEPTH_TEST);
         glFrontFace(GL_CCW);
@@ -47,6 +70,7 @@ namespace Renderer
         delete window;
         delete geometryProgram;
         delete lightingProgram;
+        delete framebuffer;
         projection = {};
     };
 
@@ -54,6 +78,126 @@ namespace Renderer
 
     void render(unsigned int sceneIdentifier)
     {
+// Geometry
+        // Bind framebuffer
+        framebuffer->bind();
+
+        // Clear framebuffer
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Enable geometry pass program
+        geometryProgram->enable();
+        GLuint programId = geometryProgram->getProgramId();
+
+        // Set uniforms
+        Uniform::setMat4(programId, "projection", projection);
+        Uniform::setMat4(programId, "view", math::Mat4::identity());
+        Uniform::setMat4(programId, "model", math::Mat4::identity());
+
+        // Draw geometry
+        graphics::Scene* scene = graphics::RenderData::get<graphics::Scene>(sceneIdentifier);
+        graphics::Node* camera = graphics::RenderData::get<graphics::FirstPersonCamera>(scene->camera);
+        camera->process(programId);
+        for(unsigned int n : scene->nodes)
+        {
+            graphics::Node* node = graphics::RenderData::get<graphics::Model>(n);
+                        
+            if(node)
+                node->process(programId);
+            else
+                std::cout << "Couldent find node!" << std::endl;
+        }
+
+        // Unbind framebuffer
+        framebuffer->unbind();
+
+        // Disable geometry pass program
+        geometryProgram->disable();
+
+// Lighting
+        // Clear window
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Enable lighting pass program
+        lightingProgram->enable();
+        programId = lightingProgram->getProgramId();
+
+        // Set orthographic projection
+        Uniform::setMat4(programId, "projection", orthographic);
+
+        // Push texture unit context
+        TextureUnitManager::pushContext();
+
+        // Bind framebuffer textures
+        Uniform::setTexture2D(programId, "gPosition", framebuffer->position->getId());
+        Uniform::setTexture2D(programId, "gNormal", framebuffer->normal->getId());
+        Uniform::setTexture2D(programId, "gAlbedo", framebuffer->albedo->getId());
+
+        // Draw screen-wide quad
+        Uniform::setMat4(programId, "model", math::Mat4::scale({2.0f, 2.0f, 2.0f}));
+        graphics::Mesh* quad = graphics::RenderData::get<graphics::Mesh>(planeMesh);
+        quad->draw();
+
+        // Pop texture unit context
+        TextureUnitManager::popContext();
+
+        // Disable lighting pass program
+        lightingProgram->disable();
+
+// Skybox
+        // Set depth func to less than or equal
+        // Blit (copy) framebuffer depth to main buffer
+            // Enable skybox pass program
+            // Set uniforms
+                // Push texture unit context
+                // Bind framebuffer textures
+                // Set skybox cubemap
+                // Draw skybox mesh
+                // Pop texture unit context
+            // Disable skybox pass program
+        // Set depth func to less than (Default)
+
+
+        /*// Set depth func to less than or equal
+        glDepthFunc(GL_LEQUAL);
+
+        // Enable skybox pass program
+        skyboxProgram->enable();
+        programId = skyboxProgram->getProgramId();
+
+        // Set view matrix to previously used but remove translation
+
+        // Push texture unit context
+        TextureUnitManager::pushContext();
+
+        // Bind framebuffer textures
+        Uniform::setTexture2D(programId, "gPosition", framebuffer->position->getId());
+        Uniform::setTexture2D(programId, "gNormal", framebuffer->normal->getId());
+        Uniform::setTexture2D(programId, "gAlbedo", framebuffer->albedo->getId());
+
+        // Set skybox cubemap
+        // Draw skybox
+
+        // Pop texture unit context
+        TextureUnitManager::popContext();
+
+        // Disable skybox pass program
+        skyboxProgram->disable();
+
+        // Set depth func to default
+        glDepthFunc(GL_LESS);*/
+
+// Finalization
+        // Update window 
+        window->update();
+
+        // Update timing
+        double timeThisFrame = glfwGetTime();
+        deltatime = timeThisFrame - timeLastFrame;
+        fps = (size_t)(1.0 / deltatime);
+        timeLastFrame = timeThisFrame;
+/*
+
         // Clear window
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -67,7 +211,6 @@ namespace Renderer
         Uniform::setMat4(programId, "model", math::Mat4::identity());
 
         graphics::Scene* scene = graphics::RenderData::get<graphics::Scene>(sceneIdentifier);
-
         for(unsigned int n : scene->nodes)
         {
             graphics::Node* node = graphics::RenderData::get<graphics::Model>(n);
@@ -80,65 +223,16 @@ namespace Renderer
                 std::cout << "Couldent find node!" << std::endl;
         }
 
-        
-
-        //std::cout << "BREAKPOINT 4" << std::endl;
-        //std::cin.get();
-        //std::queue<unsigned int> renderQueue;
-        //for(auto e : scene->nodes)
-        //    renderQueue.push(e);
-        //
-        //while(!renderQueue.empty())
-        //{
-        //    graphics::Node* node = graphics::RenderData::get<graphics::Node>(renderQueue.front());
-        //    //for(auto e : node.childrenNodes)
-        //    //    renderQueue.push(e);
-        //    
-        //    graphics::Mesh* me = graphics::RenderData::get<graphics::Mesh>(node->mesh);
-        //    node->transform.set(geometryProgram->getProgramId());
-        //    me->draw();
-        //}
-
-        // For every node in scene
-            // Set node uniforms (Projection-, model-, and viewmatrix)(Material)
-                // Set projection and view
-                // Add model to stack. 
-                // Set material
-            // Draw node
-                // Draw mesh
-
-        //std::for_each(nodes.begin(), nodes.end(), [&](Node* node)
-        //{
-        //    TextureUnitManager::pushContext();
-        //    node->setUniforms(geometryProgram->getProgramId());
-        //    node->draw();
-        //    TextureUnitManager::popContext();
-        //});
         geometryProgram->disable();
 
         // Update window
         window->update();
 
-        // Enable geometry pass program
-        // Set uniforms (Projection, View, Model)
-        // Bind framebuffer
-        // Clear window
-        // Draw
-        // Unbind framebuffer
-        // Disable geometry pass program
-        // Clear window ?
-        // Enable lighting pass program
-        // Set uniforms (View, Framebuffer texture positions, lighting)
-        // Bind framebuffer textures
-        // Render quad
-        // Disable lighting pass program
-        // Update window
-
-        // Calculate Deltatime
+        // Update timing
         double timeThisFrame = glfwGetTime();
         deltatime = timeThisFrame - timeLastFrame;
         fps = (size_t)(1.0 / deltatime);
-        timeLastFrame = timeThisFrame;
+        timeLastFrame = timeThisFrame;*/
     }
 
     size_t getFPS()
@@ -151,20 +245,36 @@ namespace Renderer
         return deltatime;
     }
 
-    void setProjection(math::Radians newFov, float newAspectratio, float newNear, float newFar)
+    void setPerspective(std::optional<math::Radians> newFov, std::optional<float> newAspectratio, std::optional<float> newNear, std::optional<float> newFar)
     {
         if(newFov)
-            fov = newFov;
-
+            fov = newFov.value();
         if(newAspectratio)
-            aspectratio = newAspectratio;
-
+            aspectratio = newAspectratio.value();
         if(newNear)
-            near = newNear;
-
+            nearP = newNear.value();
         if(newFar)
-            far = newFar;
+            farP = newFar.value();
 
-        projection = math::Mat4::perspective(fov, aspectratio, near, far);
+        projection = math::Mat4::perspective(fov, aspectratio, nearP, farP);
+    }
+
+    // Updates orthographic matrix arguments if argument is not 0 and updates the matrix
+    void setOrthographic(std::optional<float> newLeft, std::optional<float> newRight, std::optional<float> newBottom, std::optional<float> newTop, std::optional<float> newNear, std::optional<float> newFar)
+    {
+        if(newLeft)
+            left = newLeft.value();
+        if(newRight)
+            right = newRight.value();
+        if(newBottom)
+            bottom = newBottom.value();
+        if(newTop)
+            top = newTop.value();
+        if(newNear)
+            nearO = newNear.value();
+        if(newFar)
+            farO = newFar.value();
+
+        orthographic = math::Mat4::orthographic(left, right, bottom, top, nearO, farO);
     }
 }

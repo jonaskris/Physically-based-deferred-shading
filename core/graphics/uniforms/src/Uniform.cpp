@@ -16,14 +16,18 @@ namespace Uniform
 {
     void setTexture2D(GLuint programId, const std::string& name, GLuint textureId)
     {
+        GLuint textureUnit = TextureUnitManager::requestTextureUnit();
+        glActiveTexture(GL_TEXTURE0 + textureUnit);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glUniform1i(glGetUniformLocation(programId, &name[0]), TextureUnitManager::requestTextureUnit());
+        glUniform1i(glGetUniformLocation(programId, &name[0]), textureUnit);
     }
 
     void setCubemap(GLuint programId, const std::string& name, GLuint textureId)
     {
+        GLuint textureUnit = TextureUnitManager::requestTextureUnit();
+        glActiveTexture(GL_TEXTURE0 + textureUnit);
         glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);  
-        glUniform1i(glGetUniformLocation(programId, &name[0]), TextureUnitManager::requestTextureUnit());
+        glUniform1i(glGetUniformLocation(programId, &name[0]), textureUnit);
     }
     
     void setFloat(GLuint programId, const std::string& name, float f)

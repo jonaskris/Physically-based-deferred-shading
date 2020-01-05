@@ -10,8 +10,7 @@
 
 #include <Image.h>
 
-
-Image::Image(const std::string& file) : file(file)
+Image::Image(const std::string& file, unsigned int desiredChannels) : file(file)
 {
 
     // Read file
@@ -20,12 +19,7 @@ Image::Image(const std::string& file) : file(file)
                               (std::istreambuf_iterator<char>()));
 
     // Load image from file contents
-    pixels = stbi_load_from_memory((stbi_uc* const)(&fileContents[0]), fileContents.size(), &width, &height, &channels, 0);
-    
-    //std::cout << "width: " << width << ", height: " << height << ", channels: " << channels << std::endl;
-    //if(stbi_failure_reason())
-    //    std::cout << stbi_failure_reason();
-    //std::cin.get();
+    pixels = stbi_load_from_memory((stbi_uc* const)(&fileContents[0]), fileContents.size(), &width, &height, &channels, desiredChannels);
 }
 
 Image::~Image()

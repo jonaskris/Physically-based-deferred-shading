@@ -4,6 +4,8 @@
 #include <Utils.h>
 #include <Vec3.h>
 #include <Icosphere.h>
+#include <Plane.h>
+#include <Cube.h>
 //#include <Quaternion.h>
 
 #include <Shader.h>
@@ -28,15 +30,21 @@ int main()
         // Create Renderer
         Renderer::initialize(
             // Window
-            "Title", 500, 500,
+            "Title", 1000, 1000,
             // Shaders
             {
-                {"resources/ForwardShader.vert", Shader::Type::VERTEX}, 
-                {"resources/ForwardShader.frag", Shader::Type::FRAGMENT}
+                {"resources/Shaders/Geometry.vert", Shader::Type::VERTEX}, 
+                {"resources/Shaders/Geometry.frag", Shader::Type::FRAGMENT}
+            },
+            {
+                {"resources/Shaders/Lighting.vert", Shader::Type::VERTEX}, 
+                {"resources/Shaders/Lighting.frag", Shader::Type::FRAGMENT}
+            },
+            {
+                {"resources/Shaders/Skybox.vert", Shader::Type::VERTEX}, 
+                {"resources/Shaders/Skybox.frag", Shader::Type::FRAGMENT}
             }
         );
-
-
 
     // Initialize scene
     {
@@ -48,20 +56,23 @@ int main()
         unsigned int moonTexture = graphics::RenderData::insert<graphics::TextureCubemap, graphics::Texture>( new graphics::TextureCubemap(*moonImage) );
         unsigned int metalAlbedoTexture = graphics::RenderData::insert<graphics::TextureCubemap, graphics::Texture>( new graphics::TextureCubemap(*metalAlbedo) );
 
-        //// Materials
+        // Materials
         unsigned int moonMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(moonTexture) );
         unsigned int metalMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(metalAlbedoTexture) );
 
         // Meshes
         unsigned int icosphere = Icosphere::generate(2);
+        unsigned int cube = Cube::generate();
+        //unsigned int plane = Plane::generate();
 
         // Nodes
         unsigned int cam = graphics::RenderData::insert<graphics::FirstPersonCamera, graphics::Node>( new graphics::FirstPersonCamera(math::Vec3{-2.0f, 0.0f, 0.0f}, math::Degrees(0.0f), math::Degrees(0.0f), {}) );
         unsigned int mod2 = graphics::RenderData::insert<graphics::Model, graphics::Node>( new graphics::Model(icosphere, moonMaterial, math::Transform({0.75f, 0.0f, 0.0f}, {}, {0.5f, 0.5f, 0.5f}), {}) );
         unsigned int mod1 = graphics::RenderData::insert<graphics::Model, graphics::Node>( new graphics::Model(icosphere, metalMaterial, {}, {mod2}) );
+        unsigned int mod3 = graphics::RenderData::insert<graphics::Model, graphics::Node>( new graphics::Model(cube, metalMaterial, math::Transform({-1.0f, 0.0f, 0.0f}, {}), {}) );
 
         // Scenes
-        unsigned int s = graphics::RenderData::insert<graphics::Scene>( new graphics::Scene({cam, mod1}) );
+        unsigned int s = graphics::RenderData::insert<graphics::Scene>( new graphics::Scene(cam, {mod1, mod3}) );
     }
 
     // Main loop

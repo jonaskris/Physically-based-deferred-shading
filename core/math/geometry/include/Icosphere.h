@@ -63,9 +63,9 @@ namespace Icosphere
                 s /= l;
                 t /= 2.0f;
                 s /= 2.0f;
-                // Vertices/Normals
+
                 vertices = 
-                {
+                {// | Position |   Normal  |
                     -s, t, 0.0f,-s, t, 0.0f, 
                      s, t, 0.0f, s, t, 0.0f, 
                     -s,-t, 0.0f,-s,-t, 0.0f, 
@@ -80,22 +80,6 @@ namespace Icosphere
                     -t, 0.0f, s,-t, 0.0f, s
                 };
 
-	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{}.normalize() }) );
-
-	            // vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f, t}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f, t}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{0.0f,-1.0f,-t}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{0.0f, 1.0f,-t}.normalize() }) );
-
-                // vertices.push_back( VertexType({ math::Vec3{ t, 0.0f,-1.0f}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{ t, 0.0f, 1.0f}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{-t, 0.0f,-1.0f}.normalize() }) );
-	            // vertices.push_back( VertexType({ math::Vec3{-t, 0.0f, 1.0f}.normalize() }) );
-
-                // Indices
                 indices = 
                 {
                     0, 11, 5,
@@ -122,29 +106,6 @@ namespace Icosphere
                     8, 6, 7,
                     9, 8, 1
                 };
-	            //indices.push_back(0); indices.push_back(11); indices.push_back(5);
-	            //indices.push_back(0); indices.push_back(5);  indices.push_back(1);
-	            //indices.push_back(0); indices.push_back(1);  indices.push_back(7);
-	            //indices.push_back(0); indices.push_back(7);  indices.push_back(10);
-	            //indices.push_back(0); indices.push_back(10); indices.push_back(11);
-
-                //indices.push_back(1);  indices.push_back(5);  indices.push_back(9);
-	            //indices.push_back(5);  indices.push_back(11); indices.push_back(4);
-	            //indices.push_back(11); indices.push_back(10); indices.push_back(2);
-	            //indices.push_back(10); indices.push_back(7);  indices.push_back(6);
-                //indices.push_back(7);  indices.push_back(1);  indices.push_back(8);
-
-                //indices.push_back(3); indices.push_back(9); indices.push_back(4);
-                //indices.push_back(3); indices.push_back(4); indices.push_back(2);
-	            //indices.push_back(3); indices.push_back(2); indices.push_back(6);
-	            //indices.push_back(3); indices.push_back(6); indices.push_back(8);
-	            //indices.push_back(3); indices.push_back(8); indices.push_back(9);
-
-                //indices.push_back(4); indices.push_back(9); indices.push_back(5);
-	            //indices.push_back(2); indices.push_back(4); indices.push_back(11);
-	            //indices.push_back(6); indices.push_back(2); indices.push_back(10);
-	            //indices.push_back(8); indices.push_back(6); indices.push_back(7);
-	            //indices.push_back(9); indices.push_back(8); indices.push_back(1);
             }
 
             void subdivide(size_t subdivisions)

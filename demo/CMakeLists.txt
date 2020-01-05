@@ -11,7 +11,7 @@ target_link_libraries(demo
     PUBLIC programs
     PUBLIC renderer
     PUBLIC renderdata
-    PUBLIC geometry
     PUBLIC math
+    PUBLIC geometry
     PUBLIC uniforms
     PUBLIC window)

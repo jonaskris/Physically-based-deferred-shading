@@ -305,6 +305,17 @@ namespace math
 		return perspective(-right, right, -top, top, near, far);
 	}
 
+    Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float near, float far)
+    {
+        return Mat4
+        {
+            2.0f / (right - left), 0.0f, 0.0f, -(right + left)/(right - left),
+            0.0f, 2.0f/(top - bottom), 0.0f, -(top + bottom)/(top - bottom),
+            0.0f, 0.0f, -2.0f/(far - near), -(far + near)/(far - near),
+            0.0f, 0.0f, 0.0f, 1.0f
+        };
+    }
+
     Mat4 Mat4::view(const Vec3& lookFrom, const Vec3& lookAt, const Vec3& up)
 	{
         Vec3 forward = (lookFrom-lookAt).normalize(); // Direction from lookAt to lookFrom

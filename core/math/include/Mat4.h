@@ -50,7 +50,8 @@ namespace math
 
         static Mat4 perspective(float left, float right, float bottom, float top, float near, float far);   // Non-symmetric
 		static Mat4 perspective(Radians fov, float aspectratio, float near, float far);                       // Symmetric with fov and aspectratio
-
+        static Mat4 orthographic(float left, float right, float bottom, float top, float near, float far);  
+        
         static Mat4 view(const Vec3& lookFrom, const Vec3& lookAt, const Vec3& up);
     };
 }

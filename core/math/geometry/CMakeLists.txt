@@ -4,8 +4,8 @@ project(Geometry)
 
 add_library(geometry
     include/Icosphere.h
-    include/Cube.h
-    include/Plane.h
+    include/Cube.h src/Cube.cpp
+    include/Plane.h src/Plane.cpp
     include/AxisTriplets.h)
 
 target_include_directories(geometry

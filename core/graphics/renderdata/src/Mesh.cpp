@@ -45,10 +45,6 @@ namespace graphics
     void Mesh::draw() const
     {
         glBindVertexArray(VAO);
-    
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    
         glDrawElements(drawmode, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }

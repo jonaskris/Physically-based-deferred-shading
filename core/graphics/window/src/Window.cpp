@@ -1,4 +1,5 @@
 #include <iostream>
+#include <optional>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -26,7 +27,7 @@ DebugMessageCallback( GLenum source,
 void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
-    Renderer::setProjection(math::Radians(0.0f), (float)width / (float)height, 0.0f, 0.0f);
+    Renderer::setPerspective(std::nullopt, (float)width / (float)height, std::nullopt, std::nullopt);
 }
 
 // Converts position to be vertically normalized and horizontally depending on aspect ratio.

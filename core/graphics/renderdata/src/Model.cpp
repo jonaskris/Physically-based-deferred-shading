@@ -24,10 +24,6 @@ namespace graphics
         {
             graphics::Material* m = graphics::RenderData::get<graphics::Material>(material);
             m->set(programId);
-        } else
-        {
-            // Set default material?
-            std::cout << "Couldent find material!" << std::endl;
         }
 
         // Draw mesh

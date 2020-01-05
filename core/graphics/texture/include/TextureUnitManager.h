@@ -14,7 +14,7 @@ namespace TextureUnitManager
         Activates texture unit, marks it as used and returns its id.
         Returns -1 if there are no available texture units.
     */
-    int requestTextureUnit();
+    GLuint requestTextureUnit();
 
     /* 
         Create a context in which requested texture units are assigned.
