@@ -58,7 +58,7 @@ namespace Renderer
 
         glEnable(GL_DEPTH_TEST);
         glFrontFace(GL_CCW);
-        glDisable(GL_CULL_FACE);
+        glEnable(GL_CULL_FACE);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
         glPointSize(3.0f);
         glClearColor(1.0f, 0.7f, 0.3f, 1.0f);
@@ -148,6 +148,9 @@ namespace Renderer
         // Set depth func to less than or equal
         glDepthFunc(GL_LEQUAL);
 
+        // Set face culling to front
+        glCullFace(GL_FRONT);
+
         // Blit (copy) framebuffer depth to main buffer
         glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer->getId());
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -173,6 +176,9 @@ namespace Renderer
 
             // Disable skybox pass program
             skyboxProgram->disable();
+
+        // Set face culling to back (Default)
+        glCullFace(GL_BACK);
 
         // Set depth func to less than (Default)
         glDepthFunc(GL_LESS);
