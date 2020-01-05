@@ -220,6 +220,17 @@ namespace math
         return inverse;
     }
 
+    Mat4 Mat4::removeTranslation() const
+    {
+        return Mat4
+        {
+            elements[0],    elements[1],    elements[2],    0.0f,
+            elements[4],    elements[5],    elements[6],    0.0f,
+            elements[8],    elements[9],    elements[10],   0.0f,
+            0.0f,           0.0f,           0.0f,           1.0f
+        };
+    }
+
     // Operators
     Vec4 Mat4::operator*(const Vec4& vector) const { return multiply(vector); }
 

@@ -152,7 +152,7 @@ namespace Icosphere
             graphics::VertexAttribute{0, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(0)},
 
             // Normal
-            graphics::VertexAttribute{1, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(3 * sizeof(float))}
+            graphics::VertexAttribute{1, 3, GL_FLOAT, true, 6 * sizeof(float), (const void*)(3 * sizeof(float))}
         };
 
         return graphics::RenderData::insert<graphics::Mesh>(

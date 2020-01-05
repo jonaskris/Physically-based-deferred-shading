@@ -9,19 +9,38 @@
 
 namespace Cube
 {
-    unsigned int generate()
+    unsigned int generate(bool cubemapped)
     {
         Workspace workspace;
-        workspace.generate();
+        workspace.generate(cubemapped);
 
-        std::vector<graphics::VertexAttribute> vertexAttributes
+        std::vector<graphics::VertexAttribute> vertexAttributes;
+
+        if(cubemapped)
         {
-            // Position
-            graphics::VertexAttribute{0, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(0)},
+            vertexAttributes =
+            {
+                // Position
+                graphics::VertexAttribute{0, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(0)},
 
-            // Normal
-            graphics::VertexAttribute{1, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(3 * sizeof(float))}
-        };
+                // Normal
+                graphics::VertexAttribute{1, 3, GL_FLOAT, true, 6 * sizeof(float), (const void*)(3 * sizeof(float))}
+            };
+        } else
+        {
+            vertexAttributes =
+            {
+                // Position
+                graphics::VertexAttribute{0, 3, GL_FLOAT, false, 8 * sizeof(float), (const void*)(0)},
+
+                // Normal
+                graphics::VertexAttribute{1, 3, GL_FLOAT, true, 8 * sizeof(float), (const void*)(3 * sizeof(float))},
+
+                // Uv
+                graphics::VertexAttribute{2, 2, GL_FLOAT, true, 8 * sizeof(float), (const void*)(6 * sizeof(float))}
+            };
+        }
+        
 
         return graphics::RenderData::insert<graphics::Mesh>(
             new graphics::Mesh

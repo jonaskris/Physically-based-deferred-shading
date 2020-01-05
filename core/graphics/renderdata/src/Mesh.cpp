@@ -10,7 +10,7 @@
 
 namespace graphics
 {
-    void Mesh::initialize(const std::vector<VertexAttribute>& vertexAttributes)
+    void Mesh::initialize(const std::vector<float>& vertices, const std::vector<uint32_t>& indices, const std::vector<VertexAttribute>& vertexAttributes)
     {
         // VBO
         glGenBuffers(1, &VBO);
@@ -40,12 +40,12 @@ namespace graphics
     }
 
     Mesh::Mesh(const std::vector<float>& vertices, const std::vector<uint32_t>& indices, const std::vector<VertexAttribute>& vertexAttributes, unsigned int drawmode) 
-    : vertices(vertices), indices(indices), drawmode(drawmode) { initialize(vertexAttributes); }
+    : drawmode(drawmode), verticesSize(vertices.size()), indicesSize(indices.size()) { initialize(vertices, indices, vertexAttributes); }
 
     void Mesh::draw() const
     {
         glBindVertexArray(VAO);
-        glDrawElements(drawmode, indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(drawmode, indicesSize, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 }

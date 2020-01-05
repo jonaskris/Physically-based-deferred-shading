@@ -39,7 +39,6 @@ namespace Renderer
         skyboxProgram = new Program(skyboxShaders);
         framebuffer = new graphics::Framebuffer(windowWidth, windowHeight);
         planeMesh = Plane::generate();
-        cubeMesh = Cube::generate();
 
         // Default perspective
         fov = math::Degrees(45.0f);
@@ -96,7 +95,8 @@ namespace Renderer
 
         // Draw geometry
         graphics::Scene* scene = graphics::RenderData::get<graphics::Scene>(sceneIdentifier);
-        graphics::Node* camera = graphics::RenderData::get<graphics::FirstPersonCamera>(scene->camera);
+        graphics::FirstPersonCamera* camera = graphics::RenderData::get<graphics::FirstPersonCamera>(scene->camera);
+        graphics::Model* skybox = graphics::RenderData::get<graphics::Model>(scene->skybox);
         camera->process(programId);
         for(unsigned int n : scene->nodes)
         {
@@ -113,7 +113,7 @@ namespace Renderer
 
         // Disable geometry pass program
         geometryProgram->disable();
-
+        
 // Lighting
         // Clear window
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -137,7 +137,7 @@ namespace Renderer
         Uniform::setMat4(programId, "model", math::Mat4::scale({2.0f, 2.0f, 2.0f}));
         graphics::Mesh* quad = graphics::RenderData::get<graphics::Mesh>(planeMesh);
         quad->draw();
-
+        
         // Pop texture unit context
         TextureUnitManager::popContext();
 
@@ -146,46 +146,36 @@ namespace Renderer
 
 // Skybox
         // Set depth func to less than or equal
-        // Blit (copy) framebuffer depth to main buffer
-            // Enable skybox pass program
-            // Set uniforms
-                // Push texture unit context
-                // Bind framebuffer textures
-                // Set skybox cubemap
-                // Draw skybox mesh
-                // Pop texture unit context
-            // Disable skybox pass program
-        // Set depth func to less than (Default)
-
-
-        /*// Set depth func to less than or equal
         glDepthFunc(GL_LEQUAL);
 
-        // Enable skybox pass program
-        skyboxProgram->enable();
-        programId = skyboxProgram->getProgramId();
+        // Blit (copy) framebuffer depth to main buffer
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer->getId());
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        glBlitFramebuffer(0, 0, 1000, 1000, 0, 0, 1000, 1000, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
-        // Set view matrix to previously used but remove translation
+            // Enable skybox pass program
+            skyboxProgram->enable();
+            programId = skyboxProgram->getProgramId();
 
-        // Push texture unit context
-        TextureUnitManager::pushContext();
+            // Set uniforms
+            Uniform::setMat4(programId, "projection", projection);
+            Uniform::setMat4(programId, "view", camera->getView().removeTranslation());
+            Uniform::setMat4(programId, "model", math::Mat4::identity());
 
-        // Bind framebuffer textures
-        Uniform::setTexture2D(programId, "gPosition", framebuffer->position->getId());
-        Uniform::setTexture2D(programId, "gNormal", framebuffer->normal->getId());
-        Uniform::setTexture2D(programId, "gAlbedo", framebuffer->albedo->getId());
+                // Push texture unit context
+                TextureUnitManager::pushContext();
+                
+                // Draw skybox geometry
+                skybox->process(programId);
 
-        // Set skybox cubemap
-        // Draw skybox
+                // Pop texture unit context
+                TextureUnitManager::popContext();
 
-        // Pop texture unit context
-        TextureUnitManager::popContext();
+            // Disable skybox pass program
+            skyboxProgram->disable();
 
-        // Disable skybox pass program
-        skyboxProgram->disable();
-
-        // Set depth func to default
-        glDepthFunc(GL_LESS);*/
+        // Set depth func to less than (Default)
+        glDepthFunc(GL_LESS);
 
 // Finalization
         // Update window 
@@ -196,43 +186,6 @@ namespace Renderer
         deltatime = timeThisFrame - timeLastFrame;
         fps = (size_t)(1.0 / deltatime);
         timeLastFrame = timeThisFrame;
-/*
-
-        // Clear window
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Draw nodes
-        geometryProgram->enable();
-        GLuint programId = geometryProgram->getProgramId();
-
-        // Set uniforms
-        Uniform::setMat4(programId, "projection", projection);
-        Uniform::setMat4(programId, "view", math::Mat4::identity());
-        Uniform::setMat4(programId, "model", math::Mat4::identity());
-
-        graphics::Scene* scene = graphics::RenderData::get<graphics::Scene>(sceneIdentifier);
-        for(unsigned int n : scene->nodes)
-        {
-            graphics::Node* node = graphics::RenderData::get<graphics::Model>(n);
-            if(!node)
-                node = graphics::RenderData::get<graphics::FirstPersonCamera>(n);
-                        
-            if(node)
-                node->process(programId);
-            else
-                std::cout << "Couldent find node!" << std::endl;
-        }
-
-        geometryProgram->disable();
-
-        // Update window
-        window->update();
-
-        // Update timing
-        double timeThisFrame = glfwGetTime();
-        deltatime = timeThisFrame - timeLastFrame;
-        fps = (size_t)(1.0 / deltatime);
-        timeLastFrame = timeThisFrame;*/
     }
 
     size_t getFPS()

@@ -65,13 +65,15 @@ namespace graphics
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-            
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0, 0, GL_RGB, left.getWidth(), left.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, left.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, GL_RGB, right.getWidth(), right.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, right.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2, 0, GL_RGB, back.getWidth(), back.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, back.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, 0, GL_RGB, front.getWidth(), front.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, front.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4, 0, GL_RGB, top.getWidth(), top.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, top.getPixels());                    
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5, 0, GL_RGB, bottom.getWidth(), bottom.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, bottom.getPixels());        
+
+            // Right, left, Up, Down, back, front
+
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0, 0, GL_RGB, right.getWidth(), right.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, right.getPixels());        
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, GL_RGB, left.getWidth(), left.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, left.getPixels());        
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2, 0, GL_RGB, top.getWidth(), top.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, top.getPixels());                    
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, 0, GL_RGB, bottom.getWidth(), bottom.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, bottom.getPixels());        
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4, 0, GL_RGB, back.getWidth(), back.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, back.getPixels());        
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5, 0, GL_RGB, front.getWidth(), front.getWidth(), 0, GL_RGB, GL_UNSIGNED_BYTE, front.getPixels());        
     
             glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
         }

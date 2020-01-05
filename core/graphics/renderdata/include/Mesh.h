@@ -14,13 +14,13 @@ namespace graphics
     {
     protected:
         unsigned int drawmode;
-        std::vector<float> vertices;
-        std::vector<uint32_t> indices;
+        unsigned int verticesSize;
+        unsigned int indicesSize;
         GLuint VAO;
         GLuint VBO;
         GLuint IBO;
 
-        void initialize(const std::vector<VertexAttribute>& vertexAttributes);
+        void initialize(const std::vector<float>& vertices, const std::vector<uint32_t>& indices, const std::vector<VertexAttribute>& vertexAttributes);
 
     public:
         Mesh(const std::vector<float>& vertices, const std::vector<uint32_t>& indices, const std::vector<VertexAttribute>& vertexAttributes, unsigned int drawmode);
@@ -29,7 +29,7 @@ namespace graphics
 
         friend std::ostream& operator<<(std::ostream& out, const Mesh& mesh)
         {
-            out << "Mesh: Vertices size: " << mesh.vertices.size() << ", Indices size: " << mesh.indices.size();
+            out << "Mesh: Vertices size: " << mesh.verticesSize << ", Indices size: " << mesh.indicesSize;
             return out;
         }
     };

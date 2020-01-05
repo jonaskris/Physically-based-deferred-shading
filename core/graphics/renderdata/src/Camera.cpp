@@ -27,7 +27,8 @@ namespace graphics
         parentTransform = transform.toMatrix() * parentTransform;
 
         // Set view
-        Uniform::setMat4(programId, "view", parentTransform.inverse().value());
+        view = parentTransform.inverse().value();
+        Uniform::setMat4(programId, "view", view);
 
         // Process childrenNodes
         for(unsigned int n : childrenNodes)
@@ -36,6 +37,11 @@ namespace graphics
             if(node)
                 node->process(programId, parentTransform);
         }
+    }
+
+    math::Mat4 Camera::getView() const
+    {
+        return view;
     }
     
     // FirstPersonCamera

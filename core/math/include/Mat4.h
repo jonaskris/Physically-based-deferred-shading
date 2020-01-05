@@ -35,6 +35,7 @@ namespace math
         Mat4& multiply(const Mat4& other);
         Vec4 multiply(const Vec4& vector) const;
         std::optional<Mat4> inverse() const;
+        Mat4 removeTranslation() const;
 
         // Operators
         Vec4 operator*(const Vec4& vector) const;

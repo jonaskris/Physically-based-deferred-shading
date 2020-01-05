@@ -34,7 +34,6 @@ namespace Renderer
         Program* skyboxProgram;
         graphics::Framebuffer* framebuffer;
         unsigned int planeMesh; // Used for drawing screen-covering plane in lighting pass
-        unsigned int cubeMesh; // Used for drawing sky box
 
         // Projection
             // Perspective (Geometry)

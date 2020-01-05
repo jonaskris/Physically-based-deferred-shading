@@ -16,10 +16,14 @@ namespace graphics
 {
     class Camera : public Node
     {
+    private:
+        math::Mat4 view;
+
     public:
         Camera(math::Transform transform, std::vector<unsigned int> childrenNodes);
 
         void process(GLuint programId, math::Mat4 parentTransform = {}) override;
+        math::Mat4 getView() const;
     };
 
     class FirstPersonCamera : public Camera, public Input::Mouse::DeltaPositionListener, public Input::Keyboard::KeyListener
