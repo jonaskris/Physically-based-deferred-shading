@@ -37,4 +37,9 @@ namespace math
     {
         return Vec3(v.elements[0], v.elements[1], v.elements[2]);
     }
+
+    inline Vec4 toVec4(const Vec3& v, float w)
+    {
+        return Vec4(v.elements[0], v.elements[1], v.elements[2], w);
+    }
 }

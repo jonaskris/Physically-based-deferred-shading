@@ -100,7 +100,7 @@ int main()
         unsigned int skyboxMaterial = graphics::RenderData::insert<graphics::Material>( new graphics::Material(skyboxTexture) );
 
         // Meshes
-        unsigned int icosphere = Icosphere::generate(3);
+        unsigned int icosphere = Icosphere::generate(4);
         unsigned int cubeCubemapped = Cube::generate(true); // True: cubemapped
 
         // Nodes

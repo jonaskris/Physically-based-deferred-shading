@@ -47,6 +47,13 @@ namespace Renderer
             math::Mat4 orthographic;
             float left, right, bottom, top, nearO, farO;
 
+        /* 
+            Lighting
+            (Only defined and used here because there was not enough time to create a proper node-based light)
+        */
+        math::Vec3 lightPosition;
+        math::Vec3 lightColor;
+
         // Timing
         double deltatime = 0.0;
         size_t fps = 0;

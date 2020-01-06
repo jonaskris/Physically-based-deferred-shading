@@ -57,6 +57,13 @@ namespace Renderer
         farO = 1.0f;
         setOrthographic();
 
+        /* 
+            Lighting
+            (Only defined and used here because there was not enough time to create a proper node-based light)
+        */
+        lightPosition = math::Vec3(1.0f, 1.0f, 0.0f);
+        lightColor = math::Vec3(100.0f, 100.0f, 100.0f);
+
         glEnable(GL_DEPTH_TEST);
         glFrontFace(GL_CCW);
         glEnable(GL_CULL_FACE);
@@ -123,6 +130,8 @@ namespace Renderer
         lightingProgram->enable();
         programId = lightingProgram->getProgramId();
 
+        lightPosition = math::toVec3(math::Mat4::rotate(math::Degrees(1.0f), {0.0f, 1.0f, 0.0f}) * math::toVec4(lightPosition, 1.0f));
+        Uniform::setVec3(programId, "lightPosition", lightPosition);
 
         // Push texture unit context
         TextureUnitManager::pushContext();
