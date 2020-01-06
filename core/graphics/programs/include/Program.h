@@ -34,6 +34,7 @@ public:
 
     GLuint getProgramId() const;
     bool getLinkedSuccessfully() const;
+    void validate();
     bool getValidatedSuccessfully() const;
 
     void enable() const;
@@ -45,6 +46,6 @@ public:
     void setUniformVec3f(const GLchar* name, const math::Vec3& vector);
     void setUniformVec4f(const GLchar* name, const math::Vec4& vector);
     void setUniformMat4f(const GLchar* name, const math::Mat4& matrix);
-    
+
     friend std::ostream& operator<<(std::ostream& out, const Program& program);
 };

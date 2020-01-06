@@ -13,6 +13,11 @@ namespace graphics
     
     Model::Model(unsigned int mesh, unsigned int material, math::Transform transform, std::vector<unsigned int> childrenNodes) : Node(childrenNodes, transform), mesh(mesh), material(material) {}
 
+    unsigned int Model::getMaterial() const
+    {
+        return material;
+    }
+
     void Model::process(GLuint programId, math::Mat4 parentTransform)
     {
         // Set transform
@@ -23,14 +28,13 @@ namespace graphics
         if(material)
         {
             graphics::Material* m = graphics::RenderData::get<graphics::Material>(material);
-            m->set(programId);
+            m->set(programId); 
         }
 
         // Draw mesh
         if(mesh)
         {
             graphics::Mesh* m = graphics::RenderData::get<graphics::Mesh>(mesh);
-
             if(m)
                 m->draw();
         }

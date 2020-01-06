@@ -49,24 +49,6 @@ Program::Program(std::vector<Shader*> shaders)
         return; // linkedSuccessfully/validatedSuccessfully false by default
     }
     linkedSuccessfully = true;
-
-    glValidateProgram(programId);
-    GLint validateResult;
-    glGetProgramiv(programId, GL_VALIDATE_STATUS, &validateResult);
-    if(validateResult == GL_FALSE)
-    {
-        GLint logLength;
-        glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &logLength);
-        std::vector<char> logVec(logLength);
-        glGetProgramInfoLog(programId, logLength, &logLength, &logVec[0]);
-        
-        std::string log(logVec.begin(), logVec.end());
-        std::cout << log << std::endl;
-
-        glDeleteProgram(programId);
-        return; // validatedSuccessfully false by default
-    }
-    validatedSuccessfully = true;
 }
 
 Program::~Program() 
@@ -83,6 +65,28 @@ GLuint Program::getProgramId() const
 bool Program::getLinkedSuccessfully() const
 {
     return linkedSuccessfully;
+}
+
+void Program::validate()
+{
+    glValidateProgram(programId);
+    GLint validateResult;
+    glGetProgramiv(programId, GL_VALIDATE_STATUS, &validateResult);
+    if(validateResult == GL_FALSE)
+    {
+        GLint logLength;
+        glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &logLength);
+        std::vector<char> logVec(logLength);
+        glGetProgramInfoLog(programId, logLength, &logLength, &logVec[0]);
+        
+        std::string log(logVec.begin(), logVec.end());
+        std::cout << "Failed to validate program. \n\tMessage: " << log << std::endl;
+
+        //glDeleteProgram(programId);
+        validatedSuccessfully = false;
+        return;
+    }
+    validatedSuccessfully = true;
 }
 
 bool Program::getValidatedSuccessfully() const

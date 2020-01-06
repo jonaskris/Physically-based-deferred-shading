@@ -12,10 +12,11 @@ uniform mat4 model;
 
 void main()
 {
-    normal = in_normal;
-    uv = in_position;
+    vec4 worldPosition = model * vec4(in_position, 1.0);
+    position = worldPosition.xyz;
 
-    vec4 worldPosition = projection * view * model * vec4(in_position, 1.0);
-    position = vec3(worldPosition);
-    gl_Position = worldPosition;
+    uv = in_position;
+    normal = normalize(transpose(inverse(mat3(model))) * in_normal);
+
+    gl_Position = projection * view * worldPosition;
 }

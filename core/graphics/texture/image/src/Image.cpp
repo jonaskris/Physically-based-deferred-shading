@@ -12,7 +12,6 @@
 
 Image::Image(const std::string& file, unsigned int desiredChannels) : file(file)
 {
-
     // Read file
     std::ifstream fileStream(file, std::ios::binary);
     std::vector<char> fileContents((std::istreambuf_iterator<char>(fileStream)),

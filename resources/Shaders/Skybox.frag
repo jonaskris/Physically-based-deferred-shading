@@ -7,5 +7,5 @@ uniform samplerCube albedo;
 
 void main()
 {
-    color = vec4(texture(albedo, uv).rgb, 1.0);
+    color = texture(albedo, uv);
 } 

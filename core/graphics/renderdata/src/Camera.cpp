@@ -30,6 +30,9 @@ namespace graphics
         view = parentTransform.inverse().value();
         Uniform::setMat4(programId, "view", view);
 
+        // Set position
+        position = math::toVec3((parentTransform * math::Vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+
         // Process childrenNodes
         for(unsigned int n : childrenNodes)
         {
@@ -43,6 +46,12 @@ namespace graphics
     {
         return view;
     }
+
+    math::Vec3 Camera::getPosition() const
+    {
+        return position;
+    }
+
     
     // FirstPersonCamera
     FirstPersonCamera::FirstPersonCamera(const math::Vec3& position, math::Radians yaw, math::Radians pitch, std::vector<unsigned int> childrenNodes)

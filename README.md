@@ -70,3 +70,6 @@ To run tests after building, run the command below from the build directory.
  - [GLAD](https://github.com/Dav1dde/glad)
  - [GLFW](https://github.com/glfw/glfw)
  - [STB_IMAGE](https://github.com/nothings/stb)
+
+## Special thanks
+Special thanks to FreePBR.com for being the projects provider of PBR materials and textures.

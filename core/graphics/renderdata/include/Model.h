@@ -17,6 +17,10 @@ namespace graphics
     public:
         Model(unsigned int mesh, unsigned int material, math::Transform transform, std::vector<unsigned int> childrenNodes);
 
-        virtual void process(GLuint programId, math::Mat4 parentTransform = {}) override;
+        unsigned int getMaterial() const;
+        void setMaterial(GLuint programId) const;
+        void drawMesh() const;
+        
+        void process(GLuint programId, math::Mat4 parentTransform = {});
     };
 }

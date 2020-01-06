@@ -24,6 +24,7 @@
 #include <Mat4.h>
 #include <Plane.h>
 #include <Cube.h>
+#include <Material.h>
 
 namespace Renderer
 {
@@ -122,8 +123,6 @@ namespace Renderer
         lightingProgram->enable();
         programId = lightingProgram->getProgramId();
 
-        // Set orthographic projection
-        Uniform::setMat4(programId, "projection", orthographic);
 
         // Push texture unit context
         TextureUnitManager::pushContext();
@@ -132,6 +131,15 @@ namespace Renderer
         Uniform::setTexture2D(programId, "gPosition", framebuffer->position->getId());
         Uniform::setTexture2D(programId, "gNormal", framebuffer->normal->getId());
         Uniform::setTexture2D(programId, "gAlbedo", framebuffer->albedo->getId());
+        Uniform::setTexture2D(programId, "gRoughness", framebuffer->roughness->getId());
+        Uniform::setTexture2D(programId, "gMetalness", framebuffer->metalness->getId());
+
+        // Set uniforms
+        Uniform::setMat4(programId, "projection", orthographic);
+        Uniform::setVec3(programId, "viewPosition", camera->getPosition());
+        graphics::Material* skyboxMaterial = graphics::RenderData::get<graphics::Material>(skybox->getMaterial());
+        if(skyboxMaterial)
+            skyboxMaterial->setAlbedo(programId, "skybox");
 
         // Draw screen-wide quad
         Uniform::setMat4(programId, "model", math::Mat4::scale({2.0f, 2.0f, 2.0f}));
