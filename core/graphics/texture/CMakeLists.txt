@@ -11,4 +11,5 @@ target_include_directories(texture
 
 target_link_libraries(texture
     PUBLIC image
-    PUBLIC glad)
+    PUBLIC glad
+    PUBLIC glfw)
