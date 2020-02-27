@@ -15,39 +15,28 @@ namespace graphics
             Used to access map container of any type of data.
         */
         template <typename DataType>
-        std::map<unsigned int, DataType*>& access()
+        std::map<DataIdentifier<DataType>, DataType*>& access()
         {
-            static std::map<unsigned int, DataType*> m;
+            static std::map<DataIdentifier<DataType>, DataType*> m;
             return m;
         }
 
         /* 
-            Insert into map of DataType, identify with counter for IdentifierType
-            For example, you can insert Model(s) and Camera(s) as Node(s), or Texture2D(s) and 
-            TextureCubemap(s) as Texture(s).
+            Insert into map of DataType.
         */
-        template <typename DataType, typename IdentifierType>
-        unsigned int insert(DataType* data)
+        template <typename DataType>
+        DataIdentifier<DataType> insert(DataType* data)
         {
             auto& m = access<DataType>();
 
-            unsigned int identifier = DataIdentifier<IdentifierType>::newIdentifier();
+            DataIdentifier<DataType> identifier = DataIdentifier<DataType>();
             m[identifier] = data;
             
             return identifier;
         }
-
-        /*
-            For cases where DataType = IdentifierType for method above.
-        */
-        template <typename DataType>
-        unsigned int insert(DataType* data)
-        {
-            return insert<DataType, DataType>(data);
-        }
     
         template <typename DataType>
-        DataType* get(unsigned int identifier)
+        DataType* get(DataIdentifier<DataType> identifier)
         {
             auto& m = access<DataType>();
 

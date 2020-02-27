@@ -9,7 +9,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <Mesh.h>
+//#include <Mesh.h>
 #include <RenderData.h>
 #include <VertexAttribute.h>
 
@@ -142,7 +142,7 @@ namespace Icosphere
 
     unsigned int generate(size_t subdivisions)
     {
-        Workspace workspace;
+        /*Workspace workspace;
         workspace.generateBase();
         workspace.subdivide(subdivisions);
 
@@ -162,6 +162,6 @@ namespace Icosphere
                 vertexAttributes,
                 (unsigned int)GL_TRIANGLES
             }
-        );
+        );*/
     }
 }

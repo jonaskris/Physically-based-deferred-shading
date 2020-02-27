@@ -3,15 +3,16 @@
 #include <vector>
 #include <cstdint>
 
-#include <Mesh.h>
+//#include <Mesh.h>
 #include <RenderData.h>
 #include <VertexAttribute.h>
+#include <DataIdentifier.h>
 
 namespace Plane
 {
     unsigned int generate()
     {
-        Workspace workspace;
+        /*Workspace workspace;
         workspace.generate();
 
         std::vector<graphics::VertexAttribute> vertexAttributes
@@ -33,6 +34,8 @@ namespace Plane
                 vertexAttributes,
                 (unsigned int)GL_TRIANGLES
             }
-        );
+        );*/
+        
+        return 0;
     }
 };

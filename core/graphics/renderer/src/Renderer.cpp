@@ -11,20 +11,20 @@
 
 #include <Utils.h>
 #include <Window.h>
-#include <Scene.h>
+//#include <Scene.h>
 #include <Program.h>
 #include <TextureUnitManager.h>
 #include <RenderData.h>
-#include <Node.h>
-#include <Texture.h>
-#include <Mesh.h>
+//#include <Node.h>
+//#include <Texture.h>
+//#include <Mesh.h>
 #include <Uniform.h>
-#include <Model.h>
-#include <Camera.h>
+//#include <Model.h>
+//#include <Camera.h>
 #include <Mat4.h>
 #include <Plane.h>
 #include <Cube.h>
-#include <Material.h>
+//#include <Material.h>
 
 namespace Renderer
 {
@@ -85,7 +85,7 @@ namespace Renderer
 
     void render(unsigned int sceneIdentifier)
     {
-// Geometry
+/*// Geometry
         // Bind framebuffer
         framebuffer->bind();
 
@@ -209,6 +209,7 @@ namespace Renderer
         deltatime = timeThisFrame - timeLastFrame;
         fps = (size_t)(1.0 / deltatime);
         timeLastFrame = timeThisFrame;
+*/
     }
 
     size_t getFPS()

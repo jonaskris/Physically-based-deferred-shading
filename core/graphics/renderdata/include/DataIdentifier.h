@@ -3,7 +3,7 @@
 namespace graphics
 {
     /*
-        DataIdentifier is a generator for a unique identifier per DataType, and
+        DataIdentifier is a class for a unique identifier per DataType, and
         keeps track of already used identifiers for the DataType.
     */
     template <typename DataType>
@@ -11,13 +11,12 @@ namespace graphics
     {
     private:
         static unsigned int counter;
-
-        DataIdentifier() = delete;
-        DataIdentifier(const DataIdentifier&) = delete;
-        DataIdentifier& operator=(const DataIdentifier&) = delete;
+        unsigned int identifier;
 
     public:
-        static unsigned int newIdentifier() { return ++counter; }
+        DataIdentifier() : identifier(++counter) {};
+        
+        friend bool operator<(const DataIdentifier<DataType>& lhs, const DataIdentifier<DataType>& rhs) { return lhs.identifier < rhs.identifier; }
     };
 
     template <typename DataType>

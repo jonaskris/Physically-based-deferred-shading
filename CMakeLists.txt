@@ -9,6 +9,8 @@ add_subdirectory(external/GLAD)
 add_subdirectory(external/GLFW)
 add_subdirectory(external/STB_IMAGE)
 add_subdirectory(external/googletest)
+add_subdirectory(external/nlohmann_json)
+add_subdirectory(external/Assimp)
 add_subdirectory(core)
 add_subdirectory(demo)
 

@@ -3,15 +3,16 @@
 #include <vector>
 #include <cstdint>
 
-#include <Mesh.h>
+//#include <Mesh.h>
 #include <RenderData.h>
 #include <VertexAttribute.h>
+#include <DataIdentifier.h>
 
 namespace Cube
 {
     unsigned int generate(bool cubemapped)
     {
-        Workspace workspace;
+        /*Workspace workspace;
         workspace.generate(cubemapped);
 
         std::vector<graphics::VertexAttribute> vertexAttributes;
@@ -49,6 +50,8 @@ namespace Cube
                 vertexAttributes,
                 (unsigned int)GL_TRIANGLES
             }
-        );
+        );*/
+
+        return 0;
     }
 };

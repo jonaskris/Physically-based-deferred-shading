@@ -15,15 +15,15 @@
 #include <Input.h>
 #include <RenderData.h>
 
-#include <Image.h>
-#include <Texture.h>
-#include <Material.h>
+//#include <Image.h>
+//#include <Texture.h>
+//#include <Material.h>
 
 // For constructing scene
-#include <Scene.h>
-#include <Node.h>
-#include <Model.h>
-#include <Camera.h>
+//#include <Scene.h>
+//#include <Node.h>
+//#include <Model.h>
+//#include <Camera.h>
 
 int main()
 {
@@ -47,7 +47,12 @@ int main()
             }
         );
 
-    // Initialize scene
+    //graphics::GLTFLoader::load("resources/Avocado/Avocado.gltf");
+
+    std::cout << "Test1" << std::endl;
+    std::cin.get();
+
+    /*// Initialize scene
     {
         // Images
         std::array<Image, 3> metalImages =
@@ -112,7 +117,7 @@ int main()
 
         // Scenes
         unsigned int s = graphics::RenderData::insert<graphics::Scene>( new graphics::Scene(cam, skybox, {mod1, mod2, mod3}) );
-    }
+    }*/
 
     // Main loop
     unsigned int framecounter = 0;
