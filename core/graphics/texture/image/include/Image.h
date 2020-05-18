@@ -3,22 +3,29 @@
 #include <iostream>
 #include <string>
 
-class Image
+#include <Source.h>
+
+namespace graphics
 {
-private:
-    std::string file;
-    unsigned char* pixels;
-    int width, height;
-    int channels;
+    class Image
+    {
+    private:
+        Source source;
+        unsigned char* pixels;
+        int width, height;
+        int channels;
+    
+    public:
+        Image(const Source& source);
+        ~Image();
+    
+        Source getSource() const;
 
-public:
-    Image(const std::string& file, unsigned int desiredChannels = 3);
-    ~Image();
+        int getWidth() const;
+        int getHeight() const;
+        int getChannels() const;
+        const unsigned char* const getPixels() const;
 
-    int getWidth() const;
-    int getHeight() const;
-    int getChannels() const;
-    const unsigned char* const getPixels() const;
-
-    friend std::ostream& operator<<(std::ostream& out, const Image& shader);
-};
+        friend std::ostream& operator<<(std::ostream& out, const Image& image);
+    };
+}

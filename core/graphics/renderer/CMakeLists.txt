@@ -9,9 +9,8 @@ target_include_directories(renderer
 
 target_link_libraries(renderer 
     PUBLIC window
-    PUBLIC programs
+    PUBLIC scene
+    PUBLIC program
     PUBLIC renderdata
     PUBLIC glad
-    PUBLIC uniforms
-    PUBLIC math
-    PUBLIC geometry)
+    PUBLIC math)

@@ -3,55 +3,46 @@
 #include <vector>
 #include <cstdint>
 
-//#include <Mesh.h>
-#include <RenderData.h>
+#include <Geometry.h>
 #include <VertexAttribute.h>
-#include <DataIdentifier.h>
 
-namespace Cube
+namespace math::geometry
 {
-    unsigned int generate(bool cubemapped)
+    namespace Cube
     {
-        /*Workspace workspace;
-        workspace.generate(cubemapped);
-
-        std::vector<graphics::VertexAttribute> vertexAttributes;
-
-        if(cubemapped)
+        Geometry generate(bool cubemapped)
         {
-            vertexAttributes =
+            Workspace workspace;
+            workspace.generate(cubemapped);
+
+            std::vector<VertexAttribute> vertexAttributes;
+
+            if(cubemapped)
             {
-                // Position
-                graphics::VertexAttribute{0, 3, GL_FLOAT, false, 6 * sizeof(float), (const void*)(0)},
+                vertexAttributes =
+                {
+                    VertexAttribute{defines::VertexAttribute::POSITION, 0, defines::NumeralType::VEC3, GL_FLOAT, false, 6 * sizeof(float), 0},
 
-                // Normal
-                graphics::VertexAttribute{1, 3, GL_FLOAT, true, 6 * sizeof(float), (const void*)(3 * sizeof(float))}
-            };
-        } else
-        {
-            vertexAttributes =
+                    // Normal
+                    VertexAttribute{defines::VertexAttribute::NORMAL, 1, defines::NumeralType::VEC3, GL_FLOAT,  true, 6 * sizeof(float), (const void*)(3 * sizeof(float))}
+                };
+            } else
             {
-                // Position
-                graphics::VertexAttribute{0, 3, GL_FLOAT, false, 8 * sizeof(float), (const void*)(0)},
+                vertexAttributes =
+                {
+                    // Position
+                    VertexAttribute{defines::VertexAttribute::POSITION, 0, defines::NumeralType::VEC3, GL_FLOAT,  false, 8 * sizeof(float), 0},
 
-                // Normal
-                graphics::VertexAttribute{1, 3, GL_FLOAT, true, 8 * sizeof(float), (const void*)(3 * sizeof(float))},
+                    // Normal
+                    VertexAttribute{defines::VertexAttribute::NORMAL, 1, defines::NumeralType::VEC3, GL_FLOAT,  true, 8 * sizeof(float), (const void*)(3 * sizeof(float))},
 
-                // Uv
-                graphics::VertexAttribute{2, 2, GL_FLOAT, true, 8 * sizeof(float), (const void*)(6 * sizeof(float))}
-            };
-        }
-        
-
-        return graphics::RenderData::insert<graphics::Mesh>(
-            new graphics::Mesh
-            {
-                workspace.vertices, workspace.indices, 
-                vertexAttributes,
-                (unsigned int)GL_TRIANGLES
+                    // Uv
+                    VertexAttribute{defines::VertexAttribute::UV, 2, defines::NumeralType::VEC2, GL_FLOAT,  true, 8 * sizeof(float), (const void*)(6 * sizeof(float))}
+                };
             }
-        );*/
 
-        return 0;
+
+            return Geometry(workspace.vertices, vertexAttributes, workspace.indices, GL_TRIANGLES);
+        }
     }
-};
+}

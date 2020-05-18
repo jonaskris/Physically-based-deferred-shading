@@ -1,9 +1,8 @@
+#include <TextureUnitManager.h>
+
 #include <vector>
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <TextureUnitManager.h>
 
 namespace TextureUnitManager
 {

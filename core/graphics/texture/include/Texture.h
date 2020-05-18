@@ -1,35 +1,82 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <glad/glad.h>
 
+#include <Defines.h>
+
 #include <Image.h>
-#include <TextureUnitManager.h>
 
 namespace graphics
 {   
+    namespace
+    {
+        GLenum formatFromChannels(int channels)
+        {
+            GLenum format;
+            switch(channels)
+            {
+                case 1:
+                    format = GL_R;
+                    break;
+                case 2:
+                    format = GL_RG;
+                    break;
+                case 3:
+                    format = GL_RGB;
+                    break;
+                case 4:
+                    format = GL_RGBA;
+                    break;
+            };
+
+            return format;
+        }
+    }
+
     class Texture
     {
+    private:
+        defines::SamplerType samplerType;
+
     protected:
-        GLuint textureId;       
+        GLuint textureId;
+        GLuint width, height;
+
+        Texture(defines::SamplerType samplerType) : samplerType(samplerType)
+        {
+            glGenTextures(1, &textureId);
+        }
 
     public:
+        Texture(defines::SamplerType samplerType, GLuint textureId, GLuint width, GLuint height) : samplerType(samplerType), textureId(textureId), width(width), height(height) {}
+
         GLuint getTextureId() const { return textureId; }
+        defines::SamplerType getSamplerType() const { return samplerType; }
+        GLuint getWidth() const { return width; }
+        GLuint getHeight() const { return height; }
     };
 
     class Texture2D : public Texture
     {
     public:
-        Texture2D(const Image& image, GLenum channels = GL_RGB)
+        Texture2D(const Source& imageSource) : Texture(defines::SamplerType::SAMPLER2D)
         {
-            glGenTextures(1, &textureId);
+            Image image(imageSource);
+            width = image.getWidth();
+            height = image.getHeight();
+
+            GLenum format = formatFromChannels(image.getChannels());
+
             glBindTexture(GL_TEXTURE_2D, textureId);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
-            glTexImage2D(GL_TEXTURE_2D, 0, channels, image.getWidth(), image.getHeight(), 0, channels, GL_UNSIGNED_BYTE, image.getPixels());
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image.getPixels());
+            glGenerateMipmap(GL_TEXTURE_2D);
 
             glBindTexture(GL_TEXTURE_2D, 0);
         }
@@ -38,11 +85,19 @@ namespace graphics
     class TextureCubemap : public Texture
     {
     public:
-        TextureCubemap(Image& image, GLenum channels = GL_RGB)
+        TextureCubemap(const Source& imageSource) : Texture(defines::SamplerType::SAMPLERCUBE)
         {
-            glGenTextures(1, &textureId);
+            Image image(imageSource);
+            this->width = image.getWidth();
+            this->height = image.getHeight();
+
+            GLenum format = formatFromChannels(image.getChannels());
+
+            if(width != height)
+                throw std::runtime_error("Failed to load TextureCubemap, image not square!");
+                
             glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
-    
+
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -50,14 +105,39 @@ namespace graphics
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
             for(size_t i = 0; i < 6; i++)
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, channels, image.getWidth(), image.getHeight(), 0, channels, GL_UNSIGNED_BYTE, image.getPixels());            
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image.getPixels());            
 
             glBindTexture(GL_TEXTURE_CUBE_MAP, 0);  
-        }
+        }     
 
-        TextureCubemap(const Image& left, const Image& right, const Image& back, const Image& front, const Image& top, const Image& bottom, GLenum channels = GL_RGB)
+        /*
+            Images should be in order: Right, left, top, bottom, front, back
+        */
+        TextureCubemap(const std::vector<Source>& imageSources) : Texture(defines::SamplerType::SAMPLERCUBE)
         {
-            glGenTextures(1, &textureId);
+            std::vector<Image> images;
+            images.reserve(imageSources.size());
+
+            for(const Source& source : imageSources)
+                images.emplace_back(source);
+
+            this->width = images.front().getWidth();
+            this->height = images.front().getHeight();
+
+            if(width != height)
+                throw std::runtime_error("Failed to load TextureCubemap, image not square!");
+
+            if(images.size() != 6)
+                throw std::runtime_error("Failed to load TextureCubemap, images.size() != 6!");
+
+            for(size_t i = 1; i < images.size(); i++)
+                if(images[i].getWidth() != width || images[i].getHeight() != height)
+                    throw std::runtime_error("Failed to load TextureCubemap, images have different sizes!");
+                else if(images[i].getChannels() != images.front().getChannels())
+                    throw std::runtime_error("Failed to load TextureCubemap, images have different number of channels!");
+
+            GLenum format = formatFromChannels(images.front().getChannels());
+
             glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
     
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -67,14 +147,9 @@ namespace graphics
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
             // Right, left, Up, Down, back, front
+            for(size_t i = 0; i < 6; i++)
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, images[i].getWidth(), images[i].getWidth(), 0, format, GL_UNSIGNED_BYTE, images[i].getPixels());        
 
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0, 0, channels, right.getWidth(), right.getWidth(), 0, channels, GL_UNSIGNED_BYTE, right.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, channels, left.getWidth(), left.getWidth(), 0, channels, GL_UNSIGNED_BYTE, left.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2, 0, channels, top.getWidth(), top.getWidth(), 0, channels, GL_UNSIGNED_BYTE, top.getPixels());                    
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, 0, channels, bottom.getWidth(), bottom.getWidth(), 0, channels, GL_UNSIGNED_BYTE, bottom.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4, 0, channels, back.getWidth(), back.getWidth(), 0, channels, GL_UNSIGNED_BYTE, back.getPixels());        
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5, 0, channels, front.getWidth(), front.getWidth(), 0, channels, GL_UNSIGNED_BYTE, front.getPixels());        
-    
             glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
         }
     };

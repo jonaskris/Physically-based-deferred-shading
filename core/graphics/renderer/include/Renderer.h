@@ -6,75 +6,79 @@
 
 #include <Mat4.h>
 
+#include <DataIdentifier.h>
 #include <Utils.h>
-#include <Shader.h>
+#include <Program.h>
+#include <Mesh.h>
 
-class Program;
-class Window;
-class Scene;
-
-namespace graphics
-{
-    class Framebuffer;
-}
+#include <Framebuffer.h>
 
 /*
     The Renderer controls the window, performs
     once-per-frame actions such as clearing the window before rendering,
     and updating the window after rendering.
 */
-namespace Renderer
+namespace graphics
 {
-    namespace
+    class Window;
+    class Scene;
+
+    enum class RenderMode { DEFAULT = 0, ALBEDO = 1, NORMALS = 2, METALLNESS = 3, ROUGHNESS = 4, FRESNEL = 5, IRRADIANCE = 6, REFLECTION = 7, POSITION = 8};
+
+    class Renderer
     {
+    private:
+        static Renderer* instance;
+
+    private:
         // Essentials
         Window* window;
-        Program* geometryProgram;
-        Program* lightingProgram;
-        Program* skyboxProgram;
         graphics::Framebuffer* framebuffer;
-        unsigned int planeMesh; // Used for drawing screen-covering plane in lighting pass
 
         // Projection
             // Perspective (Geometry)
             math::Mat4 projection;
-            math::Radians fov(45.0f);
+            math::Radians fov = math::Radians(45.0f);
             float aspectratio;
             float nearP;
             float farP;
+
+        // Temporary light
+        math::Vec3 lightPosition{3.0f, 3.0f, 0.0f};
+        math::Vec3 lightColor{100.0f, 100.0f, 100.0f};
+
+        // Meshes
+            // Plane mesh for drawing screen wide quad
+            DataIdentifier<Mesh> planeMesh;
 
             // Orthographic (Lighting)
             math::Mat4 orthographic;
             float left, right, bottom, top, nearO, farO;
 
-        /* 
-            Lighting
-            (Only defined and used here because there was not enough time to create a proper node-based light)
-        */
-        math::Vec3 lightPosition;
-        math::Vec3 lightColor;
-
         // Timing
         double deltatime = 0.0;
         size_t fps = 0;
         double timeLastFrame = 0; // GLFW time
-    }
 
-    void initialize(const std::string& windowTitle, size_t windowWidth, size_t windowHeight, 
-        const std::vector<std::pair<std::string, Shader::Type>> geometryShaders, 
-        const std::vector<std::pair<std::string, Shader::Type>> lightingShaders,
-        const std::vector<std::pair<std::string, Shader::Type>> skyboxShaders);
-    void terminate();
+        Renderer(const std::string& windowTitle, size_t windowWidth, size_t windowHeight);
 
-    bool windowClosed();
-    void render(unsigned int sceneIdentifier);
+    public:
+        ~Renderer();
 
-    double getDeltatime();
-    size_t getFPS();
+        static Renderer* init(const std::string& windowTitle, size_t windowWidth, size_t windowHeight);
 
-    // Updates perspective matrix arguments if argument is not 0 and updates the matrix
-    void setPerspective(std::optional<math::Radians> newFov = std::nullopt, std::optional<float> newAspectratio = std::nullopt, std::optional<float> newNear = std::nullopt, std::optional<float> newFar = std::nullopt);
+        static Renderer* getInstance();
 
-    // Updates orthographic matrix arguments if argument is not 0 and updates the matrix
-    void setOrthographic(std::optional<float> newLeft = std::nullopt, std::optional<float> newRight = std::nullopt, std::optional<float> newBottom = std::nullopt, std::optional<float> newTop = std::nullopt, std::optional<float> newNear = std::nullopt, std::optional<float> newFar = std::nullopt);
+        bool windowClosed();
+        void render(DataIdentifier<Scene> sceneIdentifier, RenderMode rendermode);
+
+        double getDeltatime();
+        size_t getFPS();
+
+        // Updates perspective matrix arguments if argument is not 0 and updates the matrix
+        void setPerspective(std::optional<math::Radians> newFov = std::nullopt, std::optional<float> newAspectratio = std::nullopt, std::optional<float> newNear = std::nullopt, std::optional<float> newFar = std::nullopt);
+
+        // Updates orthographic matrix arguments if argument is not 0 and updates the matrix
+        void setOrthographic(std::optional<float> newLeft = std::nullopt, std::optional<float> newRight = std::nullopt, std::optional<float> newBottom = std::nullopt, std::optional<float> newTop = std::nullopt, std::optional<float> newNear = std::nullopt, std::optional<float> newFar = std::nullopt);    
+    };
 }

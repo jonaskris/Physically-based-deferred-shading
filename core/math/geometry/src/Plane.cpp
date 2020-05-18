@@ -3,39 +3,31 @@
 #include <vector>
 #include <cstdint>
 
-//#include <Mesh.h>
-#include <RenderData.h>
+#include <Geometry.h>
 #include <VertexAttribute.h>
-#include <DataIdentifier.h>
 
-namespace Plane
+namespace math::geometry
 {
-    unsigned int generate()
+    namespace Plane
     {
-        /*Workspace workspace;
-        workspace.generate();
-
-        std::vector<graphics::VertexAttribute> vertexAttributes
+        Geometry generate()
         {
-            // Position
-            graphics::VertexAttribute{0, 3, GL_FLOAT, false, 8 * sizeof(float), (const void*)(0)},
+            Workspace workspace;
+            workspace.generate();
 
-            // Normal
-            graphics::VertexAttribute{1, 3, GL_FLOAT, true, 8 * sizeof(float), (const void*)(3 * sizeof(float))},
-
-            // Uv
-            graphics::VertexAttribute{2, 2, GL_FLOAT, true, 8 * sizeof(float), (const void*)(6 * sizeof(float))}
-        };
-
-        return graphics::RenderData::insert<graphics::Mesh>(
-            new graphics::Mesh
+            std::vector<VertexAttribute> vertexAttributes
             {
-                workspace.vertices, workspace.indices, 
-                vertexAttributes,
-                (unsigned int)GL_TRIANGLES
-            }
-        );*/
-        
-        return 0;
+                // Position
+                VertexAttribute{defines::VertexAttribute::POSITION, 0, defines::NumeralType::VEC3, GL_FLOAT, false, 8 * sizeof(float), 0},
+
+                // Normal
+                VertexAttribute{defines::VertexAttribute::NORMAL, 1, defines::NumeralType::VEC3, GL_FLOAT, true, 8 * sizeof(float), (const void*)(3 * sizeof(float))},
+
+                // Uv
+                VertexAttribute{defines::VertexAttribute::UV, 2, defines::NumeralType::VEC2, GL_FLOAT, true, 8 * sizeof(float), (const void*)(6 * sizeof(float))}
+            };
+
+            return Geometry(workspace.vertices, vertexAttributes, workspace.indices, GL_TRIANGLES);
+        }
     }
-};
+}

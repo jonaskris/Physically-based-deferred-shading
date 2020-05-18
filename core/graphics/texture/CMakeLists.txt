@@ -11,5 +11,9 @@ target_include_directories(texture
 
 target_link_libraries(texture
     PUBLIC image
+    PUBLIC common
     PUBLIC glad
-    PUBLIC glfw)
+    PUBLIC glfw
+    PUBLIC ${GLFW_LIBRARIES})
+
+target_compile_definitions(texture PRIVATE "GLFW_INCLUDE_NONE")
