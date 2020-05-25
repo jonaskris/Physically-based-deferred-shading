@@ -2,10 +2,8 @@
 
 #include <Mesh.h>
 #include <Texture.h>
-#include <Icosphere.h>
 
 #include <DataIdentifier.h>
-#include <DataStore.h>
 
 namespace graphics
 {

@@ -1,12 +1,10 @@
 #pragma once
 
-#include <string>
 #include <vector>
 
 #include <glad/glad.h>
 
 #include <Defines.h>
-
 #include <Image.h>
 
 namespace graphics
@@ -72,7 +70,7 @@ namespace graphics
 
             glBindTexture(GL_TEXTURE_2D, textureId);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
             glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image.getPixels());

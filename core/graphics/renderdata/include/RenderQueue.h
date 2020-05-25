@@ -15,6 +15,10 @@
 
 namespace graphics
 {
+    /*
+        Creating the RenderQueue is a step performed before drawing a scene. The scene tree is flattened into a vector of drawkeys
+        with corresponding transforms. Then the drawkeys are sorted based on the cost of OpenGL state changes.
+    */
     class RenderQueue
     {
     private:

@@ -4,21 +4,21 @@
 
 #include <glad/glad.h>
 
+#include <Defines.h>
+
 namespace graphics
 {
-    enum class ShaderType { VERTEX, FRAGMENT, GEOMETRY, TESS_EVALUATION, TESS_CONTROL, COMPUTE };
-
     class Shader
     {
     private:
         GLuint id;
-        ShaderType type;
+        defines::ShaderType type;
 
     public:
-        Shader(const std::string& shaderCode, ShaderType type);
-        static Shader loadShader(const std::string& shaderPath, ShaderType type);
+        Shader(const std::string& shaderCode, defines::ShaderType type);
+        static Shader loadShader(const std::string& shaderPath, defines::ShaderType type);
 
-        ShaderType getType();
+        defines::ShaderType getType();
         GLuint getId() const;
     };
 }

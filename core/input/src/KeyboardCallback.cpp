@@ -1,13 +1,10 @@
-#include <vector>
-#include <unordered_map>
+#include <KeyboardCallback.h>
+
 #include <algorithm>
 
 #include <GLFW/glfw3.h>
 
-#include <KeyboardCallback.h>
-
 #include <KeyboardListener.h>
-#include <InputEnums.h>
 
 namespace Input
 {

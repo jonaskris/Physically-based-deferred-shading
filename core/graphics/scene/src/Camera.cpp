@@ -1,16 +1,5 @@
 #include <Camera.h>
 
-#include <glad/glad.h>
-
-#include <vector>
-
-#include <Utils.h>
-#include <Vec3.h>
-#include <Mat4.h>
-#include <Transform.h>
-
-#include <Input.h>
-
 namespace graphics
 {
     void Camera::updateViewMatrix() 
@@ -38,6 +27,13 @@ namespace graphics
     }
 
     math::Vec3 Camera::getPosition() const { return transform.getPosition(); }
+
+    AnimatedCamera::AnimatedCamera(std::function<math::Transform (double)> animationFunc) : animationFunc(animationFunc) {}
+
+    void AnimatedCamera::timeCallback(const Input::Time::TimeEvent& timeEvent)
+    {
+        setTransform(animationFunc(timeEvent.time));
+    }
 
     void FPSCamera::updateTransform(const math::Vec3& position)
     {

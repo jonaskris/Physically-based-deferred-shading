@@ -1,15 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <utility>
-
 #include <DataIdentifier.h>
 #include <Texture.h>
 #include <Vec4.h>
-#include <Defines.h>
 #include <Program.h>
-
-#include <ProgramRequirement.h>
 
 namespace graphics
 {

@@ -14,7 +14,8 @@ namespace math
     
         explicit Radians(float radians);
         Radians(const Degrees& degrees);
-    
+
+        Radians operator-() const;    
         operator float() const;
     };
 }

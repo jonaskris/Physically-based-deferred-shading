@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 namespace graphics
 {
@@ -49,6 +48,8 @@ namespace graphics
             }
         }
 
+        ~Buffer() { glDeleteBuffers(1, &XBO); }
+
         GLuint getId() const { return XBO; }
     };
 
@@ -60,7 +61,7 @@ namespace graphics
     public:
         union
         {
-            Buffer* buffers[4/*6*/];
+            Buffer* buffers[5];
             struct
             {
                 Buffer* position;
@@ -109,7 +110,7 @@ namespace graphics
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         };
 
-        ~Framebuffer() { glDeleteFramebuffers(1, &FBO); for(size_t i = 0; i <= 4; i++) delete buffers[i]; };
+        ~Framebuffer() { glDeleteFramebuffers(1, &FBO); for(size_t i = 0; i <= 5; i++) delete buffers[i]; };
 
         void bind() { glBindFramebuffer(GL_FRAMEBUFFER, FBO); }
         void unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }

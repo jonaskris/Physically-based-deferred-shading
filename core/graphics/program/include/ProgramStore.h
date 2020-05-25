@@ -1,7 +1,8 @@
 #pragma once
 
-#include <ProgramRequirement.h>
-#include <DataStore.h>
+#include <map>
+
+#include <Defines.h>
 #include <DataIdentifier.h>
 
 namespace graphics
@@ -12,26 +13,10 @@ namespace graphics
     {
         namespace
         {
-            DataIdentifier<Program> geometryProgram;
-            DataIdentifier<Program> lightingProgram;
-            DataIdentifier<Program> skyboxProgram;
-            DataIdentifier<Program> irradianceMapProgram;
-            DataIdentifier<Program> prefilterMapProgram;
-            DataIdentifier<Program> brdfLUTProgram;
+            std::map<defines::ProgramType, DataIdentifier<Program>> programs;
         }
     
-        void setGeometryProgram(Program* program);
-        void setLightingProgram(Program* program);
-        void setSkyboxProgram(Program* program);
-        void setIrradianceMapProgram(Program* program);
-        void setPrefilterMapProgram(Program* program);
-        void setBrdfLUTProgram(Program* program);
-        
-        DataIdentifier<Program> getGeometryProgram();
-        DataIdentifier<Program> getLightingProgram();
-        DataIdentifier<Program> getSkyboxProgram();
-        DataIdentifier<Program> getIrradianceMapProgram();
-        DataIdentifier<Program> getPrefilterMapProgram();
-        DataIdentifier<Program> getBrdfLUTProgram();
+        void setProgram(defines::ProgramType programType, Program* program);
+        DataIdentifier<Program> getProgram(defines::ProgramType programType);
     }
 }

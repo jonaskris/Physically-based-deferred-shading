@@ -13,4 +13,6 @@ target_link_libraries(renderer
     PUBLIC program
     PUBLIC renderdata
     PUBLIC glad
-    PUBLIC math)
+    PUBLIC geometry
+    PUBLIC math
+    PUBLIC input)

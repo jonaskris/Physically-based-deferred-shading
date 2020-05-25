@@ -5,8 +5,10 @@ project(Input)
 add_library(input
     include/KeyboardCallback.h src/KeyboardCallback.cpp
     include/MouseCallback.h src/MouseCallback.cpp
+    include/TimeCallback.h src/TimeCallback.cpp
     include/KeyboardListener.h
     include/MouseListener.h
+    include/TimeListener.h
     include/Input.h src/Input.cpp
     include/InputEnums.h)
 

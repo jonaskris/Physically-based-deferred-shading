@@ -13,4 +13,4 @@ target_link_libraries(window
     PUBLIC glfw
     PUBLIC ${GLFW_LIBRARIES})
 
-target_compile_definitions(window PRIVATE "GLFW_INCLUDE_NONE")
+#target_compile_definitions(window PRIVATE "GLFW_INCLUDE_NONE")

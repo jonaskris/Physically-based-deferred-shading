@@ -1,12 +1,9 @@
-#include <cstring>
-#include <iostream>
-#include <iomanip>
-#include <algorithm>
-#include <optional>
-
 #include <Mat4.h>
 
-#include <Utils.h>
+#include <cstring>
+#include <iomanip>
+#include <algorithm>
+
 #include <Vec3.h>
 #include <Vec4.h>
 

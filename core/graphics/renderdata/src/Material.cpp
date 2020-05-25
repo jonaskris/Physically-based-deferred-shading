@@ -1,17 +1,7 @@
 #include <Material.h>
 
 #include <DataStore.h>
-#include <Program.h>
 #include <TextureUnitManager.h>
-
-/*
-struct MaterialAttribute
-{
-    bool usesSampler;
-    vec4 color;
-    uniform sampler2D texture;
-};
-*/
 
 namespace graphics
 {

@@ -127,9 +127,9 @@ void main()
     const float MAX_REFLECTION_LOD = 4.0;
     vec3 prefilteredColor = textureLod(prefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
     vec2 brdf = texture(brdfLUT, vec2(max(dot(normal, V), 0.0), roughness)).rg;
-    vec3 reflection = prefilteredColor * (F * brdf.x + brdf.y);
+    vec3 reflection = prefilteredColor * (kS * brdf.x + brdf.y);
 
-    vec3 ambient = kD * diffuse + reflection;
+    vec3 ambient = (kD * diffuse + reflection * vec3(1.5)); // 1.5 factor to increase reflection contribution for showcase
 
     vec3 fragmentColor = ambient + Lo;
 

@@ -1,14 +1,10 @@
-#include <vector>
-#include <unordered_map>
+#include <MouseCallback.h>
+
 #include <algorithm>
 
 #include <GLFW/glfw3.h>
 
-#include <MouseCallback.h>
-
 #include <MouseListener.h>
-#include <InputEnums.h>
-#include <Vec2.h>
 
 namespace Input
 {

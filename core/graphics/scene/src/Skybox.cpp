@@ -1,23 +1,21 @@
 #include <Skybox.h>
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
-#include <DataIdentifier.h>
 #include <DataStore.h>
-#include <Texture.h>
-#include <Mesh.h>
 #include <Program.h>
 #include <ProgramStore.h>
-#include <Plane.h>
 #include <Mat4.h>
+#include <Defines.h>
+#include <Icosphere.h>
+#include <Plane.h>
 
 #include <TextureUnitManager.h>
 
-#define IRRADIANCE_MAP_DIMENSIONS 32
-#define PREFILTER_MAP_DIMENSIONS 256
-#define PREFILTER_MAP_MIP_LEVELS 5
-#define BRDFLUT_DIMENSIONS 512
+const uint IRRADIANCE_MAP_DIMENSIONS =  32;
+const uint PREFILTER_MAP_DIMENSIONS = 256;
+const uint PREFILTER_MAP_MIP_LEVELS = 5;
+const uint BRDFLUT_DIMENSIONS = 512;
 
 namespace graphics
 {
@@ -40,7 +38,7 @@ namespace graphics
             math::Mat4::view(math::Vec3(0.0f, 0.0f, 0.0f), math::Vec3( 0.0f,  0.0f, -1.0f), math::Vec3(0.0f, -1.0f, 0.0f))  // -z
         };
         Mesh* captureMesh = DataStore::get<Mesh>(mesh);
-        Program* captureProgram = DataStore::get<Program>(ProgramStore::getIrradianceMapProgram());
+        Program* captureProgram = DataStore::get<Program>(ProgramStore::getProgram(defines::ProgramType::IRRADIANCEMAP));
 
         // Setup framebuffer
         GLuint FBO;
@@ -123,7 +121,7 @@ namespace graphics
             math::Mat4::view(math::Vec3(0.0f, 0.0f, 0.0f), math::Vec3( 0.0f,  0.0f, -1.0f), math::Vec3(0.0f, -1.0f, 0.0f))  // -z
         };
         Mesh* captureMesh = DataStore::get<Mesh>(mesh);
-        Program* captureProgram = DataStore::get<Program>(ProgramStore::getPrefilterMapProgram());
+        Program* captureProgram = DataStore::get<Program>(ProgramStore::getProgram(defines::ProgramType::PREFILTERMAP));
 
         // Setup framebuffer
         GLuint FBO;
@@ -184,9 +182,11 @@ namespace graphics
             for(size_t i = 0; i < 6; i++)
             {
                 captureProgram->setUniformMat4f("view", captureViews[i]);
+
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, prefilterTexture->getTextureId(), mip);
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
                 captureMesh->draw();
             }
         }
@@ -208,7 +208,7 @@ namespace graphics
             planeMesh = DataStore::insert<Mesh>(new Mesh(math::geometry::Plane::generate()));
 
         Mesh* captureMesh = DataStore::get<Mesh>(planeMesh);
-        Program* captureProgram = DataStore::get<Program>(ProgramStore::getBrdfLUTProgram());
+        Program* captureProgram = DataStore::get<Program>(ProgramStore::getProgram(defines::ProgramType::BRDFLUT));
 
         // Setup framebuffer
         GLuint FBO;
@@ -251,6 +251,7 @@ namespace graphics
         glViewport(0, 0, BRDFLUT_DIMENSIONS, BRDFLUT_DIMENSIONS);
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture->getTextureId(), 0);
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         captureMesh->draw();

@@ -1,8 +1,8 @@
 #pragma once
 
 /*
-    DataIdentifier is a class for a unique identifier per T, and
-    keeps track of already used identifiers for T.
+    DataIdentifier is a class for a unique identifier for objects of type T. 
+    The identifier is used with DataStore to get the corresponding object.
 */
 template <typename T>
 class DataIdentifier

@@ -1,14 +1,10 @@
 #pragma once
 
-#include <set>
-
 #include <Mesh.h>
 #include <Material.h>
-#include <ProgramStore.h>
-
+#include <Program.h>
 #include <DataIdentifier.h>
 #include <DataStore.h>
-#include <ProgramRequirement.h>
 
 namespace graphics
 {

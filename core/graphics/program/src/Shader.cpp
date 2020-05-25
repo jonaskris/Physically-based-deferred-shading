@@ -1,22 +1,18 @@
 #include <Shader.h>
 
-#include <iostream>
 #include <vector>
-#include <string>
 #include <fstream>
-
-#include <glad/glad.h>
 
 namespace graphics
 {
-    Shader::Shader(const std::string& shaderCode, ShaderType type)
+    Shader::Shader(const std::string& shaderCode, defines::ShaderType type)
     {        
-        if(type == ShaderType::VERTEX) id = glCreateShader(GL_VERTEX_SHADER);
-        else if(type == ShaderType::FRAGMENT) id = glCreateShader(GL_FRAGMENT_SHADER);
-        else if(type == ShaderType::GEOMETRY) id = glCreateShader(GL_GEOMETRY_SHADER);
-        else if(type == ShaderType::TESS_EVALUATION) id = glCreateShader(GL_TESS_EVALUATION_SHADER);
-        else if(type == ShaderType::TESS_CONTROL) id = glCreateShader(GL_TESS_CONTROL_SHADER);
-        else if(type == ShaderType::COMPUTE) id = glCreateShader(GL_COMPUTE_SHADER);
+        if(type == defines::ShaderType::VERTEX) id = glCreateShader(GL_VERTEX_SHADER);
+        else if(type == defines::ShaderType::FRAGMENT) id = glCreateShader(GL_FRAGMENT_SHADER);
+        else if(type == defines::ShaderType::GEOMETRY) id = glCreateShader(GL_GEOMETRY_SHADER);
+        else if(type == defines::ShaderType::TESS_EVALUATION) id = glCreateShader(GL_TESS_EVALUATION_SHADER);
+        else if(type == defines::ShaderType::TESS_CONTROL) id = glCreateShader(GL_TESS_CONTROL_SHADER);
+        else if(type == defines::ShaderType::COMPUTE) id = glCreateShader(GL_COMPUTE_SHADER);
 
         // Submit shadercode to OpenGL
         const char* content_c_str = shaderCode.c_str();
@@ -39,7 +35,7 @@ namespace graphics
         }
     }
 
-    Shader Shader::loadShader(const std::string& shaderPath, ShaderType type)
+    Shader Shader::loadShader(const std::string& shaderPath, defines::ShaderType type)
     {
         std::ifstream file(shaderPath);
         if(!file.is_open())
@@ -54,6 +50,6 @@ namespace graphics
         return Shader(shaderCode, type);
     }
 
-    ShaderType Shader::getType() { return type; }
+    defines::ShaderType Shader::getType() { return type; }
     GLuint Shader::getId() const { return id; }
 };

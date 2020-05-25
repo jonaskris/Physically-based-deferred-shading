@@ -28,7 +28,8 @@ namespace math
         Quaternion(); // Multiplicative identity
 
         static Quaternion fromAxisAngle(const Vec3& axis, Radians angle);         // Axis and angle to rotate around that axis
-        static Quaternion fromEulerAngles(Radians x, Radians y, Radians z);
+        static Quaternion fromEulerAngles(Radians x, Radians y, Radians z);        
+        
 
         // Operations
         Quaternion& multiply(const Quaternion& other);

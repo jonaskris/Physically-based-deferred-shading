@@ -1,12 +1,8 @@
-#include <iostream>
-#include <optional>
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include <Window.h>
 
-#include <Utils.h>
+#include <string>
+#include <utility>
+
 #include <Renderer.h>
 #include <Input.h>
 
@@ -42,11 +38,11 @@ namespace graphics
         Input::Mouse::positionCallback(window, (float)((xpos / width) * (width/height)), (float)(-ypos / height));
     }
 
-    Window::Window(const std::string& title, int width, int height)
+    Window::Window(const std::string& title, int width, int height) : width(width), height(height)
     {        
         // Initialize GLFW
         if(!glfwInit())
-            std::cerr << "Failed to initialize GLFW!" << std::endl;
+            throw std::runtime_error("Failed to initialize GLFW!");
         else
             std::cout << "GLFW initialized!\n\tVersion: " << GLFW_VERSION_MAJOR << "." << GLFW_VERSION_MINOR << std::endl;
 
@@ -57,9 +53,10 @@ namespace graphics
         // Create window
         this->window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
         if(!this->window)
-            std::cerr << "\tFailed to initialize GLFW window!" << std::endl;
+            throw std::runtime_error("Failed to initialize GLFW window!");
         else
-            std::cout << "\tInitialized GLFW window!" << std::endl;
+            std::cout << "Initialized GLFW window!" << std::endl;
+
 
         // Configure window
         glfwMakeContextCurrent(window);
@@ -69,7 +66,7 @@ namespace graphics
 
         // Initialize GLAD
         if(!gladLoadGL())
-            std::cerr << "Failed to initialize GLAD!" << std::endl;
+            throw std::runtime_error("Failed to initialize GLAD!");
         else
             std::cout << "GLAD initialized!\n\tVersion: " << GLVersion.major << "." << GLVersion.minor << std::endl;
 
@@ -89,6 +86,10 @@ namespace graphics
     {
         glfwTerminate();
     }
+
+    int Window::getWidth() const { return width; }
+
+    int Window::getHeight() const { return height; }
 
     void Window::update() const
     {

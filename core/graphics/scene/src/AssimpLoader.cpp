@@ -1,8 +1,6 @@
 #include <AssimpLoader.h>
 
 #include <algorithm>
-#include <string>
-#include <vector>
 #include <iostream>
 
 #include <assimp/Importer.hpp>
@@ -10,18 +8,15 @@
 #include <assimp/postprocess.h>
 #include <assimp/pbrmaterial.h>
 
-#include <Node.h>
-#include <Mesh.h>
-#include <Material.h>
 #include <VertexAttribute.h>
 #include <Geometry.h>
 #include <DataIdentifier.h>
 #include <DataStore.h>
-#include <VertexAttribute.h>
 #include <DrawUnit.h>
 #include <Image.h>
-#include <ProgramGenerator.h>
 #include <Program.h>
+#include <Defines.h>
+#include <ProgramStore.h>
 
 namespace graphics
 {
@@ -66,13 +61,8 @@ namespace graphics
                 material = processMaterial(aimaterial, scene, source, numUVChannels);
             }
 
-            //ProgramRequirement programRequirement = ProgramRequirement::merge(
-            //    DataStore::get<Mesh>(mesh)->getProgramRequirement(),
-            //    DataStore::get<Material>(material)->getProgramRequirement()
-            //);
-
             // In future, non-pbr models will be assigned a different program.
-            DataIdentifier<Program> program = ProgramStore::getGeometryProgram();
+            DataIdentifier<Program> program = ProgramStore::getProgram(defines::ProgramType::GEOMETRY);
             
             currentNode.drawUnits.emplace_back(mesh, material, program);
         }
@@ -125,7 +115,7 @@ namespace graphics
         for(size_t i = 0; i < vertexAttributes.size(); i++)
             vertexAttributes[i].stride = offset * sizeof(float);
 
-        // Set vertices vector
+    // Set vertices vector
         for(size_t i = 0; i < mesh->mNumVertices; i++)
         {
             // Position
@@ -177,7 +167,7 @@ namespace graphics
         // 1. Albedo texture
         auto albedoTexture = loadMaterialTexture(assimpMaterial, defines::MaterialAttribute::ALBEDO, source, uvCount);
         if(albedoTexture)
-            materialAttributeAlbedo = Material::MaterialAttribute{albedoTexture.value(), {}, 3};
+            materialAttributeAlbedo = Material::MaterialAttribute{albedoTexture, {}, 3};
         else
         {
             aiColor3D color;
@@ -188,17 +178,17 @@ namespace graphics
                 throw std::runtime_error("Failed to load material as it doesent have an albedo texture or color!");
         }
 
-        // 2. Normal textures
+        // 2. Normal texture
         auto normalTexture = loadMaterialTexture(assimpMaterial, defines::MaterialAttribute::NORMAL, source, uvCount);
         if(normalTexture)
-            materialAttributeNormal = Material::MaterialAttribute{normalTexture.value(), {}, 3};
+            materialAttributeNormal = Material::MaterialAttribute{normalTexture, {}, 3};
         else
             materialAttributeNormal = Material::MaterialAttribute{DataIdentifier<Texture>(0), {0.0f, 0.0f, 1.0f, 0.0}, 3};
 
-        // 3. Metalness/Roughness textures
+        // 3. Metalness/Roughness texture
         auto metalRoughnessTexture = loadMaterialTexture(assimpMaterial, defines::MaterialAttribute::METALLNESS_ROUGHNESS, source, uvCount);
         if(metalRoughnessTexture)
-            materialAttributeMetallnessRoughness = Material::MaterialAttribute{metalRoughnessTexture.value(), {}, 2};
+            materialAttributeMetallnessRoughness = Material::MaterialAttribute{metalRoughnessTexture, {}, 2};
         else
         {
             aiColor3D colorMetallness;
@@ -218,14 +208,14 @@ namespace graphics
         return DataStore::insert<Material>(new Material(materialAttributeAlbedo, materialAttributeNormal, materialAttributeMetallnessRoughness, (bool)twoSided));
     }
 
-    std::optional<DataIdentifier<Texture>> loadMaterialTexture(aiMaterial* assimpMaterial, defines::MaterialAttribute type, const Source& source, size_t uvCount)
+    DataIdentifier<Texture> loadMaterialTexture(aiMaterial* assimpMaterial, defines::MaterialAttribute type, const Source& source, size_t uvCount)
     {
         aiString imageName;
         int uvIndex;
         if(type == defines::MaterialAttribute::METALLNESS_ROUGHNESS)
         {
             if(assimpMaterial->GetTexture(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE, &imageName) != AI_SUCCESS)
-                return std::nullopt;
+                return DataIdentifier<Texture>(0);
         } else
         {
             aiTextureType textureType;
@@ -236,13 +226,11 @@ namespace graphics
             }
 
             if(assimpMaterial->GetTexture(textureType, 0, &imageName) != AI_SUCCESS)
-                return std::nullopt;
+                return DataIdentifier<Texture>(0);
 
             // Assign uv index
-            if(uvCount == 1)
+            if(uvCount == 1 || assimpMaterial->Get(AI_MATKEY_UVWSRC(textureType, 0), uvIndex) != AI_SUCCESS)
                 uvIndex = 0;
-            else if(assimpMaterial->Get(AI_MATKEY_UVWSRC(textureType, 0), uvIndex) != AI_SUCCESS)
-               uvIndex = 0; 
         }
 
         Source imageSource(source.getDirectory() + imageName.C_Str());

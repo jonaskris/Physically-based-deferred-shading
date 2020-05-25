@@ -1,31 +1,24 @@
 #include <Renderer.h>
 
 #include <vector>
-#include <queue>
 #include <iostream>
 #include <algorithm>
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
-#include <Framebuffer.h>
-
-#include <Utils.h>
 #include <Window.h>
 #include <Program.h>
-#include <TextureUnitManager.h>
-#include <DataIdentifier.h>
 #include <DataStore.h>
-#include <Program.h>
+#include <TextureUnitManager.h>
 #include <RenderQueue.h>
 #include <Scene.h>
-
-#include <Mesh.h>
+#include <Defines.h>
+#include <ProgramStore.h>
 #include <Geometry.h>
+#include <Mesh.h>
 #include <Plane.h>
-
-
-#include <Mat4.h>
+#include <Camera.h>
+#include <Input.h>
 
 namespace graphics
 {
@@ -160,7 +153,7 @@ namespace graphics
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Enable lighting pass program
-        currentProgram = DataStore::get<Program>(ProgramStore::getLightingProgram());
+        currentProgram = DataStore::get<Program>(ProgramStore::getProgram(defines::ProgramType::LIGHTING));
         currentProgramId = currentProgram->getId();
         currentProgram->enable();
 
@@ -184,7 +177,7 @@ namespace graphics
         currentProgram->setUniformVec3f("viewPosition", sceneP->camera->getPosition());
         
         currentProgram->setUniform1ui("renderMode", (uint32_t)rendermode);
-        lightPosition = math::toVec3(math::Mat4::rotate(math::Degrees(1.0f), {0.0f, 1.0f, 0.0f}) * math::toVec4(lightPosition, 1.0f));
+        //lightPosition = math::toVec3(math::Mat4::rotate(math::Degrees(1.0f), {0.0f, 1.0f, 0.0f}) * math::toVec4(lightPosition, 1.0f));
         currentProgram->setUniformVec3f("lightPosition", lightPosition);
         currentProgram->setUniformVec3f("lightColor", lightColor);
 
@@ -207,10 +200,10 @@ namespace graphics
         // Blit (copy) framebuffer depth to main buffer
         glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer->getId());
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glBlitFramebuffer(0, 0, 1000, 1000, 0, 0, 1000, 1000, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBlitFramebuffer(0, 0, window->getWidth(), window->getHeight(), 0, 0, window->getWidth(), window->getHeight(), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
             // Enable skybox pass program
-            currentProgram = DataStore::get<Program>(ProgramStore::getSkyboxProgram());
+            currentProgram = DataStore::get<Program>(ProgramStore::getProgram(defines::ProgramType::SKYBOX));
             currentProgramId = currentProgram->getId();
             currentProgram->enable();
 
@@ -247,132 +240,6 @@ namespace graphics
         deltatime = timeThisFrame - timeLastFrame;
         fps = (size_t)(1.0 / deltatime);
         timeLastFrame = timeThisFrame;
-
-/*// Geometry
-        // Bind framebuffer
-        framebuffer->bind();
-
-        // Clear framebuffer
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Enable geometry pass program
-        ProgramInstance* geometryProgramInstance = DataStore::get<ProgramInstance>(mGeometryProgram->getProgramInstanceIdentifier({{"IN_UV", true}}));
-        GLuint programId = geometryProgramInstance->getProgramId();
-
-        // Set uniforms
-        Uniform::setMat4(programId, "projection", projection);
-        Uniform::setMat4(programId, "view", math::Mat4::identity());
-        Uniform::setMat4(programId, "model", math::Mat4::identity());
-
-        // Draw geometry
-        graphics::Scene* scene = graphics::RenderData::get<graphics::Scene>(sceneIdentifier);
-        graphics::FirstPersonCamera* camera = graphics::RenderData::get<graphics::FirstPersonCamera>(scene->camera);
-        graphics::Model* skybox = graphics::RenderData::get<graphics::Model>(scene->skybox);
-        camera->process(programId);
-        for(unsigned int n : scene->nodes)
-        {
-            graphics::Node* node = graphics::RenderData::get<graphics::Model>(n);
-                        
-            if(node)
-                node->process(programId);
-            else
-                std::cout << "Couldent find node!" << std::endl;
-        }
-
-        // Unbind framebuffer
-        framebuffer->unbind();
-
-        // Disable geometry pass program
-        geometryProgram->disable();
-        
-// Lighting
-        // Clear window
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Enable lighting pass program
-        lightingProgram->enable();
-        programId = lightingProgram->getProgramId();
-
-        lightPosition = math::toVec3(math::Mat4::rotate(math::Degrees(1.0f), {0.0f, 1.0f, 0.0f}) * math::toVec4(lightPosition, 1.0f));
-        Uniform::setVec3(programId, "lightPosition", lightPosition);
-
-        // Push texture unit context
-        TextureUnitManager::pushContext();
-
-        // Bind framebuffer textures
-        Uniform::setTexture2D(programId, "gPosition", framebuffer->position->getId());
-        Uniform::setTexture2D(programId, "gNormal", framebuffer->normal->getId());
-        Uniform::setTexture2D(programId, "gAlbedo", framebuffer->albedo->getId());
-        Uniform::setTexture2D(programId, "gRoughness", framebuffer->roughness->getId());
-        Uniform::setTexture2D(programId, "gMetalness", framebuffer->metalness->getId());
-
-        // Set uniforms
-        Uniform::setMat4(programId, "projection", orthographic);
-        Uniform::setVec3(programId, "viewPosition", camera->getPosition());
-        graphics::Material* skyboxMaterial = graphics::RenderData::get<graphics::Material>(skybox->getMaterial());
-        if(skyboxMaterial)
-            skyboxMaterial->setAlbedo(programId, "skybox");
-
-        // Draw screen-wide quad
-        Uniform::setMat4(programId, "model", math::Mat4::scale({2.0f, 2.0f, 2.0f}));
-        graphics::Mesh* quad = graphics::RenderData::get<graphics::Mesh>(planeMesh);
-        quad->draw();
-        
-        // Pop texture unit context
-        TextureUnitManager::popContext();
-
-        // Disable lighting pass program
-        lightingProgram->disable();
-
-// Skybox
-        // Set depth func to less than or equal
-        glDepthFunc(GL_LEQUAL);
-
-        // Set face culling to front
-        glCullFace(GL_FRONT);
-
-        // Blit (copy) framebuffer depth to main buffer
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer->getId());
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-        glBlitFramebuffer(0, 0, 1000, 1000, 0, 0, 1000, 1000, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-
-            // Enable skybox pass program
-            skyboxProgram->enable();
-            programId = skyboxProgram->getProgramId();
-
-            // Set uniforms
-            Uniform::setMat4(programId, "projection", projection);
-            Uniform::setMat4(programId, "view", camera->getView().removeTranslation());
-            Uniform::setMat4(programId, "model", math::Mat4::identity());
-
-                // Push texture unit context
-                TextureUnitManager::pushContext();
-                
-                // Draw skybox geometry
-                skybox->process(programId);
-
-                // Pop texture unit context
-                TextureUnitManager::popContext();
-
-            // Disable skybox pass program
-            skyboxProgram->disable();
-
-        // Set face culling to back (Default)
-        glCullFace(GL_BACK);
-
-        // Set depth func to less than (Default)
-        glDepthFunc(GL_LESS);
-
-// Finalization
-        // Update window 
-        window->update();
-
-        // Update timing
-        double timeThisFrame = glfwGetTime();
-        deltatime = timeThisFrame - timeLastFrame;
-        fps = (size_t)(1.0 / deltatime);
-        timeLastFrame = timeThisFrame;
-*/
     }
 
     size_t Renderer::getFPS()

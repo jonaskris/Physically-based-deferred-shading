@@ -1,11 +1,6 @@
-#include <iostream>
-
-#include <math.h>
-
 #include <Quaternion.h>
 
-#include <Vec3.h>
-#include <Utils.h>
+#include <math.h>
 
 namespace math
 {

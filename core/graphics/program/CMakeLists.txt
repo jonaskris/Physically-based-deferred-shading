@@ -11,6 +11,5 @@ target_include_directories(program
 target_link_libraries(program
     PUBLIC common
     PUBLIC math
-    PUBLIC geometry
     PUBLIC glad
     PUBLIC texture)

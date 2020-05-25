@@ -4,12 +4,12 @@
 
 #include <RenderQueue.h>
 #include <Node.h>
-#include <Mesh.h>
-#include <Camera.h>
 #include <Skybox.h>
 
 namespace graphics
 {
+    class Camera;
+
     struct Scene
     {
         std::vector<Node> nodes; // Top level nodes

@@ -1,5 +1,5 @@
-#include <iostream>
-#include <string>
+#include <Image.h>
+
 #include <vector>
 #include <fstream>
 #include <istream>
@@ -8,7 +8,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-#include <Image.h>
 
 namespace graphics
 {

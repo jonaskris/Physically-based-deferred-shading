@@ -2,13 +2,12 @@
 
 #include <utility>
 #include <string>
-#include <vector>
 
+#include <Vec3.h>
 #include <Mat4.h>
 
 #include <DataIdentifier.h>
 #include <Utils.h>
-#include <Program.h>
 #include <Mesh.h>
 
 #include <Framebuffer.h>
@@ -44,8 +43,8 @@ namespace graphics
             float farP;
 
         // Temporary light
-        math::Vec3 lightPosition{3.0f, 3.0f, 0.0f};
-        math::Vec3 lightColor{100.0f, 100.0f, 100.0f};
+        math::Vec3 lightPosition{0.0f, 2.0f, -3.0f};
+        math::Vec3 lightColor{50.0f, 50.0f, 50.0f};
 
         // Meshes
             // Plane mesh for drawing screen wide quad

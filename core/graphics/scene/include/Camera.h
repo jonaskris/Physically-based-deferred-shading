@@ -1,13 +1,12 @@
 #pragma once
 
-#include <glad/glad.h>
-
 #include <vector>
 
 #include <Utils.h>
 #include <Vec3.h>
 #include <Mat4.h>
 #include <Transform.h>
+#include <functional>
 
 #include <Input.h>
 
@@ -32,6 +31,17 @@ namespace graphics
         math::Mat4 getViewMatrix();
         const math::Transform& getTransform() const;
         math::Vec3 getPosition() const;
+    };
+
+    class AnimatedCamera : public Camera, public Input::Time::TimeListener
+    {
+    private:
+        std::function<math::Transform (double)> animationFunc;
+
+    public:
+        AnimatedCamera(std::function<math::Transform (double)> animationFunc);
+
+        void timeCallback(const Input::Time::TimeEvent& timeEvent) override;
     };
 
     class FPSCamera : public Camera, public Input::Mouse::DeltaPositionListener, public Input::Keyboard::KeyListener
